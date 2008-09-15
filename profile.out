@@ -1,0 +1,569 @@
+{'CCD1:DEM': [{'OverEarly': '0',
+               'OverElection': '0',
+               'UnderEarly': '0',
+               'UnderElection': '249'},
+              [{'Early/Absentee': '0',
+                'Election day': '681',
+                'Name': 'Will Toor',
+                'Party': 'DEM'}]],
+ 'CCD1:REP': [{'OverEarly': '0',
+               'OverElection': '0',
+               'UnderEarly': '0',
+               'UnderElection': '16'},
+              [{'Early/Absentee': '0',
+                'Election day': '55',
+                'Name': 'Patrick L. Brophy',
+                'Party': 'REP'}]],
+ 'CCD2:DEM': [{'OverEarly': '0',
+               'OverElection': '0',
+               'UnderEarly': '0',
+               'UnderElection': '292'},
+              [{'Early/Absentee': '0',
+                'Election day': '638',
+                'Name': 'Ben Pearlman',
+                'Party': 'DEM'}]],
+ 'CCD2:REP': [{'OverEarly': '0',
+               'OverElection': '0',
+               'UnderEarly': '0',
+               'UnderElection': '17'},
+              [{'Early/Absentee': '0',
+                'Election day': '54',
+                'Name': 'Aaron J. Hobbs',
+                'Party': 'REP'}]],
+ 'CCD3:DEM': [{'OverEarly': '0',
+               'OverElection': '0',
+               'UnderEarly': '0',
+               'UnderElection': '319'},
+              [{'Early/Absentee': '0',
+                'Election day': '611',
+                'Name': 'Cindy Domenico',
+                'Party': 'DEM'}]],
+ 'CCD3:REP': [{'OverEarly': '0',
+               'OverElection': '0',
+               'UnderEarly': '0',
+               'UnderElection': '15'},
+              [{'Early/Absentee': '0',
+                'Election day': '56',
+                'Name': 'Dick R. Murphy',
+                'Party': 'REP'}]],
+ 'CD2:DEM': [{'OverEarly': '2',
+              'OverElection': '5',
+              'UnderEarly': '1',
+              'UnderElection': '2'},
+             [{'Early/Absentee': '0',
+               'Election day': '290',
+               'Name': 'Joan Fitz-Gerald',
+               'Party': 'DEM'},
+              {'Early/Absentee': '0',
+               'Election day': '302',
+               'Name': 'Jared Polis',
+               'Party': 'DEM'},
+              {'Early/Absentee': '0',
+               'Election day': '323',
+               'Name': 'Will Shafroth',
+               'Party': 'DEM'}]],
+ 'CD2:REP': [{'OverEarly': '0',
+              'OverElection': '0',
+              'UnderEarly': '0',
+              'UnderElection': '14'},
+             [{'Early/Absentee': '0',
+               'Election day': '48',
+               'Name': 'Scott Starin',
+               'Party': 'REP'}]],
+ 'CD4:DEM': [{'OverEarly': '0',
+              'OverElection': '0',
+              'UnderEarly': '0',
+              'UnderElection': '2'},
+             [{'Early/Absentee': '0',
+               'Election day': '11',
+               'Name': 'Betsy Markey',
+               'Party': 'DEM'}]],
+ 'CD4:REP': [{'OverEarly': '0',
+              'OverElection': '0',
+              'UnderEarly': '0',
+              'UnderElection': '1'},
+             [{'Early/Absentee': '0',
+               'Election day': '8',
+               'Name': 'Marilyn N. Musgrave',
+               'Party': 'REP'}]],
+ 'COUNTY ASSESSOR:DEM': [{'OverEarly': '0',
+                          'OverElection': '0',
+                          'UnderEarly': '0',
+                          'UnderElection': '343'},
+                         [{'Early/Absentee': '0',
+                           'Election day': '587',
+                           'Name': 'Jerry M. Roberts',
+                           'Party': 'DEM'}]],
+ 'COUNTY ASSESSOR:None': [{},
+                          [{'Early/Absentee': '0',
+                            'Election day': '0',
+                            'Name': 'No Candidate for Race',
+                            'Party': None}]],
+ 'District Attorney:DEM': [{'OverEarly': '0',
+                            'OverElection': '0',
+                            'UnderEarly': '0',
+                            'UnderElection': '327'},
+                           [{'Early/Absentee': '0',
+                             'Election day': '603',
+                             'Name': 'Stan Garnett',
+                             'Party': 'DEM'}]],
+ 'District Attorney:None': [{},
+                            [{'Early/Absentee': '0',
+                              'Election day': '0',
+                              'Name': 'No Candidate for Race',
+                              'Party': None}]],
+ 'Regent D2:DEM': [{'OverEarly': '0',
+                    'OverElection': '0',
+                    'UnderEarly': '0',
+                    'UnderElection': '357'},
+                   [{'Early/Absentee': '0',
+                     'Election day': '560',
+                     'Name': 'Joe Neguse',
+                     'Party': 'DEM'}]],
+ 'Regent D2:REP': [{'OverEarly': '0',
+                    'OverElection': '0',
+                    'UnderEarly': '0',
+                    'UnderElection': '7'},
+                   [{'Early/Absentee': '0',
+                     'Election day': '55',
+                     'Name': 'Jerry Reed',
+                     'Party': 'REP'}]],
+ 'SRD10:DEM': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '82'},
+               [{'Early/Absentee': '0',
+                 'Election day': '155',
+                 'Name': 'Dickey Lee Hullinghorst',
+                 'Party': 'DEM'}]],
+ 'SRD10:REP': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '3'},
+               [{'Early/Absentee': '0',
+                 'Election day': '18',
+                 'Name': 'Dorothy Marshall',
+                 'Party': 'REP'}]],
+ 'SRD11:DEM': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '96'},
+               [{'Early/Absentee': '0',
+                 'Election day': '161',
+                 'Name': 'Jack Pommer',
+                 'Party': 'DEM'}]],
+ 'SRD11:REP': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '5'},
+               [{'Early/Absentee': '0',
+                 'Election day': '9',
+                 'Name': 'Catherine Jarrett',
+                 'Party': 'REP'}]],
+ 'SRD12:DEM': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '31'},
+               [{'Early/Absentee': '0',
+                 'Election day': '118',
+                 'Name': 'Paul Weissmann',
+                 'Party': 'DEM'}]],
+ 'SRD12:REP': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '2'},
+               [{'Early/Absentee': '0',
+                 'Election day': '19',
+                 'Name': 'Daniel M. Lucas',
+                 'Party': 'REP'}]],
+ 'SRD13:DEM': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '74'},
+               [{'Early/Absentee': '0',
+                 'Election day': '213',
+                 'Name': 'Claire Levy',
+                 'Party': 'DEM'}]],
+ 'SRD13:REP': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '1'},
+               [{'Early/Absentee': '0',
+                 'Election day': '14',
+                 'Name': 'Robert E. Houdeshell',
+                 'Party': 'REP'}]],
+ 'SRD33:DEM': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '0'},
+               [{'Early/Absentee': '0',
+                 'Election day': '0',
+                 'Name': 'Dianne Primavera',
+                 'Party': 'DEM'}]],
+ 'SRD33:REP': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '0'},
+               [{'Early/Absentee': '0',
+                 'Election day': '0',
+                 'Name': 'Nick Kliebenstein',
+                 'Party': 'REP'}]],
+ 'SSD16:DEM': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '6'},
+               [{'Early/Absentee': '0',
+                 'Election day': '14',
+                 'Name': 'Dan Gibbs',
+                 'Party': 'DEM'}]],
+ 'SSD16:REP': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '0'},
+               [{'Early/Absentee': '0',
+                 'Election day': '0',
+                 'Name': 'Don Ytterberg',
+                 'Party': 'REP'}]],
+ 'SSD17:DEM': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '28'},
+               [{'Early/Absentee': '0',
+                 'Election day': '125',
+                 'Name': 'Brandon C. Shaffer',
+                 'Party': 'DEM'}]],
+ 'SSD17:REP': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '0'},
+               [{'Early/Absentee': '0',
+                 'Election day': '21',
+                 'Name': 'Katie Witt',
+                 'Party': 'REP'}]],
+ 'SSD18:DEM': [{'OverEarly': '0',
+                'OverElection': '0',
+                'UnderEarly': '0',
+                'UnderElection': '55'},
+               [{'Early/Absentee': '0',
+                 'Election day': '301',
+                 'Name': 'Cindy Carlisle',
+                 'Party': 'DEM'},
+                {'Early/Absentee': '0',
+                 'Election day': '401',
+                 'Name': 'Rollie Heath',
+                 'Party': 'DEM'}]],
+ 'SSD18:None': [{},
+                [{'Early/Absentee': '0',
+                  'Election day': '0',
+                  'Name': 'No Candidate for Race',
+                  'Party': None}]],
+ 'UNITED STATES SENATOR:DEM': [{'OverEarly': '0',
+                                'OverElection': '0',
+                                'UnderEarly': '0',
+                                'UnderElection': '108'},
+                               [{'Early/Absentee': '0',
+                                 'Election day': '822',
+                                 'Name': 'Mark Udall',
+                                 'Party': 'DEM'}]],
+ 'UNITED STATES SENATOR:REP': [{'OverEarly': '0',
+                                'OverElection': '0',
+                                'UnderEarly': '0',
+                                'UnderElection': '7'},
+                               [{'Early/Absentee': '0',
+                                 'Election day': '64',
+                                 'Name': 'Bob Schaffer',
+                                 'Party': 'REP'}]]}
+CCD3:DEM
+SSD17:REP
+UNITED STATES SENATOR:DEM
+COUNTY ASSESSOR:DEM
+Regent D2:DEM
+SRD12:REP
+SRD13:DEM
+CCD3:REP
+Regent D2:REP
+SSD18:DEM
+SRD13:REP
+SSD16:REP
+COUNTY ASSESSOR:None
+SSD18:None
+CCD1:DEM
+SRD10:DEM
+SSD16:DEM
+District Attorney:DEM
+SSD17:DEM
+District Attorney:None
+SRD33:DEM
+CCD2:REP
+CD2:REP
+SRD10:REP
+CD2:DEM
+SRD33:REP
+CCD2:DEM
+SRD11:DEM
+CD4:REP
+CD4:DEM
+SRD12:DEM
+UNITED STATES SENATOR:REP
+CCD1:REP
+SRD11:REP
+         68820 function calls (66003 primitive calls) in 0.658 CPU seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      962    0.356    0.000    0.356    0.000 {method 'write' of 'file' objects}
+ 2961/718    0.097    0.000    0.162    0.000 pprint.py:212(_safe_repr)
+    17051    0.024    0.000    0.024    0.000 {method 'write' of 'cStringIO.StringO' objects}
+    17051    0.022    0.000    0.022    0.000 {method 'isalpha' of 'str' objects}
+      105    0.019    0.000    0.048    0.000 makeauditunits.py:195(extract_values)
+      242    0.014    0.000    0.014    0.000 {method 'xpath' of 'etree._Element' objects}
+    412/1    0.012    0.000    0.541    0.541 pprint.py:121(_format)
+        1    0.011    0.011    0.011    0.011 {lxml.etree.parse}
+        1    0.010    0.010    0.654    0.654 makeauditunits.py:49(<module>)
+     1319    0.007    0.000    0.024    0.000 __init__.py:1321(debug)
+     1319    0.006    0.000    0.006    0.000 __init__.py:1158(getEffectiveLevel)
+     1319    0.005    0.000    0.011    0.000 __init__.py:959(debug)
+     1319    0.004    0.000    0.016    0.000 {apply}
+3303/3269    0.004    0.000    0.004    0.000 {len}
+     2525    0.004    0.000    0.004    0.000 {cStringIO.StringIO}
+      718    0.004    0.000    0.170    0.000 pprint.py:193(_repr)
+     2525    0.004    0.000    0.004    0.000 {method 'getvalue' of 'cStringIO.StringO' objects}
+        1    0.004    0.004    0.658    0.658 {execfile}
+     2058    0.003    0.000    0.003    0.000 {repr}
+     2190    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
+     2166    0.003    0.000    0.003    0.000 {method 'get' of 'dict' objects}
+      718    0.003    0.000    0.165    0.000 pprint.py:202(format)
+    26/11    0.002    0.000    0.008    0.001 sre_parse.py:385(_parse)
+        1    0.002    0.002    0.004    0.004 __init__.py:27(<module>)
+        1    0.002    0.002    0.073    0.073 makeauditunits.py:119(do_contests)
+        1    0.002    0.002    0.003    0.003 pdb.py:3(<module>)
+     1147    0.002    0.000    0.002    0.000 {issubclass}
+     59/8    0.002    0.000    0.005    0.001 sre_compile.py:38(_compile)
+      719    0.001    0.000    0.001    0.000 {method 'copy' of 'dict' objects}
+      906    0.001    0.000    0.001    0.000 {method 'keys' of 'dict' objects}
+      237    0.001    0.000    0.002    0.000 sre_parse.py:188(__next)
+       29    0.001    0.000    0.002    0.000 sre_compile.py:213(_optimize_charset)
+        1    0.001    0.001    0.545    0.545 makeauditunits.py:220(make_audit_unit)
+      824    0.001    0.000    0.001    0.000 {id}
+      242    0.001    0.000    0.001    0.000 {sorted}
+        1    0.001    0.001    0.001    0.001 threading.py:1(<module>)
+    89/38    0.001    0.000    0.001    0.000 sre_parse.py:146(getwidth)
+      573    0.001    0.000    0.001    0.000 {getattr}
+      432    0.001    0.000    0.001    0.000 {method 'join' of 'str' objects}
+      195    0.001    0.000    0.002    0.000 sre_parse.py:207(get)
+      320    0.001    0.000    0.001    0.000 {method 'items' of 'dict' objects}
+       40    0.001    0.000    0.001    0.000 posixpath.py:56(join)
+        5    0.001    0.000    0.003    0.001 gettext.py:421(find)
+       30    0.000    0.000    0.001    0.000 sre_parse.py:140(__getslice__)
+      266    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+       29    0.000    0.000    0.002    0.000 sre_compile.py:184(_compile_charset)
+       40    0.000    0.000    0.000    0.000 {posix.stat}
+        1    0.000    0.000    0.000    0.000 repr.py:1(<module>)
+      133    0.000    0.000    0.001    0.000 sre_parse.py:132(__len__)
+     20/8    0.000    0.000    0.008    0.001 sre_parse.py:307(_parse_sub)
+      221    0.000    0.000    0.000    0.000 sre_parse.py:136(__getitem__)
+       40    0.000    0.000    0.001    0.000 posixpath.py:168(exists)
+      156    0.000    0.000    0.001    0.000 sre_parse.py:201(match)
+       10    0.000    0.000    0.001    0.000 gettext.py:130(_expand_lang)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:264(_mk_bitmap)
+       87    0.000    0.000    0.000    0.000 sre_parse.py:144(append)
+      135    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+       69    0.000    0.000    0.000    0.000 {method 'sort' of 'list' objects}
+      128    0.000    0.000    0.000    0.000 {min}
+       30    0.000    0.000    0.000    0.000 sre_compile.py:360(_simple)
+        4    0.000    0.000    0.000    0.000 textwrap.py:192(_wrap_chunks)
+        8    0.000    0.000    0.016    0.002 re.py:227(_compile)
+        8    0.000    0.000    0.002    0.000 sre_compile.py:367(_compile_info)
+        8    0.000    0.000    0.016    0.002 sre_compile.py:501(compile)
+       10    0.000    0.000    0.000    0.000 locale.py:281(normalize)
+      120    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 optparse.py:603(_set_attrs)
+       15    0.000    0.000    0.000    0.000 sre_parse.py:231(_class_escape)
+        1    0.000    0.000    0.004    0.004 _elementpath.py:49(<module>)
+        8    0.000    0.000    0.008    0.001 sre_parse.py:669(parse)
+       24    0.000    0.000    0.000    0.000 sre_parse.py:263(_escape)
+        4    0.000    0.000    0.000    0.000 {built-in method split}
+        4    0.000    0.000    0.001    0.000 optparse.py:283(format_option)
+       59    0.000    0.000    0.000    0.000 sre_parse.py:96(__init__)
+       34    0.000    0.000    0.000    0.000 {method 'getchildren' of 'etree._Element' objects}
+       84    0.000    0.000    0.000    0.000 {ord}
+       75    0.000    0.000    0.000    0.000 {method 'has_key' of 'dict' objects}
+       67    0.000    0.000    0.000    0.000 sre_compile.py:24(_identityfunction)
+        4    0.000    0.000    0.001    0.000 optparse.py:554(__init__)
+       50    0.000    0.000    0.000    0.000 {setattr}
+        4    0.000    0.000    0.001    0.000 optparse.py:1008(add_option)
+       34    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+       20    0.000    0.000    0.000    0.000 UserDict.py:57(get)
+        8    0.000    0.000    0.007    0.001 sre_compile.py:486(_code)
+        1    0.000    0.000    0.000    0.000 optparse.py:318(store_option_strings)
+        1    0.000    0.000    0.000    0.000 bdb.py:1(<module>)
+       42    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+       20    0.000    0.000    0.000    0.000 UserDict.py:44(has_key)
+       16    0.000    0.000    0.000    0.000 sre_compile.py:480(isstring)
+        5    0.000    0.000    0.003    0.001 gettext.py:542(dgettext)
+       32    0.000    0.000    0.000    0.000 {isinstance}
+       30    0.000    0.000    0.000    0.000 sre_parse.py:138(__setitem__)
+        5    0.000    0.000    0.000    0.000 __init__.py:48(normalize_encoding)
+        4    0.000    0.000    0.000    0.000 optparse.py:582(_set_opt_strings)
+       34    0.000    0.000    0.000    0.000 {method 'pop' of 'set' objects}
+       32    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+       20    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 textwrap.py:114(_munge_whitespace)
+       30    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
+       11    0.000    0.000    0.000    0.000 sre_parse.py:89(closegroup)
+        1    0.000    0.000    0.000    0.000 pdb.py:53(Pdb)
+        1    0.000    0.000    0.619    0.619 makeauditunits.py:99(main)
+       11    0.000    0.000    0.000    0.000 sre_parse.py:78(opengroup)
+        5    0.000    0.000    0.003    0.001 gettext.py:476(translation)
+        8    0.000    0.000    0.000    0.000 {_sre.compile}
+        1    0.000    0.000    0.000    0.000 threading.py:94(acquire)
+        4    0.000    0.000    0.001    0.000 textwrap.py:265(wrap)
+        8    0.000    0.000    0.000    0.000 sre_parse.py:184(__init__)
+        4    0.000    0.000    0.001    0.000 textwrap.py:292(wrap)
+        1    0.000    0.000    0.000    0.000 __init__.py:1204(basicConfig)
+        4    0.000    0.000    0.000    0.000 optparse.py:273(expand_default)
+        1    0.000    0.000    0.000    0.000 optparse.py:1304(get_default_values)
+       15    0.000    0.000    0.000    0.000 {range}
+        5    0.000    0.000    0.003    0.001 gettext.py:580(gettext)
+        4    0.000    0.000    0.000    0.000 optparse.py:336(format_option_strings)
+        1    0.000    0.000    0.000    0.000 __init__.py:573(__init__)
+        1    0.000    0.000    0.002    0.002 optparse.py:1607(format_option_help)
+        1    0.000    0.000    0.003    0.003 optparse.py:1186(__init__)
+        7    0.000    0.000    0.015    0.002 re.py:186(compile)
+        1    0.000    0.000    0.000    0.000 threading.py:396(__init__)
+        4    0.000    0.000    0.000    0.000 textwrap.py:131(_split)
+        1    0.000    0.000    0.001    0.001 optparse.py:1068(format_option_help)
+        1    0.000    0.000    0.000    0.000 pprint.py:35(<module>)
+        1    0.000    0.000    0.000    0.000 traceback.py:1(<module>)
+        1    0.000    0.000    0.003    0.003 optparse.py:1627(format_help)
+        1    0.000    0.000    0.000    0.000 threading.py:158(__init__)
+       13    0.000    0.000    0.000    0.000 {max}
+        9    0.000    0.000    0.000    0.000 {hasattr}
+        4    0.000    0.000    0.000    0.000 optparse.py:981(_check_conflict)
+        1    0.000    0.000    0.000    0.000 threading.py:671(__init__)
+        2    0.000    0.000    0.000    0.000 threading.py:81(__init__)
+        8    0.000    0.000    0.000    0.000 {filter}
+       11    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
+        6    0.000    0.000    0.000    0.000 UserDict.py:17(__getitem__)
+        8    0.000    0.000    0.000    0.000 sre_parse.py:73(__init__)
+       11    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 optparse.py:194(__init__)
+       14    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
+        4    0.000    0.000    0.000    0.000 optparse.py:573(_check_opt_strings)
+        1    0.000    0.000    0.000    0.000 optparse.py:1353(parse_args)
+        2    0.000    0.000    0.000    0.000 threading.py:76(RLock)
+        4    0.000    0.000    0.000    0.000 optparse.py:672(_check_dest)
+        9    0.000    0.000    0.000    0.000 {method 'translate' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 cmd.py:46(<module>)
+        1    0.000    0.000    0.000    0.000 __init__.py:926(Logger)
+        1    0.000    0.000    0.000    0.000 {built-in method match}
+        1    0.000    0.000    0.000    0.000 atexit.py:6(<module>)
+        4    0.000    0.000    0.000    0.000 textwrap.py:94(__init__)
+        1    0.000    0.000    0.000    0.000 bdb.py:13(Bdb)
+        4    0.000    0.000    0.000    0.000 optparse.py:832(isbasestring)
+        4    0.000    0.000    0.000    0.000 optparse.py:623(_check_action)
+        2    0.000    0.000    0.000    0.000 threading.py:733(currentThread)
+        1    0.000    0.000    0.000    0.000 __init__.py:181(_acquireLock)
+        6    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 optparse.py:359(__init__)
+        1    0.000    0.000    0.000    0.000 optparse.py:1550(expand_prog_name)
+        4    0.000    0.000    0.000    0.000 threading.py:39(__init__)
+        1    0.000    0.000    0.000    0.000 optparse.py:933(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:114(release)
+        1    0.000    0.000    0.002    0.002 optparse.py:1253(_populate_option_list)
+        1    0.000    0.000    0.001    0.001 re.py:134(match)
+        1    0.000    0.000    0.541    0.541 pprint.py:105(pprint)
+        4    0.000    0.000    0.000    0.000 optparse.py:659(_check_choice)
+        1    0.000    0.000    0.001    0.001 optparse.py:1248(_add_version_option)
+        1    0.000    0.000    0.000    0.000 __init__.py:193(_releaseLock)
+        1    0.000    0.000    0.541    0.541 pprint.py:51(pprint)
+        1    0.000    0.000    0.000    0.000 threading.py:153(Condition)
+        4    0.000    0.000    0.000    0.000 {method 'expandtabs' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 {thread.allocate_lock}
+        4    0.000    0.000    0.000    0.000 optparse.py:629(_check_type)
+        1    0.000    0.000    0.000    0.000 __init__.py:564(Handler)
+        4    0.000    0.000    0.000    0.000 optparse.py:687(_check_const)
+        1    0.000    0.000    0.000    0.000 __init__.py:715(__init__)
+        3    0.000    0.000    0.000    0.000 optparse.py:237(dedent)
+        4    0.000    0.000    0.000    0.000 optparse.py:702(_check_callback)
+        4    0.000    0.000    0.000    0.000 optparse.py:693(_check_nargs)
+        1    0.000    0.000    0.001    0.001 optparse.py:1243(_add_help_option)
+        1    0.000    0.000    0.001    0.001 optparse.py:1272(set_usage)
+        1    0.000    0.000    0.000    0.000 atexit.py:37(register)
+        1    0.000    0.000    0.000    0.000 optparse.py:1405(_process_args)
+        1    0.000    0.000    0.000    0.000 threading.py:387(Thread)
+        1    0.000    0.000    0.000    0.000 optparse.py:838(__init__)
+        3    0.000    0.000    0.000    0.000 optparse.py:233(indent)
+        1    0.000    0.000    0.000    0.000 _elementpath.py:61(Path)
+        1    0.000    0.000    0.000    0.000 cmd.py:55(Cmd)
+        1    0.000    0.000    0.001    0.001 optparse.py:1571(get_usage)
+        2    0.000    0.000    0.000    0.000 repr.py:10(__init__)
+        2    0.000    0.000    0.000    0.000 {built-in method acquire}
+        1    0.000    0.000    0.000    0.000 __init__.py:838(Manager)
+        1    0.000    0.000    0.658    0.658 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 string.py:218(lower)
+        4    0.000    0.000    0.000    0.000 optparse.py:746(takes_value)
+        1    0.000    0.000    0.000    0.000 repr.py:8(Repr)
+        1    0.000    0.000    0.000    0.000 threading.py:156(_Condition)
+        3    0.000    0.000    0.000    0.000 {thread.get_ident}
+        1    0.000    0.000    0.000    0.000 __init__.py:843(__init__)
+        1    0.000    0.000    0.000    0.000 optparse.py:1238(_create_option_list)
+        2    0.000    0.000    0.000    0.000 __init__.py:350(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:1186(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:941(__init__)
+        1    0.000    0.000    0.001    0.001 optparse.py:367(format_usage)
+        1    0.000    0.000    0.000    0.000 __init__.py:590(createLock)
+        2    0.000    0.000    0.000    0.000 __init__.py:522(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:79(_RLock)
+        1    0.000    0.000    0.000    0.000 pprint.py:74(__init__)
+        2    0.000    0.000    0.000    0.000 threading.py:44(_note)
+        1    0.000    0.000    0.000    0.000 __init__.py:306(Formatter)
+        1    0.000    0.000    0.000    0.000 pprint.py:73(PrettyPrinter)
+        1    0.000    0.000    0.000    0.000 __init__.py:517(Filterer)
+        1    0.000    0.000    0.000    0.000 __init__.py:709(StreamHandler)
+        1    0.000    0.000    0.000    0.000 __init__.py:438(BufferingFormatter)
+        1    0.000    0.000    0.000    0.000 optparse.py:944(_create_option_mappings)
+        1    0.000    0.000    0.000    0.000 {method 'getroot' of 'etree._ElementTree' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:37(_Verbose)
+        1    0.000    0.000    0.000    0.000 optparse.py:1624(format_epilog)
+        1    0.000    0.000    0.000    0.000 optparse.py:1347(_get_args)
+        1    0.000    0.000    0.000    0.000 optparse.py:370(format_heading)
+        1    0.000    0.000    0.000    0.000 threading.py:274(_Semaphore)
+        1    0.000    0.000    0.000    0.000 threading.py:337(_Event)
+        1    0.000    0.000    0.000    0.000 __init__.py:1113(addHandler)
+        1    0.000    0.000    0.000    0.000 __init__.py:204(LogRecord)
+        1    0.000    0.000    0.000    0.000 {time.time}
+        1    0.000    0.000    0.000    0.000 optparse.py:1263(_init_parsing_state)
+        1    0.000    0.000    0.000    0.000 makeauditunits.py:65(Result)
+        1    0.000    0.000    0.000    0.000 threading.py:669(_MainThread)
+        1    0.000    0.000    0.000    0.000 {method 'insert' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:709(_DummyThread)
+        2    0.000    0.000    0.000    0.000 {built-in method release}
+        1    0.000    0.000    0.000    0.000 bdb.py:417(Breakpoint)
+        1    0.000    0.000    0.000    0.000 __init__.py:1180(RootLogger)
+        1    0.000    0.000    0.000    0.000 optparse.py:1298(_get_all_options)
+        1    0.000    0.000    0.000    0.000 threading.py:640(_Timer)
+        1    0.000    0.000    0.000    0.000 __init__.py:791(PlaceHolder)
+        1    0.000    0.000    0.000    0.000 threading.py:678(_set_daemon)
+        1    0.000    0.000    0.000    0.000 optparse.py:266(format_epilog)
+        1    0.000    0.000    0.000    0.000 __init__.py:759(FileHandler)
+        1    0.000    0.000    0.000    0.000 optparse.py:960(set_conflict_handler)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:213(seek)
+        1    0.000    0.000    0.000    0.000 __init__.py:660(setFormatter)
+        1    0.000    0.000    0.000    0.000 optparse.py:218(set_parser)
+        1    0.000    0.000    0.000    0.000 optparse.py:965(set_description)
+        1    0.000    0.000    0.000    0.000 optparse.py:1544(get_prog_name)
+        1    0.000    0.000    0.000    0.000 bdb.py:582(Tdb)
+        1    0.000    0.000    0.000    0.000 __init__.py:953(setLevel)
+        1    0.000    0.000    0.000    0.000 _elementpath.py:55(xpath_descendant_or_self)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:211(tell)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 __init__.py:480(Filter)
+        1    0.000    0.000    0.000    0.000 threading.py:322(_BoundedSemaphore)
+        1    0.000    0.000    0.000    0.000 __init__.py:1(<module>)
+        1    0.000    0.000    0.000    0.000 posixpath.py:39(normcase)
+        1    0.000    0.000    0.000    0.000 optparse.py:1392(check_values)
+        1    0.000    0.000    0.000    0.000 bdb.py:9(BdbQuit)
+
+
