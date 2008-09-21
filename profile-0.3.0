@@ -1,0 +1,462 @@
+CCD3:DEM
+	Over	0
+	Cindy Domenico	0
+	Under	0
+	Over	0
+	Cindy Domenico	611
+	Under	319
+SSD17:REP
+	Over	0
+	Katie Witt	0
+	Under	0
+	Over	0
+	Katie Witt	21
+	Under	0
+UNITED STATES SENATOR:DEM
+	Mark Udall	0
+	Over	0
+	Under	0
+	Mark Udall	822
+	Over	0
+	Under	108
+COUNTY ASSESSOR:DEM
+	Over	0
+	Jerry M. Roberts	0
+	Under	0
+	Over	0
+	Jerry M. Roberts	587
+	Under	343
+Regent D2:DEM
+	Over	0
+	Joe Neguse	0
+	Under	0
+	Over	0
+	Joe Neguse	560
+	Under	357
+SRD12:REP
+	Daniel M. Lucas	0
+	Over	0
+	Under	0
+	Daniel M. Lucas	19
+	Over	0
+	Under	2
+SRD13:DEM
+	Claire Levy	0
+	Over	0
+	Under	0
+	Claire Levy	213
+	Over	0
+	Under	74
+CCD3:REP
+	Over	0
+	Dick R. Murphy	0
+	Under	0
+	Over	0
+	Dick R. Murphy	56
+	Under	15
+Regent D2:REP
+	Over	0
+	Jerry Reed	0
+	Under	0
+	Over	0
+	Jerry Reed	55
+	Under	7
+SSD18:DEM
+	Cindy Carlisle	0
+	Over	0
+	Rollie Heath	0
+	Under	0
+	Cindy Carlisle	301
+	Over	0
+	Rollie Heath	401
+	Under	55
+SRD13:REP
+	Over	0
+	Robert E. Houdeshell	0
+	Under	0
+	Over	0
+	Robert E. Houdeshell	14
+	Under	1
+SSD16:REP
+	Over	0
+	Don Ytterberg	0
+	Under	0
+	Over	0
+	Don Ytterberg	0
+	Under	0
+COUNTY ASSESSOR:None
+	No Candidate for Race	0
+	No Candidate for Race	0
+SSD18:None
+	No Candidate for Race	0
+	No Candidate for Race	0
+CCD1:DEM
+	Over	0
+	Will Toor	0
+	Under	0
+	Over	0
+	Will Toor	681
+	Under	249
+SRD10:DEM
+	Over	0
+	Dickey Lee Hullinghorst	0
+	Under	0
+	Over	0
+	Dickey Lee Hullinghorst	155
+	Under	82
+SSD16:DEM
+	Over	0
+	Dan Gibbs	0
+	Under	0
+	Over	0
+	Dan Gibbs	14
+	Under	6
+District Attorney:DEM
+	Stan Garnett	0
+	Over	0
+	Under	0
+	Stan Garnett	603
+	Over	0
+	Under	327
+SSD17:DEM
+	Over	0
+	Brandon C. Shaffer	0
+	Under	0
+	Over	0
+	Brandon C. Shaffer	125
+	Under	28
+District Attorney:None
+	No Candidate for Race	0
+	No Candidate for Race	0
+SRD33:DEM
+	Over	0
+	Dianne Primavera	0
+	Under	0
+	Over	0
+	Dianne Primavera	0
+	Under	0
+CCD2:REP
+	Over	0
+	Aaron J. Hobbs	0
+	Under	0
+	Over	0
+	Aaron J. Hobbs	54
+	Under	17
+CD2:REP
+	Over	0
+	Scott Starin	0
+	Under	0
+	Over	0
+	Scott Starin	48
+	Under	14
+SRD10:REP
+	Over	0
+	Dorothy Marshall	0
+	Under	0
+	Over	0
+	Dorothy Marshall	18
+	Under	3
+CD2:DEM
+	Joan Fitz-Gerald	0
+	Over	2
+	Will Shafroth	0
+	Jared Polis	0
+	Under	1
+	Joan Fitz-Gerald	290
+	Over	5
+	Will Shafroth	323
+	Jared Polis	302
+	Under	2
+SRD33:REP
+	Over	0
+	Nick Kliebenstein	0
+	Under	0
+	Over	0
+	Nick Kliebenstein	0
+	Under	0
+CCD2:DEM
+	Ben Pearlman	0
+	Over	0
+	Under	0
+	Ben Pearlman	638
+	Over	0
+	Under	292
+SRD11:DEM
+	Over	0
+	Jack Pommer	0
+	Under	0
+	Over	0
+	Jack Pommer	161
+	Under	96
+CD4:REP
+	Marilyn N. Musgrave	0
+	Over	0
+	Under	0
+	Marilyn N. Musgrave	8
+	Over	0
+	Under	1
+CD4:DEM
+	Over	0
+	Betsy Markey	0
+	Under	0
+	Over	0
+	Betsy Markey	11
+	Under	2
+SRD12:DEM
+	Paul Weissmann	0
+	Over	0
+	Under	0
+	Paul Weissmann	118
+	Over	0
+	Under	31
+UNITED STATES SENATOR:REP
+	Bob Schaffer	0
+	Over	0
+	Under	0
+	Bob Schaffer	64
+	Over	0
+	Under	7
+CCD1:REP
+	Patrick L. Brophy	0
+	Over	0
+	Under	0
+	Patrick L. Brophy	55
+	Over	0
+	Under	16
+SRD11:REP
+	Over	0
+	Catherine Jarrett	0
+	Under	0
+	Over	0
+	Catherine Jarrett	9
+	Under	5
+         8743 function calls (8580 primitive calls) in 0.082 CPU seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      242    0.013    0.000    0.013    0.000 {method 'xpath' of 'etree._Element' objects}
+      105    0.012    0.000    0.023    0.000 makeauditunits.py:214(extract_values)
+        1    0.010    0.010    0.077    0.077 makeauditunits.py:51(<module>)
+        1    0.007    0.007    0.007    0.007 {lxml.etree.parse}
+        1    0.005    0.005    0.082    0.082 {execfile}
+        1    0.004    0.004    0.006    0.006 __init__.py:27(<module>)
+    26/11    0.002    0.000    0.007    0.001 sre_parse.py:385(_parse)
+        1    0.002    0.002    0.042    0.042 makeauditunits.py:146(do_contests)
+1414/1380    0.002    0.000    0.002    0.000 {len}
+     1448    0.002    0.000    0.002    0.000 {method 'keys' of 'dict' objects}
+     59/8    0.002    0.000    0.004    0.001 sre_compile.py:38(_compile)
+      284    0.002    0.000    0.005    0.000 __init__.py:1321(debug)
+      284    0.001    0.000    0.001    0.000 __init__.py:1158(getEffectiveLevel)
+        1    0.001    0.001    0.002    0.002 threading.py:1(<module>)
+      237    0.001    0.000    0.002    0.000 sre_parse.py:188(__next)
+      908    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
+      284    0.001    0.000    0.002    0.000 __init__.py:959(debug)
+      284    0.001    0.000    0.003    0.000 {apply}
+       29    0.001    0.000    0.001    0.000 sre_compile.py:213(_optimize_charset)
+    89/38    0.001    0.000    0.001    0.000 sre_parse.py:146(getwidth)
+      195    0.001    0.000    0.002    0.000 sre_parse.py:207(get)
+        1    0.001    0.001    0.001    0.001 makeauditunits.py:234(make_audit_unit)
+       40    0.000    0.000    0.001    0.000 posixpath.py:56(join)
+      266    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        5    0.000    0.000    0.003    0.001 gettext.py:421(find)
+     20/8    0.000    0.000    0.007    0.001 sre_parse.py:307(_parse_sub)
+       29    0.000    0.000    0.002    0.000 sre_compile.py:184(_compile_charset)
+      156    0.000    0.000    0.001    0.000 sre_parse.py:201(match)
+      133    0.000    0.000    0.001    0.000 sre_parse.py:132(__len__)
+       30    0.000    0.000    0.000    0.000 sre_parse.py:140(__getslice__)
+        1    0.000    0.000    0.000    0.000 threading.py:79(_RLock)
+      221    0.000    0.000    0.000    0.000 sre_parse.py:136(__getitem__)
+       40    0.000    0.000    0.000    0.000 {posix.stat}
+       87    0.000    0.000    0.000    0.000 sre_parse.py:144(append)
+       40    0.000    0.000    0.001    0.000 posixpath.py:168(exists)
+       10    0.000    0.000    0.001    0.000 gettext.py:130(_expand_lang)
+      128    0.000    0.000    0.000    0.000 {min}
+      123    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+        4    0.000    0.000    0.000    0.000 textwrap.py:192(_wrap_chunks)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:264(_mk_bitmap)
+      120    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+       15    0.000    0.000    0.000    0.000 sre_parse.py:231(_class_escape)
+       10    0.000    0.000    0.000    0.000 locale.py:281(normalize)
+        8    0.000    0.000    0.013    0.002 re.py:227(_compile)
+       30    0.000    0.000    0.000    0.000 sre_compile.py:360(_simple)
+        8    0.000    0.000    0.001    0.000 sre_compile.py:367(_compile_info)
+      120    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 optparse.py:603(_set_attrs)
+       59    0.000    0.000    0.000    0.000 sre_parse.py:96(__init__)
+       24    0.000    0.000    0.000    0.000 sre_parse.py:263(_escape)
+        8    0.000    0.000    0.013    0.002 sre_compile.py:501(compile)
+       74    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+       84    0.000    0.000    0.000    0.000 {ord}
+        8    0.000    0.000    0.008    0.001 sre_parse.py:669(parse)
+        4    0.000    0.000    0.001    0.000 optparse.py:554(__init__)
+        1    0.000    0.000    0.004    0.004 _elementpath.py:49(<module>)
+       50    0.000    0.000    0.000    0.000 {setattr}
+        4    0.000    0.000    0.001    0.000 optparse.py:283(format_option)
+       75    0.000    0.000    0.000    0.000 {method 'has_key' of 'dict' objects}
+       67    0.000    0.000    0.000    0.000 sre_compile.py:24(_identityfunction)
+       20    0.000    0.000    0.000    0.000 UserDict.py:57(get)
+        4    0.000    0.000    0.000    0.000 {built-in method split}
+        8    0.000    0.000    0.005    0.001 sre_compile.py:486(_code)
+       42    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+       37    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 optparse.py:318(store_option_strings)
+       20    0.000    0.000    0.000    0.000 UserDict.py:44(has_key)
+       16    0.000    0.000    0.000    0.000 sre_compile.py:480(isstring)
+       32    0.000    0.000    0.000    0.000 {isinstance}
+       34    0.000    0.000    0.000    0.000 {method 'pop' of 'set' objects}
+        4    0.000    0.000    0.001    0.000 optparse.py:1008(add_option)
+        5    0.000    0.000    0.003    0.001 gettext.py:542(dgettext)
+        5    0.000    0.000    0.000    0.000 __init__.py:48(normalize_encoding)
+        4    0.000    0.000    0.000    0.000 optparse.py:582(_set_opt_strings)
+       30    0.000    0.000    0.000    0.000 sre_parse.py:138(__setitem__)
+       32    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:396(__init__)
+       11    0.000    0.000    0.000    0.000 sre_parse.py:89(closegroup)
+       30    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
+       20    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+       11    0.000    0.000    0.000    0.000 sre_parse.py:78(opengroup)
+        1    0.000    0.000    0.000    0.000 threading.py:158(__init__)
+        1    0.000    0.000    0.000    0.000 traceback.py:1(<module>)
+       20    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:671(__init__)
+        4    0.000    0.000    0.001    0.000 textwrap.py:265(wrap)
+        8    0.000    0.000    0.000    0.000 sre_parse.py:184(__init__)
+        1    0.000    0.000    0.043    0.043 makeauditunits.py:121(main)
+        8    0.000    0.000    0.000    0.000 {_sre.compile}
+        5    0.000    0.000    0.003    0.001 gettext.py:476(translation)
+        1    0.000    0.000    0.000    0.000 __init__.py:1204(basicConfig)
+        4    0.000    0.000    0.000    0.000 textwrap.py:114(_munge_whitespace)
+        7    0.000    0.000    0.013    0.002 re.py:186(compile)
+        1    0.000    0.000    0.000    0.000 optparse.py:1304(get_default_values)
+        4    0.000    0.000    0.001    0.000 textwrap.py:292(wrap)
+       15    0.000    0.000    0.000    0.000 {range}
+        1    0.000    0.000    0.001    0.001 optparse.py:1607(format_option_help)
+        1    0.000    0.000    0.000    0.000 __init__.py:573(__init__)
+        4    0.000    0.000    0.000    0.000 optparse.py:273(expand_default)
+        1    0.000    0.000    0.002    0.002 optparse.py:1186(__init__)
+        4    0.000    0.000    0.000    0.000 textwrap.py:131(_split)
+        5    0.000    0.000    0.003    0.001 gettext.py:580(gettext)
+        1    0.000    0.000    0.000    0.000 pprint.py:35(<module>)
+        1    0.000    0.000    0.001    0.001 optparse.py:1068(format_option_help)
+        4    0.000    0.000    0.000    0.000 optparse.py:336(format_option_strings)
+        9    0.000    0.000    0.000    0.000 {hasattr}
+        1    0.000    0.000    0.000    0.000 __init__.py:926(Logger)
+        4    0.000    0.000    0.000    0.000 optparse.py:981(_check_conflict)
+       14    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
+        8    0.000    0.000    0.000    0.000 {filter}
+        1    0.000    0.000    0.000    0.000 atexit.py:6(<module>)
+        8    0.000    0.000    0.000    0.000 sre_parse.py:73(__init__)
+        1    0.000    0.000    0.002    0.002 optparse.py:1627(format_help)
+       13    0.000    0.000    0.000    0.000 {max}
+       11    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
+        6    0.000    0.000    0.000    0.000 UserDict.py:17(__getitem__)
+        2    0.000    0.000    0.000    0.000 threading.py:81(__init__)
+        4    0.000    0.000    0.000    0.000 textwrap.py:94(__init__)
+        9    0.000    0.000    0.000    0.000 {method 'translate' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:153(Condition)
+        4    0.000    0.000    0.000    0.000 optparse.py:832(isbasestring)
+        4    0.000    0.000    0.000    0.000 optparse.py:672(_check_dest)
+        4    0.000    0.000    0.000    0.000 optparse.py:573(_check_opt_strings)
+        1    0.000    0.000    0.000    0.000 __init__.py:181(_acquireLock)
+       11    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
+        1    0.000    0.000    0.001    0.001 optparse.py:1571(get_usage)
+        1    0.000    0.000    0.000    0.000 optparse.py:1353(parse_args)
+        2    0.000    0.000    0.000    0.000 threading.py:76(RLock)
+        9    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:387(Thread)
+        4    0.000    0.000    0.000    0.000 {method 'expandtabs' of 'str' objects}
+        6    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        4    0.000    0.000    0.000    0.000 threading.py:39(__init__)
+        1    0.000    0.000    0.000    0.000 optparse.py:933(__init__)
+        1    0.000    0.000    0.000    0.000 optparse.py:194(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:114(release)
+        1    0.000    0.000    0.000    0.000 {built-in method match}
+        1    0.000    0.000    0.000    0.000 threading.py:94(acquire)
+        1    0.000    0.000    0.000    0.000 optparse.py:944(_create_option_mappings)
+        1    0.000    0.000    0.000    0.000 __init__.py:1186(__init__)
+        1    0.000    0.000    0.000    0.000 atexit.py:37(register)
+        1    0.000    0.000    0.000    0.000 __init__.py:941(__init__)
+        1    0.000    0.000    0.000    0.000 string.py:218(lower)
+        2    0.000    0.000    0.000    0.000 threading.py:733(currentThread)
+        1    0.000    0.000    0.001    0.001 optparse.py:1253(_populate_option_list)
+        4    0.000    0.000    0.000    0.000 {thread.allocate_lock}
+        1    0.000    0.000    0.001    0.001 optparse.py:1248(_add_version_option)
+        1    0.000    0.000    0.000    0.000 __init__.py:564(Handler)
+        4    0.000    0.000    0.000    0.000 optparse.py:623(_check_action)
+        1    0.000    0.000    0.000    0.000 optparse.py:838(__init__)
+        1    0.000    0.000    0.000    0.000 optparse.py:359(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:156(_Condition)
+        4    0.000    0.000    0.000    0.000 optparse.py:702(_check_callback)
+        1    0.000    0.000    0.000    0.000 re.py:134(match)
+        4    0.000    0.000    0.000    0.000 optparse.py:693(_check_nargs)
+        4    0.000    0.000    0.000    0.000 optparse.py:659(_check_choice)
+        1    0.000    0.000    0.082    0.082 <string>:1(<module>)
+        4    0.000    0.000    0.000    0.000 optparse.py:746(takes_value)
+        4    0.000    0.000    0.000    0.000 optparse.py:687(_check_const)
+        3    0.000    0.000    0.000    0.000 optparse.py:237(dedent)
+        3    0.000    0.000    0.000    0.000 {thread.get_ident}
+        1    0.000    0.000    0.001    0.001 optparse.py:1243(_add_help_option)
+        1    0.000    0.000    0.001    0.001 optparse.py:1272(set_usage)
+        4    0.000    0.000    0.000    0.000 optparse.py:629(_check_type)
+        2    0.000    0.000    0.000    0.000 {built-in method acquire}
+        1    0.000    0.000    0.000    0.000 optparse.py:1550(expand_prog_name)
+        1    0.000    0.000    0.000    0.000 __init__.py:306(Formatter)
+        1    0.000    0.000    0.000    0.000 threading.py:337(_Event)
+        3    0.000    0.000    0.000    0.000 optparse.py:233(indent)
+        1    0.000    0.000    0.000    0.000 __init__.py:715(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:438(BufferingFormatter)
+        1    0.000    0.000    0.000    0.000 __init__.py:517(Filterer)
+        1    0.000    0.000    0.000    0.000 __init__.py:838(Manager)
+        2    0.000    0.000    0.000    0.000 __init__.py:350(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:274(_Semaphore)
+        1    0.000    0.000    0.000    0.000 threading.py:322(_BoundedSemaphore)
+        1    0.000    0.000    0.000    0.000 __init__.py:709(StreamHandler)
+        1    0.000    0.000    0.000    0.000 {method 'getroot' of 'etree._ElementTree' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:669(_MainThread)
+        1    0.000    0.000    0.000    0.000 __init__.py:1113(addHandler)
+        1    0.000    0.000    0.000    0.000 threading.py:37(_Verbose)
+        1    0.000    0.000    0.000    0.000 optparse.py:1624(format_epilog)
+        1    0.000    0.000    0.000    0.000 threading.py:709(_DummyThread)
+        1    0.000    0.000    0.000    0.000 optparse.py:1238(_create_option_list)
+        1    0.000    0.000    0.000    0.000 threading.py:640(_Timer)
+        1    0.000    0.000    0.001    0.001 optparse.py:367(format_usage)
+        1    0.000    0.000    0.000    0.000 __init__.py:193(_releaseLock)
+        1    0.000    0.000    0.000    0.000 __init__.py:204(LogRecord)
+        1    0.000    0.000    0.000    0.000 {time.time}
+        2    0.000    0.000    0.000    0.000 threading.py:44(_note)
+        1    0.000    0.000    0.000    0.000 pprint.py:73(PrettyPrinter)
+        1    0.000    0.000    0.000    0.000 __init__.py:590(createLock)
+        1    0.000    0.000    0.000    0.000 __init__.py:759(FileHandler)
+        1    0.000    0.000    0.000    0.000 __init__.py:843(__init__)
+        2    0.000    0.000    0.000    0.000 {built-in method release}
+        2    0.000    0.000    0.000    0.000 __init__.py:522(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:1180(RootLogger)
+        1    0.000    0.000    0.000    0.000 optparse.py:370(format_heading)
+        1    0.000    0.000    0.000    0.000 __init__.py:1(<module>)
+        1    0.000    0.000    0.000    0.000 makeauditunits.py:67(Result)
+        1    0.000    0.000    0.000    0.000 __init__.py:791(PlaceHolder)
+        1    0.000    0.000    0.000    0.000 __init__.py:480(Filter)
+        1    0.000    0.000    0.000    0.000 optparse.py:1263(_init_parsing_state)
+        1    0.000    0.000    0.000    0.000 threading.py:678(_set_daemon)
+        1    0.000    0.000    0.000    0.000 {method 'insert' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 optparse.py:960(set_conflict_handler)
+        1    0.000    0.000    0.000    0.000 optparse.py:1347(_get_args)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:213(seek)
+        1    0.000    0.000    0.000    0.000 optparse.py:1405(_process_args)
+        1    0.000    0.000    0.000    0.000 optparse.py:1298(_get_all_options)
+        1    0.000    0.000    0.000    0.000 __init__.py:660(setFormatter)
+        1    0.000    0.000    0.000    0.000 posixpath.py:39(normcase)
+        1    0.000    0.000    0.000    0.000 optparse.py:1392(check_values)
+        1    0.000    0.000    0.000    0.000 __init__.py:953(setLevel)
+        1    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 _elementpath.py:61(Path)
+        1    0.000    0.000    0.000    0.000 optparse.py:266(format_epilog)
+        1    0.000    0.000    0.000    0.000 optparse.py:218(set_parser)
+        1    0.000    0.000    0.000    0.000 optparse.py:965(set_description)
+        1    0.000    0.000    0.000    0.000 optparse.py:1544(get_prog_name)
+        1    0.000    0.000    0.000    0.000 _elementpath.py:55(xpath_descendant_or_self)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:211(tell)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
