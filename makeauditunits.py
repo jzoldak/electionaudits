@@ -75,6 +75,10 @@ class Result:
     need to be able to do diffs between cum Results to generate actual
 
     how to store them: array with columns addressed by key?
+
+        # TODO: if not there yet, put names into contest instance,
+        #  and establish order that the Results should be stored
+
     """
 
     """ earlier...    ?based on GenericResult (dynamically created somehow, add choices)?
@@ -159,21 +163,12 @@ def do_contests(file):
         contest = contest.strip()
         logging.debug("Contest: %s (%s)" % (contest, tree[0].text))
 
-        fields = {'{@_Display_Candidate_Name}': 'Name',
-                  '{@district_info}': 'Contest',
-                  '{sp_cumulative_rpt.party}': 'Party',
-                  '{@Tl_total_cand}': 'Election day',
-                  '{@_Combine_AB_EA}': 'Early/Absentee',
-                  '{@_Combine_Under}': 'UnderEarly',
-                  '{sp_cumulative_rpt.c_under_votes_election}': 'UnderElection',
-                  '{@_Combine_Over}': 'OverEarly',
-                  '{sp_cumulative_rpt.c_over_votes_election}': 'OverElection' }
-
         """
         We don't need the Header: we get contest from the node itself
         tree_head = extract_values(contesttree.xpath(
 		                 'FormattedArea[@Type="Header"]' ),
                                 fields )
+        or maybe look at just '{@district_info}': 'Contest',
         if tree_head['Contest'] != tree[0].text:
             print "head = ", tree_head, " contest = ", tree[0].text
         """
@@ -189,56 +184,37 @@ def do_contests(file):
             { '{sp_cumulative_rpt.c_under_votes_election}': 'Under',
               '{sp_cumulative_rpt.c_over_votes_election}': 'Over' } )
 
-        v = []
         #logging.debug(contesttree.getchildren())
 
+        parties = set()
         # For each candidate or option
         for c in contesttree.xpath('.//FormattedAreaPair[@Type="Details"]'):
-            cv = extract_values(c, fields )
-            earlyr.update({cv['Name']: cv['Early/Absentee']})
-            electionr.update({cv['Name']: cv['Election day']})
+            cv = extract_values(
+                c,
+                { '{@_Display_Candidate_Name}': 'Name',
+                  '{sp_cumulative_rpt.party}': 'Party',
+                  '{@Tl_total_cand}': 'Election day',
+                  '{@_Combine_AB_EA}': 'Early/Absentee', } )
 
             logging.debug("candidate: %s" % cv['Name'])
-            v.append(cv)
+            earlyr.update({cv['Name']: cv['Early/Absentee']})
+            electionr.update({cv['Name']: cv['Election day']})
+            parties.add(cv['Party'])
 
-        parties = set([cv['Party'] for cv in v])
-        assert len(parties) == 1
+        #parties = set([cv['Party'] for cv in v])
+        assert len(parties) > 0		# or == 1 for primary?
         party = parties.pop()
 
-        #tree_head.update({'Party': party})
         key = "%s:%s" % (contest, party)
 
-        # TODO: if not there yet, put names into contest instance,
-        #  and establish order that the Results should be stored
-        # TODO: separate into two possible batches: Early and Election
-        # D2 = dict((key, D1[key]) for key in keys_you_want)
-        # or dict((k,v) for k,v in d.iteritems() if predicate(k))
-
-        candvotes_early = {}
-        candvotes_election = {}
-        for candidate in v:
-            candvotes_early[candidate['Name']] = candidate['Early/Absentee']
-            candvotes_election[candidate['Name']] = candidate['Election day']
-
-        #values[key] = [tree_foot, v]
         values[key] = [earlyr, electionr]
 
-        # For each candidate, get Election day and Early/Absentee
-        # '{@_Display_Candidate_Name}': 'Name',
-
-        # '{@district_info}': 'Contest' 
-              
     return values
 
 def extract_values(tree, fields):
     """Extract the values of any field listed in fields from given tree"""
 
-    # Return results as [ [headers...] [Early...]  [Election]] ?
-    # or in an array with column headers?
-    # nah - leave that all to Record....
-
     logging.debug("tree = %s, line %s" % (tree[0].tag, tree[0].sourceline))
-    # "fields = %s" % fields
 
     if len(tree) != 1:
         print "Error: number of headers should be 1, not %d.  Line %d" % (len(tree), tree[0].sourceline)
@@ -274,7 +250,7 @@ if __name__ == "__main__":
 
 
     """
-    python -m cProfile -s time makeauditunits.py testcum.xml 2>&1 > profile.out
+    python -m cProfile -s time makeauditunits.py 2>&1 > profile-0.3.0
 
     or
 
