@@ -12,23 +12,25 @@ Question:
  Where are ballot counts?  Total the ballots for Senate DEM+REP or something
 
 Todo:
- Need a way to sort DRE results out separately
- Name report for just one party, maybe check that there is just one
+ Subtract to produce audit batch totals
  Deal with namespace issues - auto-edit file, or handle it.
+ Add support for confidence levels, etc
+
+ Need a way to sort DRE results out separately
  Divide results into Early and Election, only output stuff that changes
  Print "few" rather than a number less than 3?
  Option to either produce raw report, or combined to allow publication
  Encapsulate election-specific data in an Election class
    including replace_dict, fields of relevance, etc
-   based on "programming" data from Hart system?
+   some day: based on "programming" data from Hart system?
  Provide interface for interactive abbreviation of contest names?
  Auto-sort result files, check for non-incremental results
  Check for results that list different candidates for a contest
- Add support for confidence levels, etc
  Look for suspicious audit units, anomalous results
  Look for columns that don't agree with previous result
  Support for selecting sequence of contests in columns
- Produce totals
+
+ How to add info to auto-usage message about file arguments
 
 Django implementation:
  class Contest - model
@@ -57,20 +59,36 @@ import lxml.etree as ET
 from datetime import datetime
 
 __author__ = "Neal McBurnett <http://mcburnett.org/neal/>"
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __date__ = "2008-09-08"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
 __license__ = "GPL v3"
 
 class Result:
-    """     ?based on GenericResult (dynamically created somehow, add choices)?
-    def __init__()
+    """
+    The results for a single audit unit, along with associated info
+
+    Usage: r = Result(dict)             # how to distinguish cum from actual
+           r.update(dict)
+           r.checkin()  # validate, link to appropriate contest
+    def __str__(self):  #or unicode?
+    need to be able to do diffs between cum Results to generate actual
+
+    how to store them: array with columns addressed by key?
+    """
+
+    """ earlier...    ?based on GenericResult (dynamically created somehow, add choices)?
+
+    def __init__(self):
   contest
   audit_unit
   under, over
   choice_a, choice_b....
  Clever enumerating?  to return over, under, then each candidate
  """
+
+    def update(self):
+        """like a dictionary update, but error if value is already there"""
 
 replace_dict = {
     "REPRESENTATIVE TO THE 111th UNITED STATES CONGRESS - DISTRICT ": "CD",
@@ -111,6 +129,11 @@ def main(parser):
     logging.debug("args = %s" % args)
 
     totals = {}
+
+    if len(args) == 0:
+        args.append("/srv/s/audittools/testcum.xml")
+        logging.debug("using test file: " + args[0])
+
     for file in args:
         newtotals = do_contests(file)
         make_audit_unit(totals, newtotals)
@@ -146,21 +169,35 @@ def do_contests(file):
                   '{@_Combine_Over}': 'OverEarly',
                   '{sp_cumulative_rpt.c_over_votes_election}': 'OverElection' }
 
+        """
+        We don't need the Header: we get contest from the node itself
         tree_head = extract_values(contesttree.xpath(
 		                 'FormattedArea[@Type="Header"]' ),
                                 fields )
-        
+        if tree_head['Contest'] != tree[0].text:
+            print "head = ", tree_head, " contest = ", tree[0].text
+        """
+
         # Get undervotes and overvotes from Footer
-        tree_foot = extract_values(contesttree.xpath(
-		                 'FormattedArea[@Type="Footer"]' ),
-                                fields )
-        
+        earlyr = extract_values(
+            contesttree.xpath('FormattedArea[@Type="Footer"]' ),
+            { '{@_Combine_Under}': 'Under',
+              '{@_Combine_Over}': 'Over' } )
+
+        electionr = extract_values(
+            contesttree.xpath('FormattedArea[@Type="Footer"]' ),
+            { '{sp_cumulative_rpt.c_under_votes_election}': 'Under',
+              '{sp_cumulative_rpt.c_over_votes_election}': 'Over' } )
+
         v = []
-        logging.debug(contesttree.getchildren())
+        #logging.debug(contesttree.getchildren())
 
         # For each candidate or option
         for c in contesttree.xpath('.//FormattedAreaPair[@Type="Details"]'):
             cv = extract_values(c, fields )
+            earlyr.update({cv['Name']: cv['Early/Absentee']})
+            electionr.update({cv['Name']: cv['Election day']})
+
             logging.debug("candidate: %s" % cv['Name'])
             v.append(cv)
 
@@ -168,7 +205,7 @@ def do_contests(file):
         assert len(parties) == 1
         party = parties.pop()
 
-        tree_head.update({'Party': party})
+        #tree_head.update({'Party': party})
         key = "%s:%s" % (contest, party)
 
         # TODO: if not there yet, put names into contest instance,
@@ -183,7 +220,8 @@ def do_contests(file):
             candvotes_early[candidate['Name']] = candidate['Early/Absentee']
             candvotes_election[candidate['Name']] = candidate['Election day']
 
-        values[key] = [tree_foot, v]
+        #values[key] = [tree_foot, v]
+        values[key] = [earlyr, electionr]
 
         # For each candidate, get Election day and Early/Absentee
         # '{@_Display_Candidate_Name}': 'Name',
@@ -210,11 +248,11 @@ def extract_values(tree, fields):
     values = {}
     for i in tree.xpath('.//FormattedReportObject'):
         #logging.debug("i = %s" % (i))
-        logging.debug("i = %s, line %s" % (i[1].tag, i[1].sourceline))
+        #logging.debug("i = %s, line %s" % (i[1].tag, i[1].sourceline))
         if 'FieldName' in i.attrib and i.attrib['FieldName'] in fields.keys():
             values[fields[i.attrib['FieldName']]] = i[1].text
 
-    logging.debug("values = %s" % values)
+    logging.debug("values for %s = %s" % (fields, values))
     return values
 
 def make_audit_unit(totals, newtotals):
@@ -222,16 +260,13 @@ def make_audit_unit(totals, newtotals):
 
     import pprint
 
-    pprint.pprint(newtotals)
+    #pprint.pprint(newtotals)
 
     for contest in newtotals:
         print contest
         for x in newtotals[contest]:
             for f in x:
-                import pdb
-                #pdb.set_trace()	# put this where you want to start tracing
-                
-                #print("	%s	%s" % (f, x[f])) # - totals[contest][x][f])
+                print("	%s	%s" % (f, x[f])) # - totals[contest][x][f])
 
 
 if __name__ == "__main__":

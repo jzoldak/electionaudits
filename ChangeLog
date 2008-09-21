@@ -1,3 +1,9 @@
+2008-09-20    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (make_audit_unit): 
+	divide into early and election results, without yet using Result class
+	Version 0.3.0
+	
 2008-09-14    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py (make_audit_unit):
