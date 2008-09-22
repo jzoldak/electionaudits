@@ -12,6 +12,7 @@ Question:
  Where are ballot counts?  Total the ballots for Senate DEM+REP or something
 
 Todo:
+ Separate "Early" from "Absentee", report both
  Subtract to produce audit batch totals
  Deal with namespace issues - auto-edit file, or handle it.
  Add support for confidence levels, etc
@@ -96,7 +97,8 @@ class Result:
 
 replace_dict = {
     "REPRESENTATIVE TO THE 111th UNITED STATES CONGRESS - DISTRICT ": "CD",
-    ", Vote For 1 ": "",
+    "REPRESENTATIVE TO THE 111TH UNITED STATES CONGRESS - DISTRICT ": "CD",
+    ", Vote For 1": "",
     "STATE REPRESENTATIVE - DISTRICT ": "SRD",
     "STATE SENATE - DISTRICT ": "SSD",
     "REGENT OF THE UNIVERSITY OF COLORADO CONGRESSIONAL DISTRICT ": "Regent D",
@@ -178,10 +180,17 @@ def do_contests(file):
         #logging.debug("tree:\n" + ET.tostring(contesttree, pretty_print=True))
 
         # Get undervotes and overvotes from Footer
+        absenteer = extract_values(
+            contesttree.xpath('FormattedArea[@Type="Footer"]' ),
+            { '{@_Combine_Under}': 'Under',	# Report combined AB/Early here
+              '{@AB_Under_votes}': 'Under',
+              '{@_Combine_Over}': 'Over',	# Report combined AB/Early here
+              '{@AB_Over_Votes}': 'Over' } )
+
         earlyr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
-            { '{@_Combine_Under}': 'Under',
-              '{@_Combine_Over}': 'Over' } )
+            { '{@EA_Under_Votes}': 'Under',
+              '{@EA_Over_Votes}': 'Over' } )
 
         electionr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
@@ -197,11 +206,15 @@ def do_contests(file):
                 c,
                 { '{@_Display_Candidate_Name}': 'Name',
                   '{sp_cumulative_rpt.party}': 'Party',
-                  '{@Tl_total_cand}': 'Election day',
-                  '{@_Combine_AB_EA}': 'Early/Absentee', } )
+                  #'{@Tl_total_cand}': 'Election day',  #??
+                  '{sp_cumulative_rpt.c_votes_election}': 'Election day', #??
+                  '{@_Combine_AB_EA}': 'Absentee', # report combined here
+                  '{@AB_Votes}': 'Absentee',
+                  '{@EA_Votes}': 'Early' } )
 
             logging.debug("candidate: %s" % cv['Name'])
-            earlyr.update({cv['Name']: cv['Early/Absentee']})
+            absenteer.update({cv['Name']: cv['Absentee']})
+            earlyr.update({cv['Name']: cv['Early']})
             electionr.update({cv['Name']: cv['Election day']})
             parties.add(cv['Party'])
 
@@ -210,7 +223,7 @@ def do_contests(file):
 
         key = "%s:%s" % (contest, party)
 
-        values[key] = [earlyr, electionr]
+        values[key] = [absenteer, earlyr, electionr]
 
     return values
 
@@ -243,11 +256,12 @@ def make_audit_unit(totals, newtotals):
 
     #pprint.pprint(newtotals)
 
-    for contest in newtotals:
+    for contest in sorted(newtotals):
         print contest
         for x in newtotals[contest]:
+            print "---"
             for f in x:
-                print("	%s	%s" % (f, x[f])) # - totals[contest][x][f])
+                print("	%s	%s" % (x[f], f)) # - totals[contest][x][f])
 
 
 if __name__ == "__main__":
@@ -282,3 +296,109 @@ if __name__ == "__main__":
     extras
     tree = contesttree.xpath('FormattedArea[@Type="Header"]//FormattedReportObject[@FieldName="{@Contest Title}"]/FormattedValue')
     """
+
+"""
+Fields in the 08 general election  cumulative report from crystal
+1043974 2008-09-22 12:22 cumulative.xml
+
+# grep Field cumulative.xml| sed -e 's/^.*FieldN/FieldN/' -e 's,><ObjectName>.*,,' | sort|uniq -c|sort -n 
+     71 FieldName="{@AB_Over_Votes}"
+     71 FieldName="{@AB_Per_absentee_over}"
+     71 FieldName="{@AB_Per_absentee_total}"
+     71 FieldName="{@AB_Per_absentee_under}"
+     71 FieldName="{@AB_Total_absentee}"
+     71 FieldName="{@AB_Under_votes}"
+     71 FieldName="{@ballots_cast}"
+     71 FieldName="{@district_info}"
+     71 FieldName="{@EA_Over_Votes}"
+     71 FieldName="{@Ea_Per_early_over}"
+     71 FieldName="{@Ea_Per_early_total}"
+     71 FieldName="{@Ea_Per_early_under}"
+     71 FieldName="{@EA_Total}"
+     71 FieldName="{@EA_Under_Votes}"
+     71 FieldName="{@El_Per_elect_over}"
+     71 FieldName="{@El_Per_elect_total}"
+     71 FieldName="{@El_Per_elect_under}"
+     71 FieldName="{sp_cumulative_rpt.counted_precincts}"
+     71 FieldName="{sp_cumulative_rpt.c_over_votes_election}"
+     71 FieldName="{sp_cumulative_rpt.c_under_votes_election}"
+     71 FieldName="{sp_cumulative_rpt.reg_voters}"
+     71 FieldName="{sp_cumulative_rpt.total_precincts}"
+     71 FieldName="{@Tl_Per_over}"
+     71 FieldName="{@Tl_Per_Total}"
+     71 FieldName="{@Tl_Per_under}"
+     71 FieldName="{@Tl_total_over}"
+     71 FieldName="{@Tl_total_under}"
+     71 FieldName="{@Tl_total_votes}"
+     71 FieldName="{@To_Percent_Turnout}"
+     71 FieldName="{@To_Per_Precinct_Reporting}"
+     71 FieldName="{#total_election}"
+    159 FieldName="{@Ab_Per_absentee_cand}"
+    159 FieldName="{@AB_Votes}"
+    159 FieldName="{@_Display_Candidate_Name}"
+    159 FieldName="{@Ea_Per_early_cand}"
+    159 FieldName="{@EA_Votes}"
+    159 FieldName="{@El_Per_elect_cand}"
+    159 FieldName="{sp_cumulative_rpt.c_votes_election}"
+    159 FieldName="{sp_cumulative_rpt.party}"
+    159 FieldName="{@Tl_Per_cand}"
+    159 FieldName="{@Tl_total_cand}"
+
+cat /srv/s/audittools/testcum.xml | grep Field | sed -e 's/^.*FieldN/FieldN/' -e 's,><ObjectName>.*,,' | sort|uniq -c|sort -n 
+     31 FieldName="{@_Combine_El_Per_elect_over}"
+     31 FieldName="{@_Combine_El_Per_elect_under}"
+     31 FieldName="{@_Combine_Over}"
+     31 FieldName="{@_Combine_Percent_Over}"
+     31 FieldName="{@_Combine_Percent_Under}"
+     31 FieldName="{@_Combine_Tl_Per_Over}"
+     31 FieldName="{@_Combine_Tl_Per_Under}"
+     31 FieldName="{@_Combine_Under}"
+     31 FieldName="{sp_cumulative_rpt.c_over_votes_election}"
+     31 FieldName="{sp_cumulative_rpt.c_under_votes_election}"
+     31 FieldName="{@Tl_total_over}"
+     31 FieldName="{@Tl_total_under}"
+     34 FieldName="{@_Combine_AB_EA_Total}"
+     34 FieldName="{@_Combine_El_Per_elect_total}"
+     34 FieldName="{@_Combine_Percent_Cast}"
+     34 FieldName="{@_Combine_Tl_Per_Total}"
+     34 FieldName="{@district_info}"
+     34 FieldName="{@Tl_total_votes}"
+     34 FieldName="{#total_election}"
+     37 FieldName="{@_Combine_AB_EA}"
+     37 FieldName="{@_Combine%_AB_EA}"
+     37 FieldName="{@_Combine_El_Per_elect_cand}"
+     37 FieldName="{@_Combine_Tl_Per_cand}"
+     37 FieldName="{@_Display_Candidate_Name}"
+     37 FieldName="{sp_cumulative_rpt.c_votes_election}"
+     37 FieldName="{sp_cumulative_rpt.party}"
+     37 FieldName="{@Tl_total_cand}"
+
+
+Fields in a Canvass report, by frequency:
+   4566  FieldName="GroupName ({sp_tly_precinct_rpt.pct_seq_nbr})"
+   4566  FieldName="{@Turn_Out%}"
+   4566  FieldName="{@Total_Cand_2_Show}"
+   4566  FieldName="{@Total_Cand_1_Show}"
+   4566  FieldName="Maximum ({@Total_Ballots}, {sp_tly_precinct_rpt.pct_seq_nbr})"
+   4566  FieldName="Maximum ({sp_tly_precinct_rpt.ballots_election}, {sp_tly_precinct_rpt.pct_seq_nbr})"
+   4566  FieldName="Maximum ({sp_tly_precinct_rpt.ballots_early}, {sp_tly_precinct_rpt.pct_seq_nbr})"
+   4566  FieldName="Maximum ({sp_tly_precinct_rpt.ballots_absentee}, {sp_tly_precinct_rpt.pct_seq_nbr})"
+   4566  FieldName="Maximum ({@Reg_Voters}, {sp_tly_precinct_rpt.pct_seq_nbr})"
+    283  FieldName="{@Total_Cand_3_Show}"
+    174  FieldName="{@Total_Cand_4_Show}"
+     34  FieldName="{@_Parse_Cand_2}"
+     34  FieldName="{@_Parse_Cand_1}"
+     34  FieldName="{@Continued}"
+     34  FieldName="{@Contest Title}"
+     34  FieldName="{@Total_RaceCand_2_Show}"
+     34  FieldName="{@Total_RaceCand_1_Show}"
+     34  FieldName="Sum ({@Total_Ballots}, {sp_tly_precinct_rpt.race_seq_nbr})"
+     34  FieldName="Sum ({sp_tly_precinct_rpt.ballots_election}, {sp_tly_precinct_rpt.race_seq_nbr})"
+     34  FieldName="Sum ({sp_tly_precinct_rpt.ballots_early}, {sp_tly_precinct_rpt.race_seq_nbr})"
+     34  FieldName="Sum ({sp_tly_precinct_rpt.ballots_absentee}, {sp_tly_precinct_rpt.race_seq_nbr})"
+     34  FieldName="Sum ({@Reg_Voters}, {sp_tly_precinct_rpt.race_seq_nbr})"
+      2  FieldName="{@_Parse_Cand_3}"
+      2  FieldName="{@Total_RaceCand_3_Show}"
+      1  FieldName="{@_Parse_Cand_4}"
+      1  FieldName="{@Total_RaceCand_4_Show}"
+"""
