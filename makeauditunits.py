@@ -154,7 +154,8 @@ def do_contests(file):
     for contesttree in root.xpath('//FormattedAreaPair[@Type="Group"]'):
         tree = contesttree.xpath('FormattedArea[@Type="Header"]//FormattedReportObject[@FieldName="{@district_info}"]/FormattedValue')
         if len(tree) != 1:
-            logging.error("Error: number of headers should be 1: %s" % (ET.tostring(contesttree, pretty_print=True)))
+            logging.error("Error: number of Headers should be 1, not %d.  Line %d" % (len(tree), contesttree.sourceline))
+            logging.debug(ET.tostring(contesttree, pretty_print=True))
 
         contest = tree[0].text
         for key in replace_dict:
@@ -172,6 +173,9 @@ def do_contests(file):
         if tree_head['Contest'] != tree[0].text:
             print "head = ", tree_head, " contest = ", tree[0].text
         """
+
+        
+        #logging.debug("tree:\n" + ET.tostring(contesttree, pretty_print=True))
 
         # Get undervotes and overvotes from Footer
         earlyr = extract_values(
@@ -201,7 +205,6 @@ def do_contests(file):
             electionr.update({cv['Name']: cv['Election day']})
             parties.add(cv['Party'])
 
-        #parties = set([cv['Party'] for cv in v])
         assert len(parties) > 0		# or == 1 for primary?
         party = parties.pop()
 
@@ -214,10 +217,12 @@ def do_contests(file):
 def extract_values(tree, fields):
     """Extract the values of any field listed in fields from given tree"""
 
-    logging.debug("tree = %s, line %s" % (tree[0].tag, tree[0].sourceline))
-
     if len(tree) != 1:
-        print "Error: number of headers should be 1, not %d.  Line %d" % (len(tree), tree[0].sourceline)
+        logging.error("Error: tree len should be 1, not %d" % (len(tree)))
+        #logging.error("Error: tree len should be 1, not %d.  Line %d" % (len(tree), tree.sourceline))
+        return
+
+    logging.debug("tree = %s, line %s" % (tree[0].tag, tree[0].sourceline))
 
     tree = tree[0]
 
@@ -250,9 +255,12 @@ if __name__ == "__main__":
 
 
     """
-    python -m cProfile -s time makeauditunits.py 2>&1 > profile-0.3.0
+    to test: ./makeauditunits.py > /tmp/q;  diff /tmp/q testcum.out
 
-    or
+    to profile:
+      python -m cProfile -s time makeauditunits.py 2>&1 > profile-0.3.0
+
+     or
 
     import cProfile
     cProfile.run('main(parser)')
@@ -268,4 +276,9 @@ if __name__ == "__main__":
     stats.strip_dirs()
     stats.sort_stats('time', 'calls')
     stats.print_stats(20)
+    """
+
+    """
+    extras
+    tree = contesttree.xpath('FormattedArea[@Type="Header"]//FormattedReportObject[@FieldName="{@Contest Title}"]/FormattedValue')
     """
