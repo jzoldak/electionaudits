@@ -8,21 +8,23 @@ Example:
 
 Use pydoc to produce full documentation.
 
-Question:
- Where are ballot counts?  Total the ballots for Senate DEM+REP or something
+Components:
+ django apps:
+   election_audit
+    with parse_data util
+ testdata
 
 Todo:
- Separate "Early" from "Absentee", report both
- Subtract to produce audit batch totals
  Deal with namespace issues - auto-edit file, or handle it.
  Add support for confidence levels, etc
 
+ Add ballot counts (optional?) based on info box
  Need a way to sort DRE results out separately
  Divide results into Early and Election, only output stuff that changes
  Print "few" rather than a number less than 3?
  Option to either produce raw report, or combined to allow publication
  Encapsulate election-specific data in an Election class
-   including replace_dict, fields of relevance, etc
+   including replacements, fields of relevance, etc
    some day: based on "programming" data from Hart system?
  Provide interface for interactive abbreviation of contest names?
  Auto-sort result files, check for non-incremental results
@@ -95,17 +97,38 @@ class Result:
     def update(self):
         """like a dictionary update, but error if value is already there"""
 
-replace_dict = {
-    "REPRESENTATIVE TO THE 111th UNITED STATES CONGRESS - DISTRICT ": "CD",
-    "REPRESENTATIVE TO THE 111TH UNITED STATES CONGRESS - DISTRICT ": "CD",
-    ", Vote For 1": "",
-    "STATE REPRESENTATIVE - DISTRICT ": "SRD",
-    "STATE SENATE - DISTRICT ": "SSD",
-    "REGENT OF THE UNIVERSITY OF COLORADO CONGRESSIONAL DISTRICT ": "Regent D",
-    "COUNTY COMMISSIONER - DISTRICT ": "CCD",
-    "DISTRICT ATTORNEY - 20th JUDICIAL DISTRICT": "District Attorney",
-    "THE EARNINGS FROM THE INVESTMENT": "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B",
-}
+replacements = [
+    ("THE EARNINGS FROM THE INVESTMENT", "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B"),
+    ("ST VRAIN SCHOOL DISTRICT", "ST VRAIN SD"),
+    ("FIRE PROTECTION DISTRICT", "FPD"),
+    ("REPRESENTATIVE TO THE 111th UNITED STATES CONGRESS - DISTRICT ", "CD"),
+    ("REPRESENTATIVE TO THE 111TH UNITED STATES CONGRESS - DISTRICT ", "CD"),
+    (", Vote For 1", ""),
+    ("STATE REPRESENTATIVE - DISTRICT ", "SRD"),
+    ("STATE SENATE - DISTRICT ", "SSD"),
+    ("REGENT OF THE UNIVERSITY OF COLORADO CONGRESSIONAL DISTRICT ", "REGENT D"),
+    ("REGENT - UNIVERSITY OF COLORADO CONGRESSIONAL DISTRICT ", "REGENT D"),
+    ("COUNTY COMMISSIONER - DISTRICT ", "CCD"),
+    ("JUSTICE OF THE COLORADO SUPREME COURT", "SUPREME COURT"),
+    ("DISTRICT JUDGE 20th JUDICIAL DISTRICT", "JUDGE 20th JD"),
+    ("ESTES VALLEY RECREATION AND PARK DIST", "ESTES VALLEY DIST"),
+    ("REGIONAL TRANSPORTATION DISTRICT DIRECTOR", "RTD"),
+    ("DISTRICT ATTORNEY 20TH JUDICIAL DISTRICT", "DISTRICT ATTORNEY"),
+    ("DISTRICT ATTORNEY - 20th JUDICIAL DISTRICT", "DISTRICT ATTORNEY"),
+    ("AMENDMENT ", "A "),
+    ("BOULDER", "B"),
+    ("LAFAYETTE", "LA"),
+    ("LONGMONT", "LO"),
+    ("LUISVILLE", "LU"),
+    ("CITY OF ", ""),
+    ("TOWN OF ", ""),
+    ("COUNTY ", "C"),
+    ("COURT OF APPEALS ", "COURT"),
+    ("BALLOT ", ""),
+    ("ISSUE NO. ", "I"),
+    ("ISSUE ", "I "),
+    ("QUESTION NO. ", "Q"),
+]
 
 
 parser = optparse.OptionParser(prog="makeauditunits", version=__version__)
@@ -143,7 +166,7 @@ def main(parser):
     logging.debug("args = %s" % args)
 
     if len(args) == 0:
-        args.append("/srv/s/audittools/testcum.xml")
+        args.append("/srv/s/audittools/testdata/testcum.xml")
         logging.debug("using test file: " + args[0])
 
     totals = {}
@@ -168,8 +191,8 @@ def do_contests(file):
             logging.debug(ET.tostring(contesttree, pretty_print=True))
 
         contest = tree[0].text
-        for key in replace_dict:
-            contest = contest.replace(key, replace_dict[key])
+        for old, new in replacements:
+            contest = contest.replace(old, new)
 
         contest = contest.strip()
         logging.debug("Contest: %s (%s)" % (contest, tree[0].text))
@@ -227,7 +250,7 @@ def do_contests(file):
             parties.add(cv['Party'])
 
         assert len(parties) > 0		# or == 1 for primary?
-        party = parties.pop()
+        party = parties.pop() or ""
 
         key = "%s:%s" % (contest, party)
 
@@ -270,155 +293,24 @@ def make_audit_unit(totals, newtotals, options):
     for contest in sorted(newtotals):
         if options.contest != None and options.contest != contest:
             continue
-        print contest
         if options.subtract:
             if contest in totals:
                 for n, o in zip(newtotals[contest], totals[contest]):
-                    print "---"
+                    printf(contest)
                     for f in sorted(n):
-                        print("	%s	%s" % (int(n[f]) - int(o[f]), f))
+                        printf("	%s	%s" % (f[0:6], int(n[f]) - int(o[f])))
+                    printf('\n')
 
         else:
+            print contest
+            
             for n in newtotals[contest]:
                 print "---"
                 for f in sorted(n):
                     print("	%s	%s" % (n[f], f))
 
+def printf(string):
+    sys.stdout.write(string)
+
 if __name__ == "__main__":
     main(parser)
-
-
-    """
-    to test: ./makeauditunits.py > /tmp/q;  diff /tmp/q testcum.out
-
-    to profile:
-      python -m cProfile -s time makeauditunits.py 2>&1 > profile-0.3.0
-
-     or
-
-    import cProfile
-    cProfile.run('main(parser)')
-
-    or older:
-
-    import hotshot, hotshot.stats
-    prof = hotshot.Profile("test.prof")
-    #benchtime, stones = prof.runcall(test.pystone.pystones)
-    benchtime, stones = prof.runcall(main(parser))
-    prof.close()
-    stats = hotshot.stats.load("stones.prof")
-    stats.strip_dirs()
-    stats.sort_stats('time', 'calls')
-    stats.print_stats(20)
-    """
-
-    """
-    extras
-    tree = contesttree.xpath('FormattedArea[@Type="Header"]//FormattedReportObject[@FieldName="{@Contest Title}"]/FormattedValue')
-    """
-
-"""
-Fields in the 08 general election  cumulative report from crystal
-1043974 2008-09-22 12:22 cumulative.xml
-
-# grep Field cumulative.xml| sed -e 's/^.*FieldN/FieldN/' -e 's,><ObjectName>.*,,' | sort|uniq -c|sort -n 
-     71 FieldName="{@AB_Over_Votes}"
-     71 FieldName="{@AB_Per_absentee_over}"
-     71 FieldName="{@AB_Per_absentee_total}"
-     71 FieldName="{@AB_Per_absentee_under}"
-     71 FieldName="{@AB_Total_absentee}"
-     71 FieldName="{@AB_Under_votes}"
-     71 FieldName="{@ballots_cast}"
-     71 FieldName="{@district_info}"
-     71 FieldName="{@EA_Over_Votes}"
-     71 FieldName="{@Ea_Per_early_over}"
-     71 FieldName="{@Ea_Per_early_total}"
-     71 FieldName="{@Ea_Per_early_under}"
-     71 FieldName="{@EA_Total}"
-     71 FieldName="{@EA_Under_Votes}"
-     71 FieldName="{@El_Per_elect_over}"
-     71 FieldName="{@El_Per_elect_total}"
-     71 FieldName="{@El_Per_elect_under}"
-     71 FieldName="{sp_cumulative_rpt.counted_precincts}"
-     71 FieldName="{sp_cumulative_rpt.c_over_votes_election}"
-     71 FieldName="{sp_cumulative_rpt.c_under_votes_election}"
-     71 FieldName="{sp_cumulative_rpt.reg_voters}"
-     71 FieldName="{sp_cumulative_rpt.total_precincts}"
-     71 FieldName="{@Tl_Per_over}"
-     71 FieldName="{@Tl_Per_Total}"
-     71 FieldName="{@Tl_Per_under}"
-     71 FieldName="{@Tl_total_over}"
-     71 FieldName="{@Tl_total_under}"
-     71 FieldName="{@Tl_total_votes}"
-     71 FieldName="{@To_Percent_Turnout}"
-     71 FieldName="{@To_Per_Precinct_Reporting}"
-     71 FieldName="{#total_election}"
-    159 FieldName="{@Ab_Per_absentee_cand}"
-    159 FieldName="{@AB_Votes}"
-    159 FieldName="{@_Display_Candidate_Name}"
-    159 FieldName="{@Ea_Per_early_cand}"
-    159 FieldName="{@EA_Votes}"
-    159 FieldName="{@El_Per_elect_cand}"
-    159 FieldName="{sp_cumulative_rpt.c_votes_election}"
-    159 FieldName="{sp_cumulative_rpt.party}"
-    159 FieldName="{@Tl_Per_cand}"
-    159 FieldName="{@Tl_total_cand}"
-
-cat /srv/s/audittools/testcum.xml | grep Field | sed -e 's/^.*FieldN/FieldN/' -e 's,><ObjectName>.*,,' | sort|uniq -c|sort -n 
-     31 FieldName="{@_Combine_El_Per_elect_over}"
-     31 FieldName="{@_Combine_El_Per_elect_under}"
-     31 FieldName="{@_Combine_Over}"
-     31 FieldName="{@_Combine_Percent_Over}"
-     31 FieldName="{@_Combine_Percent_Under}"
-     31 FieldName="{@_Combine_Tl_Per_Over}"
-     31 FieldName="{@_Combine_Tl_Per_Under}"
-     31 FieldName="{@_Combine_Under}"
-     31 FieldName="{sp_cumulative_rpt.c_over_votes_election}"
-     31 FieldName="{sp_cumulative_rpt.c_under_votes_election}"
-     31 FieldName="{@Tl_total_over}"
-     31 FieldName="{@Tl_total_under}"
-     34 FieldName="{@_Combine_AB_EA_Total}"
-     34 FieldName="{@_Combine_El_Per_elect_total}"
-     34 FieldName="{@_Combine_Percent_Cast}"
-     34 FieldName="{@_Combine_Tl_Per_Total}"
-     34 FieldName="{@district_info}"
-     34 FieldName="{@Tl_total_votes}"
-     34 FieldName="{#total_election}"
-     37 FieldName="{@_Combine_AB_EA}"
-     37 FieldName="{@_Combine%_AB_EA}"
-     37 FieldName="{@_Combine_El_Per_elect_cand}"
-     37 FieldName="{@_Combine_Tl_Per_cand}"
-     37 FieldName="{@_Display_Candidate_Name}"
-     37 FieldName="{sp_cumulative_rpt.c_votes_election}"
-     37 FieldName="{sp_cumulative_rpt.party}"
-     37 FieldName="{@Tl_total_cand}"
-
-
-Fields in a Canvass report, by frequency:
-   4566  FieldName="GroupName ({sp_tly_precinct_rpt.pct_seq_nbr})"
-   4566  FieldName="{@Turn_Out%}"
-   4566  FieldName="{@Total_Cand_2_Show}"
-   4566  FieldName="{@Total_Cand_1_Show}"
-   4566  FieldName="Maximum ({@Total_Ballots}, {sp_tly_precinct_rpt.pct_seq_nbr})"
-   4566  FieldName="Maximum ({sp_tly_precinct_rpt.ballots_election}, {sp_tly_precinct_rpt.pct_seq_nbr})"
-   4566  FieldName="Maximum ({sp_tly_precinct_rpt.ballots_early}, {sp_tly_precinct_rpt.pct_seq_nbr})"
-   4566  FieldName="Maximum ({sp_tly_precinct_rpt.ballots_absentee}, {sp_tly_precinct_rpt.pct_seq_nbr})"
-   4566  FieldName="Maximum ({@Reg_Voters}, {sp_tly_precinct_rpt.pct_seq_nbr})"
-    283  FieldName="{@Total_Cand_3_Show}"
-    174  FieldName="{@Total_Cand_4_Show}"
-     34  FieldName="{@_Parse_Cand_2}"
-     34  FieldName="{@_Parse_Cand_1}"
-     34  FieldName="{@Continued}"
-     34  FieldName="{@Contest Title}"
-     34  FieldName="{@Total_RaceCand_2_Show}"
-     34  FieldName="{@Total_RaceCand_1_Show}"
-     34  FieldName="Sum ({@Total_Ballots}, {sp_tly_precinct_rpt.race_seq_nbr})"
-     34  FieldName="Sum ({sp_tly_precinct_rpt.ballots_election}, {sp_tly_precinct_rpt.race_seq_nbr})"
-     34  FieldName="Sum ({sp_tly_precinct_rpt.ballots_early}, {sp_tly_precinct_rpt.race_seq_nbr})"
-     34  FieldName="Sum ({sp_tly_precinct_rpt.ballots_absentee}, {sp_tly_precinct_rpt.race_seq_nbr})"
-     34  FieldName="Sum ({@Reg_Voters}, {sp_tly_precinct_rpt.race_seq_nbr})"
-      2  FieldName="{@_Parse_Cand_3}"
-      2  FieldName="{@Total_RaceCand_3_Show}"
-      1  FieldName="{@_Parse_Cand_4}"
-      1  FieldName="{@Total_RaceCand_4_Show}"
-"""

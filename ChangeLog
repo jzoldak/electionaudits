@@ -1,4 +1,13 @@
 2008-09-22    <neal@bcn.boulder.co.us>
+	* makeauditunits.py: 
+	Do single-row output for --subtract
+	Partly move to printf() vs print
+	Move files to testdata, test again
+	Add more abbreviations
+	Fix replace_dict to be ordered list: replacements
+	Move data info to testnotes
+	
+2008-09-22    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py: 
 	Add --contest option
