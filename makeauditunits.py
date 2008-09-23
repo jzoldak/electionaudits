@@ -104,6 +104,7 @@ replace_dict = {
     "REGENT OF THE UNIVERSITY OF COLORADO CONGRESSIONAL DISTRICT ": "Regent D",
     "COUNTY COMMISSIONER - DISTRICT ": "CCD",
     "DISTRICT ATTORNEY - 20th JUDICIAL DISTRICT": "District Attorney",
+    "THE EARNINGS FROM THE INVESTMENT": "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B",
 }
 
 
@@ -116,6 +117,13 @@ parser.add_option("-v", "--verbose",
 parser.add_option("-d", "--debug",
                   action="store_true", default=False,
                   help="turn on debugging output")
+
+parser.add_option("-s", "--subtract",
+                  action="store_true", default=False,
+                  help="subtract each file from previous file" )
+
+parser.add_option("-c", "--contest", dest="contest",
+                  help="report on CONTEST", metavar="CONTEST")
 
 # incorporate OptionParser usage documentation into our docstring
 __doc__ = __doc__.replace("%InsertOptionParserUsage%\n", parser.format_help())
@@ -134,15 +142,15 @@ def main(parser):
 
     logging.debug("args = %s" % args)
 
-    totals = {}
-
     if len(args) == 0:
         args.append("/srv/s/audittools/testcum.xml")
         logging.debug("using test file: " + args[0])
 
+    totals = {}
+
     for file in args:
         newtotals = do_contests(file)
-        make_audit_unit(totals, newtotals)
+        make_audit_unit(totals, newtotals, options)
         totals = newtotals
 
 def do_contests(file):
@@ -249,20 +257,32 @@ def extract_values(tree, fields):
     logging.debug("values for %s = %s" % (fields, values))
     return values
 
-def make_audit_unit(totals, newtotals):
+def make_audit_unit(totals, newtotals, options):
     """Subtract totals from newtotals and report the results for one audit unit"""
 
     import pprint
 
     #pprint.pprint(newtotals)
 
-    for contest in sorted(newtotals):
-        print contest
-        for x in newtotals[contest]:
-            print "---"
-            for f in x:
-                print("	%s	%s" % (x[f], f)) # - totals[contest][x][f])
+    if options.subtract and totals == {}:	# skip first time around
+        return
 
+    for contest in sorted(newtotals):
+        if options.contest != None and options.contest != contest:
+            continue
+        print contest
+        if options.subtract:
+            if contest in totals:
+                for n, o in zip(newtotals[contest], totals[contest]):
+                    print "---"
+                    for f in sorted(n):
+                        print("	%s	%s" % (int(n[f]) - int(o[f]), f))
+
+        else:
+            for n in newtotals[contest]:
+                print "---"
+                for f in sorted(n):
+                    print("	%s	%s" % (n[f], f))
 
 if __name__ == "__main__":
     main(parser)

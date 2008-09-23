@@ -1,8 +1,15 @@
 2008-09-22    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py: 
+	Add --contest option
+	add --subtract to report differences for incrementals
+	sort reports
+
+2008-09-22    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py: 
 	Separate "Early" from "Absentee", report both
-	
+
 2008-09-20    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py (make_audit_unit): 
