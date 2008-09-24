@@ -14,26 +14,35 @@ Components:
     with parse_data util
  testdata
 
+Questions:
+ How to add info to auto-usage message about file arguments
+
 Todo:
  Deal with namespace issues - auto-edit file, or handle it.
+ Use filenames for audit unit names
+
+ Improve documentation
+ Track unrecornized FormattedValue fields - dump FieldName, value and line
+ Add ballot counts (optional?) based on info box
+ Put contest abbreviation in a new field, option to print with it or not
+
  Add support for confidence levels, etc
 
- Add ballot counts (optional?) based on info box
+ Package up, as an egg?  Test on windows
+
  Need a way to sort DRE results out separately
- Divide results into Early and Election, only output stuff that changes
  Print "few" rather than a number less than 3?
- Option to either produce raw report, or combined to allow publication
- Encapsulate election-specific data in an Election class
+ ?Option to either produce raw report, or combined to allow publication
+ Encapsulate election-specific data in specific classes
    including replacements, fields of relevance, etc
    some day: based on "programming" data from Hart system?
- Provide interface for interactive abbreviation of contest names?
+
  Auto-sort result files, check for non-incremental results
  Check for results that list different candidates for a contest
  Look for suspicious audit units, anomalous results
  Look for columns that don't agree with previous result
- Support for selecting sequence of contests in columns
 
- How to add info to auto-usage message about file arguments
+ Provide interface for interactive abbreviation of contest names?
 
 Django implementation:
  class Contest - model
@@ -48,9 +57,6 @@ Django implementation:
  class PublicView
   contest
  class RawView
-
-http://code.djangoproject.com/wiki/DynamicModels plus syncdb and admin magic
-
 """
 
 import os
