@@ -1,3 +1,8 @@
+2008-09-25    <neal@bcn.boulder.co.us>
+
+	* electionaudit/models.py (Choice.__str__): 
+	add django models and get them working with django generic admin
+
 2008-09-22    <neal@bcn.boulder.co.us>
 	* makeauditunits.py: 
 	Do single-row output for --subtract

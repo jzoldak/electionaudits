@@ -1,0 +1,21 @@
+Audittools is a collection of tools to help with auditing elections.
+It is designed based on the principles presented by a group
+of election auditing experts in the US, documented at
+
+  http://electionaudits.org/principles
+
+Requirements
+
+python
+
+optional:
+Django 1.0
+
+
+electionaudit: Graphical exploration and entry of information, via a
+Django-based web site.
+
+Usage:
+
+cd audittools
+./manage.py runserver --pythonpath=..
