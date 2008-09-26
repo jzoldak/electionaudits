@@ -18,8 +18,24 @@ Questions:
  How to add info to auto-usage message about file arguments
 
 Todo:
+ add methods to get results for a contest
+  calculate margins at some point
+ how to do this for combined batches??
+   perhaps drop AuditUnit notion, so
+   combining batches => making new batch names, 
+    creating new VoteCounts combining old ones, and
+    marking old VoteCounts as supersceded
+ view /<election>/<contest>/auditreport:
+ given a particular election
+  for each contest in the election
+   for each batch name
+    print batch name and then
+    for each VoteCount associated with the contest & batch, which is still valid
+     print votecount and choice name
+
+ good recipe for which takes dicts for adding votecount
  Deal with namespace issues - auto-edit file, or handle it.
- Use filenames for audit unit names
+ Use filenames for batches
 
  Improve documentation
  Track unrecornized FormattedValue fields - dump FieldName, value and line
@@ -64,6 +80,8 @@ import sys
 import optparse
 import logging
 import lxml.etree as ET
+
+import electionaudit.models as models
 
 from datetime import datetime
 
@@ -185,6 +203,16 @@ def main(parser):
 def do_contests(file):
     """Extract relevant data from each contest in a given file"""
 
+    from django.core.management import setup_environ
+    from audittools import settings
+
+    setup_environ(settings)
+
+    election, created = models.Election.objects.get_or_create(name="test")
+    over, created = models.Choice.objects.get_or_create(name="Over")
+    under, created = models.Choice.objects.get_or_create(name="Under")
+    absentee_batch, created = models.Batch.objects.get_or_create(name=file, election=election, type="Absentee")
+
     root = ET.parse(file).getroot()
     logging.debug("root = %s" % root)
 
@@ -200,7 +228,10 @@ def do_contests(file):
         for old, new in replacements:
             contest = contest.replace(old, new)
 
-        contest = contest.strip()
+        # hmm - this won't work in primary, when there are multiple
+        # contests per election, one for each party
+        contest = models.Contest.objects.create(name=contest.strip())
+
         logging.debug("Contest: %s (%s)" % (contest, tree[0].text))
 
         """
@@ -223,6 +254,9 @@ def do_contests(file):
               '{@AB_Under_votes}': 'Under',
               '{@_Combine_Over}': 'Over',	# Report combined AB/Early here
               '{@AB_Over_Votes}': 'Over' } )
+
+        v = models.VoteCount.objects.create(choice=over, votes=absenteer['Over'], batch=absentee_batch, contest=contest)
+        v = models.VoteCount.objects.create(choice=under, votes=absenteer['Under'], batch=absentee_batch, contest=contest)
 
         earlyr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
@@ -251,6 +285,8 @@ def do_contests(file):
 
             logging.debug("candidate: %s" % cv['Name'])
             absenteer.update({cv['Name']: cv['Absentee']})
+            choice, created = models.Choice.objects.get_or_create(name=cv['Name'])
+            v = models.VoteCount.objects.create(choice=choice, votes=absenteer[cv['Name']], batch=absentee_batch, contest=contest)
             earlyr.update({cv['Name']: cv['Early']})
             electionr.update({cv['Name']: cv['Election day']})
             parties.add(cv['Party'])
