@@ -8,4 +8,6 @@ except ImportError:
     sys.exit(1)
 
 if __name__ == "__main__":
+    import sys
+    sys.path.insert(0, '..')
     execute_manager(settings)
