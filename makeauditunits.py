@@ -18,8 +18,6 @@ Questions:
  How to add info to auto-usage message about file arguments
 
 Todo:
- add methods to get results for a contest
-  calculate margins at some point
  how to do this for combined batches??
    perhaps drop AuditUnit notion, so
    combining batches => making new batch names, 
@@ -33,9 +31,14 @@ Todo:
     for each VoteCount associated with the contest & batch, which is still valid
      print votecount and choice name
 
- good recipe for which takes dicts for adding votecount
+ and figure out how to do subtraction of diffs
+
+ good recipe which takes dicts for adding votecounts
  Deal with namespace issues - auto-edit file, or handle it.
  Use filenames for batches
+
+ add methods to get results for a contest
+  calculate margins at some point
 
  Improve documentation
  Track unrecornized FormattedValue fields - dump FieldName, value and line
@@ -208,10 +211,13 @@ def do_contests(file):
 
     setup_environ(settings)
 
-    election, created = models.Election.objects.get_or_create(name="test")
+    election, created = models.CountyElection.objects.get_or_create(name="BoulderGeneral")
     over, created = models.Choice.objects.get_or_create(name="Over")
     under, created = models.Choice.objects.get_or_create(name="Under")
-    absentee_batch, created = models.Batch.objects.get_or_create(name=file, election=election, type="Absentee")
+    absentee_batch, created = models.Batch.objects.get_or_create(
+        name=os.path.basename(file)[0:-4],	# trim directory and ".xml"
+        election=election,
+        type="AB" )
 
     root = ET.parse(file).getroot()
     logging.debug("root = %s" % root)
@@ -226,7 +232,7 @@ def do_contests(file):
 
         contest = tree[0].text
         for old, new in replacements:
-            contest = contest.replace(old, new)
+            pass #contest = contest.replace(old, new)
 
         # hmm - this won't work in primary, when there are multiple
         # contests per election, one for each party

@@ -61,9 +61,11 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'lukeplant_me_uk.django.validator.middleware.ValidatorMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'audittools.urls'
@@ -81,9 +83,17 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'django.contrib.flatpages',
 
+    'lukeplant_me_uk.django.validator',
+    'django_extensions',
     'electionaudit',
 )
+
+VALIDATOR_APP_VALIDATORS = {
+    'text/html': '/usr/bin/validate',
+    'application/xml+xhtml': '/usr/bin/validate',
+}
 
 try:
     from localsettings import *

@@ -1,6 +1,10 @@
+"""Generate a relationship diagram via django-extensions and
+ ./manage.py graph_models electionaudit -g -o /tmp/q2.png
+"""
+
 from django.db import models
 
-class Election(models.Model):
+class CountyElection(models.Model):
     "An election, comprising a set of Contests and Batches of votes"
 
     name = models.CharField(max_length=200)
@@ -32,11 +36,11 @@ class Batch(models.Model):
     "A batch of ballots all counted at the same time and stored together"
 
     name = models.CharField(max_length=200)
-    election = models.ForeignKey(Election)
+    election = models.ForeignKey(CountyElection)
     type = models.CharField(max_length=20, help_text="Absentee, Early etc.")
 
     def __unicode__(self):
-        return "%s/%s" % (self.name, self.type)
+        return "%s:%s" % (self.name, self.type)
 
 class Choice(models.Model):
     "A candidate or issue name: an alternative for a Contest"

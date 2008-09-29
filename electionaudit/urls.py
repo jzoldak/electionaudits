@@ -1,29 +1,51 @@
 from django.conf.urls.defaults import *
+from electionaudit.models import *
+import settings
 
-urlpatterns = patterns(r'',
-    #(r'^$', 'electionaudit.views.index'),
+# electionaudit custom views
+
+urlpatterns = patterns('electionaudit.views',
+    #(r'^$',                                    'index'),
+    (r'^reports/(?P<contest>\w*)/$',            'report'),
 )
 
-"""
-from electionaudit.models import *
+# Generic views
 
-info_dict = {
-    'queryset': Entry.objects.all(),
-    'date_field': 'pub_date',
+contest_dict = {
+    'queryset': Contest.objects.all(),
 }
 
-urlpatterns = patterns('django.views.generic.date_based',
-   (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$', 'object_detail', info_dict),
-   (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$',               'archive_day',   info_dict),
-   (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$',                                'archive_month', info_dict),
-   (r'^(?P<year>\d{4})/$',                                                    'archive_year',  info_dict),
-   (r'^$',                                                                    'archive_index', info_dict),
+votecount_dict = {
+    'queryset': VoteCount.objects.all(),
+    'template_object_name' : 'votecounts',
+}
+
+votecount_detail_dict = {
+    'queryset': VoteCount.objects.all(),
+    'template_object_name' : 'votecount',
+}
+
+urlpatterns += patterns('django.views.generic.list_detail',
+    (r'^contests/$',                    'object_list',     contest_dict),
+    (r'^contests/(?P<object_id>\d+)/$', 'object_detail',   contest_dict),
+    (r'^votecounts/$',                    'object_list',     votecount_dict),
+    (r'^votecounts/(?P<object_id>\d+)/$', 'object_detail',   votecount_detail_dict),
 )
 
-urlpatterns = patterns(w'',
-    (r'^$', 'electionaudit.views.index'),
-    (r'^(?P<poll_id>\d+)/$', 'electionaudit.views.detail'),
-    (r'^(?P<poll_id>\d+)/results/$', 'electionaudit.views.results'),
-    (r'^(?P<poll_id>\d+)/vote/$', 'electionaudit.views.vote'),
-)
+if settings.DEBUG:
+    urlpatterns = urlpatterns + patterns('',
+        (r'^validator/', include('lukeplant_me_uk.django.validator.urls')))
+
+"""
+urls to consider
+
+/index
+/reports/
+/reports/<contest>
+/elections/
+votecount/<batch>
+/contest/report/ auditable report
+/election/ list of batches
+? list of contests
+/election/contest stats
 """

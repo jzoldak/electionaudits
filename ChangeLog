@@ -1,3 +1,14 @@
+2008-09-27    <neal@bcn.boulder.co.us>
+
+	* electionaudit/views.py (report): 
+	added report view, template, 
+	added custom admin to display auditunits in a table
+	trimmed batch name
+	add htmlvalidator
+	fix template errors
+	add flatpages and home page
+	
+	
 2008-09-25    <neal@bcn.boulder.co.us>
 
 	* electionaudit/models.py (Choice.__str__): 
