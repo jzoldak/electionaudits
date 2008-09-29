@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Contest List</h2>
+<table border="border" cellpadding="5">
+<tbody>
+        {% for contest in object_list %}
+<tr>
+ <td><a href="{{ contest.id }}">{{ contest.name }}</a></td>
+ <td>{{ contest.margin }}</td>
+</tr>
+        {% endfor %}
+</tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Contest: {{ object.name }}</h2>
+
+<table border="border" cellpadding="5">
+<tbody>
+  {% for votecount in object.votecount_set.all %}
+<tr>
+ <td>{{ votecount.votes }}</td>
+ <td>{{ votecount.choice }}</td>
+ <td><a href="/batch/{{ votecount.batch.id }}">{{ votecount.batch }}</a></td>
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}
