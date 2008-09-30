@@ -32,6 +32,20 @@ urlpatterns += patterns('django.views.generic.list_detail',
     (r'^votecounts/(?P<object_id>\d+)/$', 'object_detail',   votecount_detail_dict),
 )
 
+from django.contrib import databrowse
+urlpatterns += patterns('',
+    (r'^databrowse/(.*)', databrowse.site.root),
+)
+
+from django.contrib import databrowse
+
+databrowse.site.register(CountyElection)
+databrowse.site.register(AuditUnit)
+databrowse.site.register(Batch)
+databrowse.site.register(Contest)
+databrowse.site.register(Choice)
+databrowse.site.register(VoteCount)
+
 if settings.DEBUG:
     urlpatterns = urlpatterns + patterns('',
         (r'^validator/', include('lukeplant_me_uk.django.validator.urls')))

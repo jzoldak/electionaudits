@@ -84,6 +84,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.flatpages',
+    'django.contrib.databrowse',
 
     'lukeplant_me_uk.django.validator',
     'django_extensions',
