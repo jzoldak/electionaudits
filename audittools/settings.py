@@ -91,6 +91,8 @@ INSTALLED_APPS = (
     'electionaudit',
 )
 
+LANGUAGE_CODE="en"
+
 VALIDATOR_APP_VALIDATORS = {
     'text/html': '/usr/bin/validate',
     'application/xml+xhtml': '/usr/bin/validate',

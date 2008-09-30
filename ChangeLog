@@ -1,3 +1,9 @@
+2008-09-29    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (do_contests): 
+	Version"0.4.0"
+	Introduce ContestBatch record and report of AuditUnits in a Contest
+	
 2008-09-27    <neal@bcn.boulder.co.us>
 
 	* electionaudit/views.py (report): 

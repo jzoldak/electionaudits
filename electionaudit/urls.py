@@ -5,8 +5,7 @@ import settings
 # electionaudit custom views
 
 urlpatterns = patterns('electionaudit.views',
-    #(r'^$',                                    'index'),
-    (r'^reports/(?P<contest>\w*)/$',            'report'),
+    #(r'^reports/(?P<contest>\w*)/$',            'report'),
 )
 
 # Generic views
@@ -26,6 +25,8 @@ votecount_detail_dict = {
 }
 
 urlpatterns += patterns('django.views.generic.list_detail',
+    (r'^reports/$',                     'object_list',     dict(contest_dict, template_name="electionaudit/reports.html")),
+    (r'^reports/(?P<object_id>\d+)/$',  'object_detail',   dict(contest_dict, template_name="electionaudit/report.html")),
     (r'^contests/$',                    'object_list',     contest_dict),
     (r'^contests/(?P<object_id>\d+)/$', 'object_detail',   contest_dict),
     (r'^votecounts/$',                    'object_list',     votecount_dict),
@@ -43,6 +44,7 @@ databrowse.site.register(CountyElection)
 databrowse.site.register(AuditUnit)
 databrowse.site.register(Batch)
 databrowse.site.register(Contest)
+databrowse.site.register(ContestBatch)
 databrowse.site.register(Choice)
 databrowse.site.register(VoteCount)
 

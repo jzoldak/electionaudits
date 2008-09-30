@@ -42,6 +42,15 @@ class Batch(models.Model):
     def __unicode__(self):
         return "%s:%s" % (self.name, self.type)
 
+class ContestBatch(models.Model):
+    "The set of VoteCounts for a given Contest and Batch"
+
+    contest = models.ForeignKey(Contest)
+    batch = models.ForeignKey(Batch)
+
+    def __unicode__(self):
+        return "%s:%s" % (self.contest, self.batch)
+
 class Choice(models.Model):
     "A candidate or issue name: an alternative for a Contest"
 
@@ -53,14 +62,13 @@ class Choice(models.Model):
         return "%s" % (self.name)
 
 class VoteCount(models.Model):
-    "The count of votes for a particular Choice which are in the same Batch and Contest"
+    "The count of votes for a particular Choice in a ContestBatch"
 
     votes = models.IntegerField()
     choice = models.ForeignKey(Choice)
-    batch = models.ForeignKey(Batch)
-    contest = models.ForeignKey(Contest)
+    contest_batch = models.ForeignKey(ContestBatch)
 
     cumulative = models.BooleanField()
 
     def __unicode__(self):
-        return "%d\t%s\t%s\t%s" % (self.votes, self.choice.name, self.contest, self.batch.name)
+        return "%d\t%s\t%s\t%s" % (self.votes, self.choice.name, self.contest_batch.contest, self.contest_batch.batch)

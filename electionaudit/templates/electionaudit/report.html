@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Audit Report for {{ object }}</h2>
+<table border="border" cellpadding="5">
+<thead>
+ {% for contestbatch in object.contestbatch_set.all %}
+  {% if forloop.first %}
+   <tr>
+   {% for votecount in contestbatch.votecount_set.all %}
+      <td>{{ votecount.choice }}</td>
+   {% endfor %}
+   </tr>
+  {% endif %}
+ {% endfor %}
+</thead>
+<tbody>
+ {% for contestbatch in object.contestbatch_set.all %}
+  <tr>
+  {% for votecount in contestbatch.votecount_set.all %}
+     <td>{{ votecount.votes }}</td>
+  {% endfor %}
+  </tr>
+ {% endfor %}
+</tbody>
+</table>
+{% endblock %}

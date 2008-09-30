@@ -17,7 +17,12 @@ Components:
 Questions:
  How to add info to auto-usage message about file arguments
 
+Fix:
+ don't assume or check that audit report rows are all in the same sequence
+  sort them?
+
 Todo:
+ set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
  how to do this for combined batches??
    perhaps drop AuditUnit notion, so
    combining batches => making new batch names, 
@@ -89,7 +94,7 @@ import electionaudit.models as models
 from datetime import datetime
 
 __author__ = "Neal McBurnett <http://mcburnett.org/neal/>"
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __date__ = "2008-09-08"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
 __license__ = "GPL v3"
@@ -214,6 +219,7 @@ def do_contests(file):
     election, created = models.CountyElection.objects.get_or_create(name="BoulderGeneral")
     over, created = models.Choice.objects.get_or_create(name="Over")
     under, created = models.Choice.objects.get_or_create(name="Under")
+
     absentee_batch, created = models.Batch.objects.get_or_create(
         name=os.path.basename(file)[0:-4],	# trim directory and ".xml"
         election=election,
@@ -236,7 +242,8 @@ def do_contests(file):
 
         # hmm - this won't work in primary, when there are multiple
         # contests per election, one for each party
-        contest = models.Contest.objects.create(name=contest.strip())
+        contest, created = models.Contest.objects.get_or_create(name=contest.strip())
+        contest_batch = models.ContestBatch.objects.create(contest=contest, batch=absentee_batch)
 
         logging.debug("Contest: %s (%s)" % (contest, tree[0].text))
 
@@ -261,8 +268,8 @@ def do_contests(file):
               '{@_Combine_Over}': 'Over',	# Report combined AB/Early here
               '{@AB_Over_Votes}': 'Over' } )
 
-        v = models.VoteCount.objects.create(choice=over, votes=absenteer['Over'], batch=absentee_batch, contest=contest)
-        v = models.VoteCount.objects.create(choice=under, votes=absenteer['Under'], batch=absentee_batch, contest=contest)
+        v = models.VoteCount.objects.create(choice=over, votes=absenteer['Over'], contest_batch=contest_batch)
+        v = models.VoteCount.objects.create(choice=under, votes=absenteer['Under'], contest_batch=contest_batch)
 
         earlyr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
@@ -292,7 +299,7 @@ def do_contests(file):
             logging.debug("candidate: %s" % cv['Name'])
             absenteer.update({cv['Name']: cv['Absentee']})
             choice, created = models.Choice.objects.get_or_create(name=cv['Name'])
-            v = models.VoteCount.objects.create(choice=choice, votes=absenteer[cv['Name']], batch=absentee_batch, contest=contest)
+            v = models.VoteCount.objects.create(choice=choice, votes=absenteer[cv['Name']], contest_batch=contest_batch)
             earlyr.update({cv['Name']: cv['Early']})
             electionr.update({cv['Name']: cv['Election day']})
             parties.add(cv['Party'])
