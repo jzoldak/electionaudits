@@ -1,5 +1,5 @@
 """Generate a relationship diagram via django-extensions and
- ./manage.py graph_models electionaudit -g -o /tmp/q2.png
+ ./manage.py graph_models electionaudit -g -o ../doc/model_graph.png
 """
 
 from django.db import models
@@ -47,6 +47,9 @@ class ContestBatch(models.Model):
 
     contest = models.ForeignKey(Contest)
     batch = models.ForeignKey(Batch)
+
+    def contest_ballots(self):
+        return sum(a.votes for a in self.votecount_set.all())
 
     def __unicode__(self):
         return "%s:%s" % (self.contest, self.batch)

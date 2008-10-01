@@ -2,13 +2,21 @@
 
 {% block content %}
     <h2>Audit Report for {{ object }}</h2>
+<p>
+<!-- Margin of victory is {{ object.margin }} -->
+</p>
+
 <table border="border" cellpadding="5">
 <thead>
  {% for contestbatch in object.contestbatch_set.all %}
   {% if forloop.first %}
    <tr>
+   <td>AuditUnit</td>
+   <td>Batch</td>
+   <td>Ballots</td>
+   <td>Contest Ballots</td>
    {% for votecount in contestbatch.votecount_set.all %}
-      <td>{{ votecount.choice }}</td>
+      <td style="writing-mode: tb-rl;">{{ votecount.choice }}</td>
    {% endfor %}
    </tr>
   {% endif %}
@@ -17,9 +25,13 @@
 <tbody>
  {% for contestbatch in object.contestbatch_set.all %}
   <tr>
-  {% for votecount in contestbatch.votecount_set.all %}
-     <td>{{ votecount.votes }}</td>
-  {% endfor %}
+   <td>{{ forloop.counter|stringformat:"04d" }}</td>
+   <td>{{ contestbatch.batch }}</td>
+   <td>{{ contestbatch.ballot_count }}</td>
+   <td>{{ contestbatch.contest_ballots }}</td>
+   {% for votecount in contestbatch.votecount_set.all %}
+     <td><b>{{ votecount.votes }}</b></td>
+   {% endfor %}
   </tr>
  {% endfor %}
 </tbody>

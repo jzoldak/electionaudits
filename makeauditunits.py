@@ -22,32 +22,46 @@ Fix:
   sort them?
 
 Todo:
- set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
+ generate data from incremental reports via --subtract in addition
+ to independent reports as now.
+
+ make available on a web site
+
+ good recipe which takes dicts for adding votecounts
+
+ Deal with namespace issues - auto-edit file, or handle it.
+
+ add audit unit number
+ calculate contest ballot counts
+ figure out ballot counts (CVRs) based on info box for president??
+   max of all contests??
+   or 'Total Number of Voters' from pdf?
+ add methods to get results for a contest
+  calculate margins at some point
+
+ add table relating batch names to description - type, source, mbbs, etc
+ link to that from batch name
+
  how to do this for combined batches??
    perhaps drop AuditUnit notion, so
    combining batches => making new batch names, 
     creating new VoteCounts combining old ones, and
     marking old VoteCounts as supersceded
- view /<election>/<contest>/auditreport:
- given a particular election
-  for each contest in the election
-   for each batch name
-    print batch name and then
-    for each VoteCount associated with the contest & batch, which is still valid
-     print votecount and choice name
+
+ Track unrecognized FormattedValue fields - dump FieldName, value and line
+
+ develop view /<countyelection>/<contest>/auditreport:
+  including just batches that are in the county
 
  and figure out how to do subtraction of diffs
 
- good recipe which takes dicts for adding votecounts
- Deal with namespace issues - auto-edit file, or handle it.
- Use filenames for batches
-
- add methods to get results for a contest
-  calculate margins at some point
+ form for random selection of contestbatches
+ add "audited" flag (selected, success, failure) and form to mark them
+  and update stats
+ report of just contestbatches selected for audit
+ set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
 
  Improve documentation
- Track unrecornized FormattedValue fields - dump FieldName, value and line
- Add ballot counts (optional?) based on info box
  Put contest abbreviation in a new field, option to print with it or not
 
  Add support for confidence levels, etc

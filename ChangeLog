@@ -1,3 +1,8 @@
+2008-10-01    <neal@bcn.boulder.co.us>
+
+	* electionaudit/models.py (ContestBatch): 
+	add contest_ballots method, and add count to report
+
 2008-09-29    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py (do_contests): 
