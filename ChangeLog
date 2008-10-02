@@ -1,5 +1,9 @@
 2008-10-01    <neal@bcn.boulder.co.us>
 
+	* Version 0.5.0
+	* Improve README; Add GPL v3 COPYING file, doc/model_graph.png
+	* ToDo: split out from makeauditunits.py
+	
 	* electionaudit/models.py (ContestBatch): 
 	add contest_ballots method, and add count to report
 

@@ -1,100 +1,12 @@
 #!/usr/bin/env python
-"""Produce a report of audit units from incremental output of Hart Tally
+"""Produce a report of audit units from incremental cumulative reports
+made with Hart's Tally software.
 
 %InsertOptionParserUsage%
 
 Example:
- makeauditunits cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
+ makeauditunits -s cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
 
-Use pydoc to produce full documentation.
-
-Components:
- django apps:
-   election_audit
-    with parse_data util
- testdata
-
-Questions:
- How to add info to auto-usage message about file arguments
-
-Fix:
- don't assume or check that audit report rows are all in the same sequence
-  sort them?
-
-Todo:
- generate data from incremental reports via --subtract in addition
- to independent reports as now.
-
- make available on a web site
-
- good recipe which takes dicts for adding votecounts
-
- Deal with namespace issues - auto-edit file, or handle it.
-
- add audit unit number
- calculate contest ballot counts
- figure out ballot counts (CVRs) based on info box for president??
-   max of all contests??
-   or 'Total Number of Voters' from pdf?
- add methods to get results for a contest
-  calculate margins at some point
-
- add table relating batch names to description - type, source, mbbs, etc
- link to that from batch name
-
- how to do this for combined batches??
-   perhaps drop AuditUnit notion, so
-   combining batches => making new batch names, 
-    creating new VoteCounts combining old ones, and
-    marking old VoteCounts as supersceded
-
- Track unrecognized FormattedValue fields - dump FieldName, value and line
-
- develop view /<countyelection>/<contest>/auditreport:
-  including just batches that are in the county
-
- and figure out how to do subtraction of diffs
-
- form for random selection of contestbatches
- add "audited" flag (selected, success, failure) and form to mark them
-  and update stats
- report of just contestbatches selected for audit
- set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
-
- Improve documentation
- Put contest abbreviation in a new field, option to print with it or not
-
- Add support for confidence levels, etc
-
- Package up, as an egg?  Test on windows
-
- Need a way to sort DRE results out separately
- Print "few" rather than a number less than 3?
- ?Option to either produce raw report, or combined to allow publication
- Encapsulate election-specific data in specific classes
-   including replacements, fields of relevance, etc
-   some day: based on "programming" data from Hart system?
-
- Auto-sort result files, check for non-incremental results
- Check for results that list different candidates for a contest
- Look for suspicious audit units, anomalous results
- Look for columns that don't agree with previous result
-
- Provide interface for interactive abbreviation of contest names?
-
-Django implementation:
- class Contest - model
-  margin
-  # one-to-many with Results pointed to by them
- class IncrementalResult
-  contest
-  early [under, over, choice_a, choice_b]
-  election [under, over, choice_a, choice_b]
-  generate_results
-
- class PublicView
-  contest
- class RawView
 """
 
 import os
@@ -108,40 +20,10 @@ import electionaudit.models as models
 from datetime import datetime
 
 __author__ = "Neal McBurnett <http://mcburnett.org/neal/>"
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __date__ = "2008-09-08"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
 __license__ = "GPL v3"
-
-class Result:
-    """
-    The results for a single audit unit, along with associated info
-
-    Usage: r = Result(dict)             # how to distinguish cum from actual
-           r.update(dict)
-           r.checkin()  # validate, link to appropriate contest
-    def __str__(self):  #or unicode?
-    need to be able to do diffs between cum Results to generate actual
-
-    how to store them: array with columns addressed by key?
-
-        # TODO: if not there yet, put names into contest instance,
-        #  and establish order that the Results should be stored
-
-    """
-
-    """ earlier...    ?based on GenericResult (dynamically created somehow, add choices)?
-
-    def __init__(self):
-  contest
-  audit_unit
-  under, over
-  choice_a, choice_b....
- Clever enumerating?  to return over, under, then each candidate
- """
-
-    def update(self):
-        """like a dictionary update, but error if value is already there"""
 
 replacements = [
     ("THE EARNINGS FROM THE INVESTMENT", "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B"),
@@ -179,6 +61,13 @@ replacements = [
 
 parser = optparse.OptionParser(prog="makeauditunits", version=__version__)
 
+parser.add_option("-s", "--subtract",
+                  action="store_true", default=False,
+                  help="Input files are incremental snapshots.   Subtract data in each file from previous data to generate batch results" )
+
+parser.add_option("-c", "--contest", dest="contest",
+                  help="report on CONTEST", metavar="CONTEST")
+
 parser.add_option("-v", "--verbose",
                   action="store_true", default=False,
                   help="Verbose output" )
@@ -186,13 +75,6 @@ parser.add_option("-v", "--verbose",
 parser.add_option("-d", "--debug",
                   action="store_true", default=False,
                   help="turn on debugging output")
-
-parser.add_option("-s", "--subtract",
-                  action="store_true", default=False,
-                  help="subtract each file from previous file" )
-
-parser.add_option("-c", "--contest", dest="contest",
-                  help="report on CONTEST", metavar="CONTEST")
 
 # incorporate OptionParser usage documentation into our docstring
 __doc__ = __doc__.replace("%InsertOptionParserUsage%\n", parser.format_help())

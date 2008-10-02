@@ -1,21 +1,117 @@
-Audittools is a collection of tools to help with auditing elections.
-It is designed based on the principles presented by a group
-of election auditing experts in the US, documented at
+The ElectionAudits software project is designed to help audit
+elections with good statistical confidence.  It is provided in support
+of the
 
-  http://electionaudits.org/principles
+ Principles and Best Practices for Post-Election Audits
+ http://electionaudits.org/principles
+
+Authors
+=======
+Neal McBurnett
+
+Copyright
+=========
+Copyright 2008 Neal McBurnett
+
+ElectionAudits is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See the file COPYING for the full license.
+
 
 Requirements
+============
 
-python
+Python (developed with python version 2.5, but should work with 2.3)
+python-lxml (xml parsing package)
+Django 1.0  # makeauditunits.py could be separated out from this pretty easily
+sqlite3
 
-optional:
-Django 1.0
+Helpful but optional Django apps:
+    lukeplant_me_uk.django.validator for automatic xhtml validation
+    django_extensions for ease in development and documentation
+
+It has been tested on Ubuntu Linux, but shouldn't be hard to get
+running on OSX or Windows.
 
 
-electionaudit: Graphical exploration and entry of information, via a
+Versions, Bug reports
+=====================
+The software uses launchpad.net for project support.  Visit
+
+ https://launchpad.net/electionaudits
+
+to get the latest version or report bugs.  It uses the "Bazaar"
+distributed version control software, making it easy for you to
+contribute.
+
+
+Components:
+===========
+
+makeauditunits.py
+=================
+A program to parse election results data into easily
+manipulated databases and clean csv files.
+
+Currently supported: Hart InterCivic Tally "cumulative" reports in xml
+(crystal-reports) format (including all options: Absentee, Early and
+Election day, and the info box).
+
+Use the --help option to print usage instructions:
+
+$ ./makeauditunits --help
+
+Test data is provided, so you can just run
+
+$ cd audittools
+$ ./manage.py syncdb
+$ ../makeauditunits.py ../testdata/testcum.xml
+
+or if you have some incremental reports:
+
+$ makeauditunits -s cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
+
+electionaudit module
+====================
+
+Graphical exploration and entry of information, via a
 Django-based web site.
 
 Usage:
 
-cd audittools
-./manage.py runserver --pythonpath=..
+First run the internal django server:
+
+$ cd audittools
+$ ./manage.py syncdb
+
+$ ./manage.py runserver
+
+Then, in a browser, visit the main URL, e.g.
+
+ http://127.0.0.1:8000/
+
+to see the Audit Reports for the various Contests, etc.
+
+See doc/model_graph.png for a diagram of the various database tables
+and associated fields and relationships.
+
+See http://127.0.0.1:8000/admin/ (using the username and password
+you entered during the "syncdb" step) to enter new data, and
+http://127.0.0.1:8000/admin/doc/ for more documentation on the data models
+and various available views of the information.
+
+Features: self-validation of all xhtml pages generated: see
+a report of any errors at
+
+ http://127.0.0.1:8000/validator/

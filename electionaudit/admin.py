@@ -2,6 +2,7 @@ from django.contrib import admin
 from electionaudit.models import *
 
 class VoteCountAdmin(admin.ModelAdmin):
+    "Modify default layout of admin form"
     list_display = ['votes', 'choice', 'contest_batch']
 
 admin.site.register(CountyElection)

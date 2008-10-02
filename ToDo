@@ -1,0 +1,70 @@
+ToDo list for ElectionAudits
+
+Generate data from incremental reports via --subtract in addition
+ to independent reports as now.
+Produce output in csv format also
+
+Deal with namespace issues - auto-edit file, or handle it another way.
+
+Add a convenient recipe which takes dicts for adding votecounts
+and use that in makeauditunits.
+
+Improve documentation
+Set up a web site for news, screenshots etc
+
+Figure out ballot counts (CVRs) based on max of all contests in batch?
+  or 'Total Number of Voters' from pdf?
+Add methods to get results for a whole contest and calculate margins
+
+Incorporate Rivest's pps.py code to report statistics and confidence
+ levels and select audit units to be audited.
+
+Add table relating batch names to description - type, source, mbbs, etc
+and link to that from batch name
+
+Separate makeauditunits.py from django dependencies
+rename/move electionaudit directory/module to electionaudits
+look thru pylint advice
+perhaps automatically generate doc and put in doc directory before packaging
+
+Add info about file arguments to auto-usage message
+
+Don't assume or check that audit report rows are all in the same sequence
+ sort them?
+
+How to combine batches for privacy
+  perhaps drop AuditUnit notion, so
+  combining batches => making new batch names, 
+   creating new VoteCounts combining old ones, and
+   marking old VoteCounts as supersceded
+ Or generate a whole new CountyElection?
+
+While parsing xml, track unrecognized FormattedValue fields - dump
+ FieldName, value and line
+
+Develop view /<countyelection>/<contest>/auditreport:
+ including just batches that are in the county
+
+Add "audited" flag (selected, success, failure) and form to mark them
+ and update stats
+Provide report of just contestbatches selected for audit
+Set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
+
+Put contest abbreviation in a new field, option to print with it or not
+
+Package up, as an egg?  Test on windows
+
+Need a way to sort DRE results out separately.
+For privacy, print "few" rather than a number less than 3?
+
+Option to produce full collection of auditable reports for all contests,
+ in pdf?
+
+Encapsulate election-specific data in specific classes
+  including list of contest edits ("replacements var"), fields of relevance, etc
+  some day: do that based on "programming" data from Hart system?
+
+Auto-sort result files, check for non-incremental results
+Check for results that list different candidates for a contest
+Look for suspicious audit units, anomalous results
+Look for columns that don't agree with previous result
