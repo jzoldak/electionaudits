@@ -1,5 +1,7 @@
 # Django settings for audittools project.
 
+import os.path
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -10,7 +12,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'dev.db'             # Or path to database file if using sqlite3.
+DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'dev.db')
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -35,8 +37,6 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-
-import os.path
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), "site_media")
 
@@ -69,8 +69,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'audittools.urls'
-
-import os.path
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), "templates"),

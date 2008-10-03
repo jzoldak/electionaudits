@@ -5,7 +5,11 @@ made with Hart's Tally software.
 %InsertOptionParserUsage%
 
 Example:
- makeauditunits -s cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
+ Currently, you first need to make sure that makeauditunits knows
+ how to save the changes in the database i.e. which settings to use.  E.g.
+ $ export DJANGO_SETTINGS_MODULE=audittools.settings
+
+ $ makeauditunits -s cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
 
 """
 

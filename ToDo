@@ -11,6 +11,7 @@ and use that in makeauditunits.
 
 Improve documentation
 Set up a web site for news, screenshots etc
+Get rid of or document unused stuff like AuditUnit table, Votecount.cumulative
 
 Figure out ballot counts (CVRs) based on max of all contests in batch?
   or 'Total Number of Voters' from pdf?
@@ -52,7 +53,8 @@ Set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
 
 Put contest abbreviation in a new field, option to print with it or not
 
-Package up, as an egg?  Test on windows
+Package up, as an egg?  And submit to http://pypi.python.org/pypi
+Test on windows
 
 Need a way to sort DRE results out separately.
 For privacy, print "few" rather than a number less than 3?

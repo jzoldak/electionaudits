@@ -29,6 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 See the file COPYING for the full license.
 
 
+Contact the authors if you think you need different licensing terms.
+
+
 Requirements
 ============
 
@@ -76,6 +79,8 @@ Test data is provided, so you can just run
 
 $ cd audittools
 $ ./manage.py syncdb
+
+$ export DJANGO_SETTINGS_MODULE=audittools.settings
 $ ../makeauditunits.py ../testdata/testcum.xml
 
 or if you have some incremental reports:

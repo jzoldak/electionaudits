@@ -1,3 +1,11 @@
+2008-10-03    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py: 
+	fixed documentation: must set $DJANGO_SETTINGS_MODULE "(LP: #277341)
+
+	* audittools/settings.py: 
+	set full path for sqlite3 db so makeauditunits works in any dir
+
 2008-10-01    <neal@bcn.boulder.co.us>
 
 	* Version 0.5.0
