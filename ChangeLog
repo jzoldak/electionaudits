@@ -1,3 +1,10 @@
+2008-10-04    <neal@bcn.boulder.co.us>
+
+	* electionaudit/templates/electionaudit/index.html: 
+	New home page via simple generic view by default (LP: #278330)
+	* electionaudit/templates/electionaudit/contest_detail.html: 
+	Get /contests/*/ to list the relevant batches, FWIW
+
 2008-10-03    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py: 

@@ -1,14 +1,15 @@
 from django.conf.urls.defaults import *
 from electionaudit.models import *
+from django.contrib import databrowse
 import settings
 
-# electionaudit custom views
-
-urlpatterns = patterns('electionaudit.views',
-    #(r'^reports/(?P<contest>\w*)/$',            'report'),
-)
-
-# Generic views
+databrowse.site.register(CountyElection)
+databrowse.site.register(AuditUnit)
+databrowse.site.register(Batch)
+databrowse.site.register(Contest)
+databrowse.site.register(ContestBatch)
+databrowse.site.register(Choice)
+databrowse.site.register(VoteCount)
 
 contest_dict = {
     'queryset': Contest.objects.all(),
@@ -24,6 +25,22 @@ votecount_detail_dict = {
     'template_object_name' : 'votecount',
 }
 
+# electionaudit custom views
+
+urlpatterns = patterns('electionaudit.views',
+    #(r'^reports/(?P<contest>\w*)/$',            'report'),
+)
+
+urlpatterns += patterns('',
+    (r'^databrowse/(.*)', databrowse.site.root),
+)
+
+# Generic views
+
+urlpatterns += patterns('django.views.generic.simple',
+    (r'^$',             'direct_to_template', {'template': 'electionaudit/index.html'}),
+)
+
 urlpatterns += patterns('django.views.generic.list_detail',
     (r'^reports/$',                     'object_list',     dict(contest_dict, template_name="electionaudit/reports.html")),
     (r'^reports/(?P<object_id>\d+)/$',  'object_detail',   dict(contest_dict, template_name="electionaudit/report.html")),
@@ -33,35 +50,12 @@ urlpatterns += patterns('django.views.generic.list_detail',
     (r'^votecounts/(?P<object_id>\d+)/$', 'object_detail',   votecount_detail_dict),
 )
 
-from django.contrib import databrowse
-urlpatterns += patterns('',
-    (r'^databrowse/(.*)', databrowse.site.root),
-)
-
-from django.contrib import databrowse
-
-databrowse.site.register(CountyElection)
-databrowse.site.register(AuditUnit)
-databrowse.site.register(Batch)
-databrowse.site.register(Contest)
-databrowse.site.register(ContestBatch)
-databrowse.site.register(Choice)
-databrowse.site.register(VoteCount)
-
 if settings.DEBUG:
-    urlpatterns = urlpatterns + patterns('',
+    urlpatterns += patterns('',
         (r'^validator/', include('lukeplant_me_uk.django.validator.urls')))
 
 """
 urls to consider
-
-/index
-/reports/
-/reports/<contest>
 /elections/
-votecount/<batch>
-/contest/report/ auditable report
-/election/ list of batches
-? list of contests
 /election/contest stats
 """

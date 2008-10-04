@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Contest: {{ object.name }}</h2>
+    <h2>Batches for Contest: {{ object.name }}</h2>
 
 <table border="border" cellpadding="5">
 <tbody>
-  {% for votecount in object.votecount_set.all %}
+  {% for contestbatch in object.contestbatch_set.all %}
 <tr>
- <td>{{ votecount.votes }}</td>
- <td>{{ votecount.choice }}</td>
- <td><a href="/batch/{{ votecount.batch.id }}">{{ votecount.batch }}</a></td>
+ <td>{{ contestbatch.batch.election }}</td>
+ <td>{{ contestbatch.batch }}</td>
 </tr>
   {% endfor %}
 </tbody>
