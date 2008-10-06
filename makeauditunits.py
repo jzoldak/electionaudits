@@ -93,6 +93,8 @@ def parse_csv(file):
 
     setup_environ(settings)
 
+    election = os.path.basename(file)[0:-4]
+
     reader = csv.DictReader(open(file))
 
     for r in reader:
@@ -102,13 +104,13 @@ def parse_csv(file):
             contest += ":" + r['Party_Code']
         choice = r['candidate_name']
         
-        new_contest_batch("test", batch, contest, choice, 'AB', r['absentee_votes'])
-        new_contest_batch("test", batch, contest, choice, 'EL', r['election_votes'])
+        new_contest_batch(election, batch, contest, choice, 'AB', r['absentee_votes'])
+        new_contest_batch(election, batch, contest, choice, 'EL', r['election_votes'])
         if r['cand_seq_nbr'] == '1':	# duplicated for each candidate - silly
-            new_contest_batch("test", batch, contest, 'Under', 'AB', r['absentee_under_votes'])
-            new_contest_batch("test", batch, contest, 'Over',  'AB', r['absentee_over_votes'])
-            new_contest_batch("test", batch, contest, 'Under', 'EL', r['election_under_votes'])
-            new_contest_batch("test", batch, contest, 'Over',  'EL', r['election_over_votes'])
+            new_contest_batch(election, batch, contest, 'Under', 'AB', r['absentee_under_votes'])
+            new_contest_batch(election, batch, contest, 'Over',  'AB', r['absentee_over_votes'])
+            new_contest_batch(election, batch, contest, 'Under', 'EL', r['election_under_votes'])
+            new_contest_batch(election, batch, contest, 'Over',  'EL', r['election_over_votes'])
             
 def new_contest_batch(election, batch, contest, choice, type, votes):
     election, created = models.CountyElection.objects.get_or_create(name=election)

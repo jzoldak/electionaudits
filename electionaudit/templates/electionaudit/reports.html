@@ -6,11 +6,19 @@
 <p>Number of contests: {{ object_list|length }}</p>
 
 <table border="border" cellpadding="5">
+<thead>
+<tr>
+ <td>Contest Name</a></td>
+ <td>Margin %</a></td>
+ <td>Audit Units</a></td>
+</tr>
+</thead>
 <tbody>
         {% for contest in object_list %}
 <tr>
  <td><a href="{{ contest.id }}">{{ contest.name }}</a></td>
  <td style="text-align: right;">{{ contest.margin|floatformat:3 }}</td>
+ <td style="text-align: right;">{{ contest.contestbatch_set.all|length }}</td>
 </tr>
         {% endfor %}
 </tbody>

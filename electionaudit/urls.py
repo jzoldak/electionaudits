@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from electionaudit.models import *
 from django.contrib import databrowse
-import settings
+import audittools.settings
 
 databrowse.site.register(CountyElection)
 databrowse.site.register(AuditUnit)
@@ -50,7 +50,7 @@ urlpatterns += patterns('django.views.generic.list_detail',
     (r'^votecounts/(?P<object_id>\d+)/$', 'object_detail',   votecount_detail_dict),
 )
 
-if settings.DEBUG:
+if audittools.settings.DEBUG:
     urlpatterns += patterns('',
         (r'^validator/', include('lukeplant_me_uk.django.validator.urls')))
 

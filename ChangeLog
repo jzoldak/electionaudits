@@ -1,5 +1,16 @@
 2008-10-05    <neal@bcn.boulder.co.us>
 
+	* electionaudit/urls.py: 
+	fix settings import in urls.py
+
+	* makeauditunits.py (parse_csv): 
+	name csv election after filename
+
+	* electionaudit/templates/electionaudit/reports.html: 
+	add headers and audit unit counts to contest list
+	
+2008-10-05    <neal@bcn.boulder.co.us>
+
 	* Version 0.6.0
 	* electionaudit/models.py (Choice): 
 	(Contest.tally): 
