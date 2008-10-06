@@ -18,8 +18,30 @@ class Contest(models.Model):
     name = models.CharField(max_length=200)
 
     # or provide external vote counts and calculate this?
-    margin = models.FloatField(default=0.01)
-    
+    margin = models.FloatField(null=True, blank=True, help_text="(Winner - Second) / total, in percent")
+
+    def tally(self):
+        "Tally up all the choices and calculate margins"
+
+        total = 0
+        winner = None
+        second = None
+
+        for choice in self.choice_set.all():
+            choice.tally()
+            total += choice.votes
+            if choice.name not in ["Under", "Over"]:
+                if not winner or choice.votes > winner.votes:
+                    second = winner
+                    winner = choice
+                elif not second or choice.votes > second.votes:
+                    second = choice
+
+        if second and winner.votes > 0:
+            self.margin = (winner.votes - second.votes) * 100.0 / total
+            self.save()
+        return self.margin
+
     def __unicode__(self):
         return "%s" % (self.name)
 
@@ -37,7 +59,7 @@ class Batch(models.Model):
 
     name = models.CharField(max_length=200)
     election = models.ForeignKey(CountyElection)
-    type = models.CharField(max_length=20, help_text="Absentee, Early etc.")
+    type = models.CharField(max_length=20, help_text="AB for Absentee, EV for Early, EL for Election")
 
     def __unicode__(self):
         return "%s:%s" % (self.name, self.type)
@@ -58,8 +80,20 @@ class Choice(models.Model):
     "A candidate or issue name: an alternative for a Contest"
 
     name = models.CharField(max_length=200)
+    votes = models.IntegerField(null=True, blank=True)
+    contest = models.ForeignKey(Contest)
 
-    #slug = choice[0:6]
+    def tally(self):
+        "Tally up all the votes for this choice and save result"
+
+        from django.db import connection
+        cursor = connection.cursor()
+        cursor.execute('SELECT sum(votes) AS total_votes FROM electionaudit_votecount WHERE "choice_id" = %d' % self.id)
+
+        row = cursor.fetchone()
+        self.votes = row[0]
+        self.save()
+        return self.votes
 
     def __unicode__(self):
         return "%s" % (self.name)

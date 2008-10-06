@@ -1,9 +1,11 @@
 {% extends "base.html" %}
+{% block title %}ElectionAudits Audit Rpeort for {{ object }}{% endblock %}
 
 {% block content %}
     <h2>Audit Report for {{ object }}</h2>
+<p>Number of audit units: {{ object.contestbatch_set.all|length }}</p>
 <p>
-<!-- Margin of victory is {{ object.margin }} -->
+Margin of victory is {{ object.margin|floatformat:3 }}%
 </p>
 
 <table border="border" cellpadding="5">
@@ -17,6 +19,15 @@
    <td>Contest Ballots</td>
    {% for votecount in contestbatch.votecount_set.all %}
       <td style="writing-mode: tb-rl;">{{ votecount.choice }}</td>
+   {% endfor %}
+   </tr>
+   <tr>
+   <td>Totals</td>
+   <td></td>
+   <td></td>
+   <td></td>
+   {% for votecount in contestbatch.votecount_set.all %}
+      <td style="writing-mode: tb-rl;">{{ votecount.choice.votes }}</td>
    {% endfor %}
    </tr>
   {% endif %}

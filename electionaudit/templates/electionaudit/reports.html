@@ -1,13 +1,16 @@
 {% extends "base.html" %}
-
+{% block title %}ElectionAudits Contest List{% endblock %}
 {% block content %}
     <h2>Contest List</h2>
+
+<p>Number of contests: {{ object_list|length }}</p>
+
 <table border="border" cellpadding="5">
 <tbody>
         {% for contest in object_list %}
 <tr>
  <td><a href="{{ contest.id }}">{{ contest.name }}</a></td>
- <td>{{ contest.margin }}</td>
+ <td style="text-align: right;">{{ contest.margin|floatformat:3 }}</td>
 </tr>
         {% endfor %}
 </tbody>

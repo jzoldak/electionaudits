@@ -1,3 +1,16 @@
+2008-10-05    <neal@bcn.boulder.co.us>
+
+	* Version 0.6.0
+	* electionaudit/models.py (Choice): 
+	(Contest.tally): 
+	add tally funtion to calculate margins
+	add contest field to Choice model
+	speed up via a single transaction for parsing each file:
+	 from 2:53 to 0:44 for testp.xml
+	
+	* makeauditunits.py (parse_csv): 
+	new function to parse csv files like that from San Mateo county
+	
 2008-10-04    <neal@bcn.boulder.co.us>
 
 	* electionaudit/templates/electionaudit/index.html: 

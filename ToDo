@@ -1,7 +1,17 @@
 ToDo list for ElectionAudits
 
+Switch to BSD license for less confusion, wider uptake?
+
+Provide makeauditunits option to name election.
+separate out Contests by CountyElection in audit report
+
 Generate data from incremental reports via --subtract in addition
  to independent reports as now.
+ First, in make_audit_unit, generate new data structure from newtotals
+
+Paginate votecount report
+Provide good html titles for all pages
+
 Produce output in csv format also
 
 Deal with namespace issues - auto-edit file, or handle it another way.
@@ -15,8 +25,6 @@ Get rid of or document unused stuff like AuditUnit table, Votecount.cumulative
 
 Figure out ballot counts (CVRs) based on max of all contests in batch?
   or 'Total Number of Voters' from pdf?
-Add methods to get results for a whole contest and calculate margins
-
 Incorporate Rivest's pps.py code to report statistics and confidence
  levels and select audit units to be audited.
 
@@ -28,6 +36,7 @@ rename/move electionaudit directory/module to electionaudits
 look thru pylint advice
 perhaps automatically generate doc and put in doc directory before packaging
 
+Use django choices for batch.type
 Add info about file arguments to auto-usage message
 
 Don't assume or check that audit report rows are all in the same sequence

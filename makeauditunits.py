@@ -17,51 +17,19 @@ import os
 import sys
 import optparse
 import logging
+import csv
 import lxml.etree as ET
 
 import electionaudit.models as models
+from django.db import transaction
 
 from datetime import datetime
 
 __author__ = "Neal McBurnett <http://mcburnett.org/neal/>"
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 __date__ = "2008-09-08"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
 __license__ = "GPL v3"
-
-replacements = [
-    ("THE EARNINGS FROM THE INVESTMENT", "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B"),
-    ("ST VRAIN SCHOOL DISTRICT", "ST VRAIN SD"),
-    ("FIRE PROTECTION DISTRICT", "FPD"),
-    ("REPRESENTATIVE TO THE 111th UNITED STATES CONGRESS - DISTRICT ", "CD"),
-    ("REPRESENTATIVE TO THE 111TH UNITED STATES CONGRESS - DISTRICT ", "CD"),
-    (", Vote For 1", ""),
-    ("STATE REPRESENTATIVE - DISTRICT ", "SRD"),
-    ("STATE SENATE - DISTRICT ", "SSD"),
-    ("REGENT OF THE UNIVERSITY OF COLORADO CONGRESSIONAL DISTRICT ", "REGENT D"),
-    ("REGENT - UNIVERSITY OF COLORADO CONGRESSIONAL DISTRICT ", "REGENT D"),
-    ("COUNTY COMMISSIONER - DISTRICT ", "CCD"),
-    ("JUSTICE OF THE COLORADO SUPREME COURT", "SUPREME COURT"),
-    ("DISTRICT JUDGE 20th JUDICIAL DISTRICT", "JUDGE 20th JD"),
-    ("ESTES VALLEY RECREATION AND PARK DIST", "ESTES VALLEY DIST"),
-    ("REGIONAL TRANSPORTATION DISTRICT DIRECTOR", "RTD"),
-    ("DISTRICT ATTORNEY 20TH JUDICIAL DISTRICT", "DISTRICT ATTORNEY"),
-    ("DISTRICT ATTORNEY - 20th JUDICIAL DISTRICT", "DISTRICT ATTORNEY"),
-    ("AMENDMENT ", "A "),
-    ("BOULDER", "B"),
-    ("LAFAYETTE", "LA"),
-    ("LONGMONT", "LO"),
-    ("LUISVILLE", "LU"),
-    ("CITY OF ", ""),
-    ("TOWN OF ", ""),
-    ("COUNTY ", "C"),
-    ("COURT OF APPEALS ", "COURT"),
-    ("BALLOT ", ""),
-    ("ISSUE NO. ", "I"),
-    ("ISSUE ", "I "),
-    ("QUESTION NO. ", "Q"),
-]
-
 
 parser = optparse.OptionParser(prog="makeauditunits", version=__version__)
 
@@ -98,18 +66,62 @@ def main(parser):
     logging.debug("args = %s" % args)
 
     if len(args) == 0:
-        args.append("/srv/s/audittools/testdata/testcum.xml")
+        args.append(os.path.join(os.path.dirname(__file__), 'testdata/testcum.xml'))
         logging.debug("using test file: " + args[0])
 
     totals = {}
 
     for file in args:
-        newtotals = do_contests(file)
-        make_audit_unit(totals, newtotals, options)
-        totals = newtotals
+        if file.endswith(".xml"):
+            newtotals = parse_xml_crystal(file)
+            make_audit_unit(totals, newtotals, options)
+            totals = newtotals
+        elif file.endswith(".csv"):
+            parse_csv(file)
 
-def do_contests(file):
-    """Extract relevant data from each contest in a given file"""
+    # Update tallies on all contests, just in case
+    for contest in models.Contest.objects.all():
+        contest.tally()
+
+@transaction.commit_on_success
+def parse_csv(file):
+    """Parse a csv file of election data.  The model of this format
+    is the San Mateo precinct spreadsheet in testdata/test.csv"""
+
+    from django.core.management import setup_environ
+    from audittools import settings
+
+    setup_environ(settings)
+
+    reader = csv.DictReader(open(file))
+
+    for r in reader:
+        batch = r['Precinct_name']
+        contest = r['Contest_title']
+        if r['Party_Code']:
+            contest += ":" + r['Party_Code']
+        choice = r['candidate_name']
+        
+        new_contest_batch("test", batch, contest, choice, 'AB', r['absentee_votes'])
+        new_contest_batch("test", batch, contest, choice, 'EL', r['election_votes'])
+        if r['cand_seq_nbr'] == '1':	# duplicated for each candidate - silly
+            new_contest_batch("test", batch, contest, 'Under', 'AB', r['absentee_under_votes'])
+            new_contest_batch("test", batch, contest, 'Over',  'AB', r['absentee_over_votes'])
+            new_contest_batch("test", batch, contest, 'Under', 'EL', r['election_under_votes'])
+            new_contest_batch("test", batch, contest, 'Over',  'EL', r['election_over_votes'])
+            
+def new_contest_batch(election, batch, contest, choice, type, votes):
+    election, created = models.CountyElection.objects.get_or_create(name=election)
+    batch, created = models.Batch.objects.get_or_create(name=batch, election=election, type=type )
+    contest, created = models.Contest.objects.get_or_create(name=contest)
+    contest_batch, created = models.ContestBatch.objects.get_or_create(contest=contest, batch=batch)
+    choice, created = models.Choice.objects.get_or_create(name=choice, contest=contest)
+    models.VoteCount.objects.create(choice=choice, votes=votes, contest_batch=contest_batch)
+
+@transaction.commit_on_success
+def parse_xml_crystal(file):
+    """Extract relevant data from each contest in a given crystalreports xml
+    file"""
 
     from django.core.management import setup_environ
     from audittools import settings
@@ -117,9 +129,6 @@ def do_contests(file):
     setup_environ(settings)
 
     election, created = models.CountyElection.objects.get_or_create(name="BoulderGeneral")
-    over, created = models.Choice.objects.get_or_create(name="Over")
-    under, created = models.Choice.objects.get_or_create(name="Under")
-
     absentee_batch, created = models.Batch.objects.get_or_create(
         name=os.path.basename(file)[0:-4],	# trim directory and ".xml"
         election=election,
@@ -127,6 +136,13 @@ def do_contests(file):
 
     root = ET.parse(file).getroot()
     logging.debug("root = %s" % root)
+
+    # The Hart system forces the use of some odd contest names.
+    # This is a table of fixes for them.
+    replacements = [
+        (", Vote For 1", ""),
+        ("THE EARNINGS FROM THE INVESTMENT", "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B"),
+        ]
 
     values = {}
 
@@ -136,14 +152,17 @@ def do_contests(file):
             logging.error("Error: number of Headers should be 1, not %d.  Line %d" % (len(tree), contesttree.sourceline))
             logging.debug(ET.tostring(contesttree, pretty_print=True))
 
-        contest = tree[0].text
+        contest_name = tree[0].text
         for old, new in replacements:
-            pass #contest = contest.replace(old, new)
+            contest_name = contest_name.replace(old, new)
 
         # hmm - this won't work in primary, when there are multiple
         # contests per election, one for each party
-        contest, created = models.Contest.objects.get_or_create(name=contest.strip())
+        contest, created = models.Contest.objects.get_or_create(name=contest_name.strip())
         contest_batch = models.ContestBatch.objects.create(contest=contest, batch=absentee_batch)
+
+        over, created = models.Choice.objects.get_or_create(name="Over", contest=contest)
+        under, created = models.Choice.objects.get_or_create(name="Under", contest=contest)
 
         logging.debug("Contest: %s (%s)" % (contest, tree[0].text))
 
@@ -198,7 +217,7 @@ def do_contests(file):
 
             logging.debug("candidate: %s" % cv['Name'])
             absenteer.update({cv['Name']: cv['Absentee']})
-            choice, created = models.Choice.objects.get_or_create(name=cv['Name'])
+            choice, created = models.Choice.objects.get_or_create(name=cv['Name'], contest=contest)
             v = models.VoteCount.objects.create(choice=choice, votes=absenteer[cv['Name']], contest_batch=contest_batch)
             earlyr.update({cv['Name']: cv['Early']})
             electionr.update({cv['Name']: cv['Election day']})

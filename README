@@ -36,13 +36,16 @@ Requirements
 ============
 
 Python (developed with python version 2.5, but should work with 2.3)
-python-lxml (xml parsing package)
-Django 1.0  # makeauditunits.py could be separated out from this pretty easily
+lxml (xml parsing package, e.g. python-lxml in Ubuntu or easy_install lxml)
+Django 1.0  (makeauditunits.py could be separated out from this pretty easily)
 sqlite3
 
 Helpful but optional Django apps:
     lukeplant_me_uk.django.validator for automatic xhtml validation
     django_extensions for ease in development and documentation
+
+Comment them out of audittools/settings.py and
+electionaudit/urls.py if you don't want them.
 
 It has been tested on Ubuntu Linux, but shouldn't be hard to get
 running on OSX or Windows.
@@ -54,7 +57,7 @@ The software uses launchpad.net for project support.  Visit
 
  https://launchpad.net/electionaudits
 
-to get the latest version or report bugs.  It uses the "Bazaar"
+to get the latest version or report bugs.  It uses the bzr ("Bazaar")
 distributed version control software, making it easy for you to
 contribute.
 
@@ -83,7 +86,12 @@ $ ./manage.py syncdb
 $ export DJANGO_SETTINGS_MODULE=audittools.settings
 $ ../makeauditunits.py ../testdata/testcum.xml
 
-or if you have some incremental reports:
+or in windows:
+
+C:> set DJANGO_SETTINGS_MODULE=audittools.settings
+C:> ../makeauditunits.py ../testdata/testcum.xml
+
+or if you have some incremental reports [not working with django right now....]:
 
 $ makeauditunits -s cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
 
