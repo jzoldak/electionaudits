@@ -83,7 +83,7 @@ def main(parser):
     for contest in models.Contest.objects.all():
         contest.tally()
 
-@transaction.commit_on_success
+@transaction.commit_manually
 def parse_csv(file):
     """Parse a csv file of election data.  The model of this format
     is the San Mateo precinct spreadsheet in testdata/test.csv"""
@@ -97,8 +97,15 @@ def parse_csv(file):
 
     reader = csv.DictReader(open(file))
 
+    oldbatch = ''
+
     for r in reader:
         batch = r['Precinct_name']
+        if batch != oldbatch:
+            oldbatch = batch
+            print "commit new batch:", batch
+            transaction.commit()
+
         contest = r['Contest_title']
         if r['Party_Code']:
             contest += ":" + r['Party_Code']
@@ -111,6 +118,8 @@ def parse_csv(file):
             new_contest_batch(election, batch, contest, 'Over',  'AB', r['absentee_over_votes'])
             new_contest_batch(election, batch, contest, 'Under', 'EL', r['election_under_votes'])
             new_contest_batch(election, batch, contest, 'Over',  'EL', r['election_over_votes'])
+
+    transaction.commit()
             
 def new_contest_batch(election, batch, contest, choice, type, votes):
     election, created = models.CountyElection.objects.get_or_create(name=election)
