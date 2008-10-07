@@ -103,8 +103,7 @@ def parse_csv(file):
         batch = r['Precinct_name']
         if batch != oldbatch:
             oldbatch = batch
-            print "commit new batch:", batch
-            transaction.commit()
+            logging.debug("new batch '%s' at line %d" % (batch, reader.reader.line_num))
 
         contest = r['Contest_title']
         if r['Party_Code']:
@@ -119,8 +118,6 @@ def parse_csv(file):
             new_contest_batch(election, batch, contest, 'Under', 'EL', r['election_under_votes'])
             new_contest_batch(election, batch, contest, 'Over',  'EL', r['election_over_votes'])
 
-    transaction.commit()
-            
 def new_contest_batch(election, batch, contest, choice, type, votes):
     election, created = models.CountyElection.objects.get_or_create(name=election)
     batch, created = models.Batch.objects.get_or_create(name=batch, election=election, type=type )
@@ -266,7 +263,10 @@ def extract_values(tree, fields):
     return values
 
 def make_audit_unit(totals, newtotals, options):
-    """Subtract totals from newtotals and report the results for one audit unit"""
+    """Subtract totals from newtotals and report the results for one audit unit.
+    Sample of totals: {contest1: [AB, EV, EL], c2: [AB, EV, EL] }
+     where e.g. AB = {'Under': 14, 'John': 23}
+    """
 
     import pprint
 

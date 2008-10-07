@@ -1,3 +1,10 @@
+2008-10-06    <neal@bcn.boulder.co.us>
+
+	* audittools/templates/404.html: 
+	add 404.html and 500.html
+	Describe csv in README
+	Better titles in templates
+	
 2008-10-05    <neal@bcn.boulder.co.us>
 
 	* electionaudit/urls.py: 

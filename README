@@ -70,9 +70,26 @@ makeauditunits.py
 A program to parse election results data into easily
 manipulated databases and clean csv files.
 
-Currently supported: Hart InterCivic Tally "cumulative" reports in xml
-(crystal-reports) format (including all options: Absentee, Early and
-Election day, and the info box).
+Currently supported input formats:
+
+ * Hart InterCivic Tally "cumulative" reports in xml (crystal-reports)
+   format (including all options: Absentee, Early and Election day, and
+   the info box)
+
+ * CSV input with one line per candidate using these headers:
+   'Precinct_name'
+   'Contest_title'
+   'Party_Code'
+   'candidate_name'
+   'cand_seq_nbr'
+   'absentee_votes'
+   'election_votes'
+   and these columns, only used for 1st candidate (when 'cand_seq_nbr' is 1)
+    'absentee_under_votes'
+    'absentee_over_votes'
+    'election_under_votes'
+    'election_over_votes'
+
 
 Use the --help option to print usage instructions:
 

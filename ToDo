@@ -2,6 +2,8 @@ ToDo list for ElectionAudits
 
 Switch to BSD license for less confusion, wider uptake?
 
+Check for duplicate records
+
 Provide makeauditunits option to name election.
 separate out Contests by CountyElection in audit report
 
@@ -25,7 +27,7 @@ Get rid of or document unused stuff like AuditUnit table, Votecount.cumulative
 
 Figure out ballot counts (CVRs) based on max of all contests in batch?
   or 'Total Number of Voters' from pdf?
-Incorporate Rivest's pps.py code to report statistics and confidence
+Incorporate Rivest's varsize.py code to report statistics and confidence
  levels and select audit units to be audited.
 
 Add table relating batch names to description - type, source, mbbs, etc
@@ -42,12 +44,14 @@ Add info about file arguments to auto-usage message
 Don't assume or check that audit report rows are all in the same sequence
  sort them?
 
-How to combine batches for privacy
-  perhaps drop AuditUnit notion, so
+Combine contestbatches for privacy
+  Can combine during input phase also, with debugging output....
+  input parameter: minimum # contest ballots; Flag: allow_zero
+  drop AuditUnit notion?
   combining batches => making new batch names, 
    creating new VoteCounts combining old ones, and
-   marking old VoteCounts as supersceded
- Or generate a whole new CountyElection?
+   deleting or marking old VoteCounts as supersceded
+ can also generate a different CountyElection with more or less detail
 
 While parsing xml, track unrecognized FormattedValue fields - dump
  FieldName, value and line
