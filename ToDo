@@ -1,17 +1,12 @@
 ToDo list for ElectionAudits
 
-Switch to BSD license for less confusion, wider uptake?
-
-Use AuditUnit in parse_xml_crystal
+Use AuditUnit in parse_xml_crystal and generate django tables from
+incremental reports via --subtract in addition to std output reports as now 
 
 Check for duplicate records
 
-Provide makeauditunits option to name election.
+Provide makeauditunits option to name election for xml files.
 separate out Contests by CountyElection in audit report
-
-Generate django tables from incremental reports via --subtract in addition
- to std output reports as now.
- First, in make_audit_unit, generate new data structure from newtotals
 
 Paginate votecount report
 Provide good html titles for all pages

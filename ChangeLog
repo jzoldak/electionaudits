@@ -1,5 +1,10 @@
 2008-10-08    <neal@bcn.boulder.co.us>
 
+	* audittools/templates/base.html: 
+	only show /validator/ if in debug mode
+	
+2008-10-08    <neal@bcn.boulder.co.us>
+
 	Version 0.7.0
 	Change from GPLv3 to MIT license for wider uptake, less complication
 

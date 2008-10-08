@@ -13,7 +13,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/databrowse/">Browse all data</a></li>
             <li><a href="/admin/">Admin</a></li>
-            <li><a href="/validator/">Validation errors</a></li>
+	    {% if debug %}<li><a href="/validator/">Validation errors</a></li>{% endif %}
         </ul>
         {% endblock %}
     </div>
