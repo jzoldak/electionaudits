@@ -1,3 +1,14 @@
+2008-10-08    <neal@bcn.boulder.co.us>
+
+	* electionaudit/templates/electionaudit/index.html: 
+	Add introduction to home page
+	
+2008-10-07    <neal@bcn.boulder.co.us>
+
+	* electionaudit/util.py (Pipe.push): 
+	Write util module with AuditUnit class to combine them for privacy
+	Add pushAuditUnit and class Push, ready to refactor makeauditunits
+	
 2008-10-06    <neal@bcn.boulder.co.us>
 
 	* audittools/templates/404.html: 

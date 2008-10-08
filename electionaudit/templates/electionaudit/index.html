@@ -1,8 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}ElectionAudits Reports{% endblock %}
+{% block title %}ElectionAudits Data Site{% endblock %}
 
 {% block content %}
+<h1>ElectionAudits Data Site</h1>
+
+<p>This site is powered by the
+<a href="http://mcburnett.org/neal/electionaudits/">
+ ElectionAudits software</a>,
+which provides software and documentation in support of
+the <a href="http://electionaudits.org/principles">
+ Principles and Best Practices for Post-Election Audits</a>
+and the other work of <a href="http://electionaudits.org/">
+ ElectionAudits.org</a>,
+ the nation's clearinghouse for election audit information.
+</p>
+<p>The software is open source, still in very active
+"alpha" development, and can be followed at its Launchpad.net site:
+<blockquote>
+<a href="https://launchpad.net/electionaudits">https://launchpad.net/electionaudits</a>
+</blockquote>
+
+<p>That is the place to get the source code, file bugs,
+make contributions, etc.
+</p>
+
+<p>
+To get started entering your own data, see the
+README file that came with this software, or
+view the lastest version at
+<a href="http://mcburnett.org/neal/electionaudits/README">README</a>.
+</p>
+<p>
+See also the
+<a href="/admin/doc/models/#electionaudit">local documentation</a>
+by logging in with the admin account and password
+that you established when you initialized this django site.
+</p>
+
+<h2>Local Data</h2>
+
 <ul>
 <li><a href="reports/">Audit reports</a></li>
 <li><a href="contests/">Contests</a></li>

@@ -83,7 +83,7 @@ def main(parser):
     for contest in models.Contest.objects.all():
         contest.tally()
 
-@transaction.commit_manually
+@transaction.commit_on_success
 def parse_csv(file):
     """Parse a csv file of election data.  The model of this format
     is the San Mateo precinct spreadsheet in testdata/test.csv"""
