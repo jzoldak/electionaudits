@@ -1,5 +1,20 @@
 2008-10-08    <neal@bcn.boulder.co.us>
 
+	Version 0.7.0
+	Change from GPLv3 to MIT license for wider uptake, less complication
+
+	* makeauditunits.py (parse_csv): 
+	Finish & refactor code to combine ballots for privacy for csv
+	remove models.AuditUnit: util.AuditUnit does what we really want
+	finally remove models.Batch.cumulative - we combine when we read in
+	* electionaudit/urls.py: 
+	fix how settings are imported to use generic method so validator works
+	 with ./manage.py runserver_plus --settings settings_debug
+	* electionaudit/templates/electionaudit/reports.html: 
+	fix some bad html
+	
+2008-10-08    <neal@bcn.boulder.co.us>
+
 	* electionaudit/templates/electionaudit/index.html: 
 	Add introduction to home page
 	

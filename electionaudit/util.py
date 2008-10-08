@@ -2,6 +2,9 @@
 #  maintain list for each (election, contest, type)
 # add "save" function to save into database
 
+import logging
+import electionaudit.models as models
+
 class Pipe:
     """Accumulate some AuditUnits to be saved, until they are big enough
     to preserve privacy.
@@ -18,7 +21,7 @@ class Pipe:
         return "preserve: %s\nbuilding: %s" % (self.preserve, self.building)
 
     def push(self, au, min_ballots):
-        print "pushing", au
+        logging.debug("pushing %s" % au)
 
         if au.contest_ballots() + self.building.contest_ballots() >= min_ballots:
             self.preserve.save()
@@ -31,7 +34,7 @@ class Pipe:
         if self.building:
             if not self.preserve:
                 raise RuntimeError("Not enough ballots for privacy")
-            self.preserve = self.preserve.combine(self.building)
+            self.preserve = self.building.combine(self.preserve)
 
         self.preserve.save()
 
@@ -54,7 +57,7 @@ def pushAuditUnit(au, min_ballots=5, method=Pipe):
 def flushPipes():
     """Flush out all the pipelines"""
 
-    for pipe in AuditUnit.pipeline:
+    for pipe in AuditUnit.pipeline.values():
         pipe.flush()
     AuditUnit.pipeline = {}
 
@@ -71,25 +74,42 @@ class AuditUnit:
     # The key is (au.election, au.contest, au.type)
     pipeline = {}
 
-    def __init__(self, election=None, contest=None, type=None, batches=None, **votecounts):
+    def __init__(self, election=None, contest=None, type=None, batches=[], **votecounts):
         self.election = election
         self.contest = contest
         self.type = type
         self.batches = batches
         self.votecounts = votecounts
 
+    def update(self, choice, votes):
+        "Add votes to the audit unit.  Should really be a dict update?"
+
+        if choice in self.votecounts:
+            raise ValueError("There are already votes for %s in %s" % (choice, self))
+        self.votecounts[choice] = int(votes)
+
     def contest_ballots(self):
         return sum(votes for votes in self.votecounts.values())
 
     def save(self):
-        if self.votecounts != {}:
-            print "time to preserve %s" % self
+        if self.votecounts == {}:
+            return
+
+        logging.debug("saving %s" % self)
+
+        election, created = models.CountyElection.objects.get_or_create(name=self.election)
+        batch, created = models.Batch.objects.get_or_create(name=' '.join(self.batches), election=election, type=self.type )
+        contest, created = models.Contest.objects.get_or_create(name=self.contest)
+        contest_batch, created = models.ContestBatch.objects.get_or_create(contest=contest, batch=batch)
+        for (choice, votes) in self.votecounts.items():
+            choice, created = models.Choice.objects.get_or_create(name=choice, contest=contest)
+            models.VoteCount.objects.create(choice=choice, votes=votes, contest_batch=contest_batch)
 
     def __cmp__(self, other):
         return cmp(self.contest_ballots(), other.contest_ballots())
 
     def __str__(self):
-        return "%s_%s_%s_%s_%s" % (self.election, self.contest, self.type, self.batches, self.votecounts)
+        return "%s_%s_%s_%s_%d" % (self.election, self.contest, self.type, self.batches, self.contest_ballots())
 
     def __neg__(self):
         return AuditUnit(self.election, self.contest, self.type, self.batches, **dict((key, -val) for (key, val) in self.votecounts.iteritems()))
@@ -98,6 +118,10 @@ class AuditUnit:
         if self.votecounts == {}:
             return other
 
+        if other.votecounts == {}:
+            return self
+
+        logging.debug("combining batches %s_%s (%d) and %s_%s (%d)\n%s\n%s" % (self.batches, self.type, self.contest_ballots(), other.batches, other.type, other.contest_ballots(), self, other))
         if self.election != other.election or self.contest != other.contest or self.type != other.type:
             raise ValueError("election, contest, and type must match")
 

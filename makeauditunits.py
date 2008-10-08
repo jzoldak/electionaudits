@@ -18,24 +18,27 @@ import sys
 import optparse
 import logging
 import csv
-import lxml.etree as ET
-
-import electionaudit.models as models
-from django.db import transaction
-
 from datetime import datetime
 
+from django.db import transaction
+import electionaudit.models as models
+import electionaudit.util as util
+
 __author__ = "Neal McBurnett <http://mcburnett.org/neal/>"
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 __date__ = "2008-09-08"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
-__license__ = "GPL v3"
+__license__ = "MIT"
 
 parser = optparse.OptionParser(prog="makeauditunits", version=__version__)
 
 parser.add_option("-s", "--subtract",
                   action="store_true", default=False,
                   help="Input files are incremental snapshots.   Subtract data in each file from previous data to generate batch results" )
+
+parser.add_option("-m", "--min_ballots", dest="min_ballots", type="int",
+                  default=5,
+                  help="combine audit units with less than MINIMUM contest ballots", metavar="MINIMUM")
 
 parser.add_option("-c", "--contest", dest="contest",
                   help="report on CONTEST", metavar="CONTEST")
@@ -73,20 +76,23 @@ def main(parser):
 
     for file in args:
         if file.endswith(".xml"):
-            newtotals = parse_xml_crystal(file)
+            newtotals = parse_xml_crystal(file, options)
             make_audit_unit(totals, newtotals, options)
             totals = newtotals
         elif file.endswith(".csv"):
-            parse_csv(file)
+            parse_csv(file, options)
 
     # Update tallies on all contests, just in case
     for contest in models.Contest.objects.all():
         contest.tally()
 
 @transaction.commit_on_success
-def parse_csv(file):
+def parse_csv(file, options):
     """Parse a csv file of election data.  The model of this format
-    is the San Mateo precinct spreadsheet in testdata/test.csv"""
+    is the San Mateo precinct spreadsheet in "testdata/test.csv".
+    If the data is to be aggregated for privacy (the default), the data
+    should be sorted by batch (precinct).
+    """
 
     from django.core.management import setup_environ
     from audittools import settings
@@ -97,40 +103,39 @@ def parse_csv(file):
 
     reader = csv.DictReader(open(file))
 
-    oldbatch = ''
+    au_AB = util.AuditUnit()
+    au_EL = util.AuditUnit()
 
     for r in reader:
-        batch = r['Precinct_name']
-        if batch != oldbatch:
-            oldbatch = batch
-            logging.debug("new batch '%s' at line %d" % (batch, reader.reader.line_num))
-
+        batch = [r['Precinct_name']]
         contest = r['Contest_title']
         if r['Party_Code']:
             contest += ":" + r['Party_Code']
         choice = r['candidate_name']
-        
-        new_contest_batch(election, batch, contest, choice, 'AB', r['absentee_votes'])
-        new_contest_batch(election, batch, contest, choice, 'EL', r['election_votes'])
-        if r['cand_seq_nbr'] == '1':	# duplicated for each candidate - silly
-            new_contest_batch(election, batch, contest, 'Under', 'AB', r['absentee_under_votes'])
-            new_contest_batch(election, batch, contest, 'Over',  'AB', r['absentee_over_votes'])
-            new_contest_batch(election, batch, contest, 'Under', 'EL', r['election_under_votes'])
-            new_contest_batch(election, batch, contest, 'Over',  'EL', r['election_over_votes'])
 
-def new_contest_batch(election, batch, contest, choice, type, votes):
-    election, created = models.CountyElection.objects.get_or_create(name=election)
-    batch, created = models.Batch.objects.get_or_create(name=batch, election=election, type=type )
-    contest, created = models.Contest.objects.get_or_create(name=contest)
-    contest_batch, created = models.ContestBatch.objects.get_or_create(contest=contest, batch=batch)
-    choice, created = models.Choice.objects.get_or_create(name=choice, contest=contest)
-    models.VoteCount.objects.create(choice=choice, votes=votes, contest_batch=contest_batch)
+        if batch != au_AB.batches  or  contest != au_AB.contest:
+            logging.debug("new batch '%s' at line %d" % (batch, reader.reader.line_num))
+            util.pushAuditUnit(au_AB, min_ballots = options.min_ballots)
+            au_AB = util.AuditUnit(election, contest, 'AB', batch)
+            util.pushAuditUnit(au_EL, min_ballots = options.min_ballots)
+            au_EL = util.AuditUnit(election, contest, 'EL', batch)
+        
+        au_AB.update(choice, r['absentee_votes'])
+        au_EL.update(choice, r['election_votes'])
+        if r['cand_seq_nbr'] == '1':	# duplicated for each candidate - silly
+            au_AB.update('Under', r['absentee_under_votes'])
+            au_AB.update('Over', r['absentee_over_votes'])
+            au_EL.update('Under', r['election_under_votes'])
+            au_EL.update('Over', r['election_over_votes'])
+
+    util.flushPipes()
 
 @transaction.commit_on_success
-def parse_xml_crystal(file):
+def parse_xml_crystal(file, options):
     """Extract relevant data from each contest in a given crystalreports xml
     file"""
 
+    import lxml.etree as ET
     from django.core.management import setup_environ
     from audittools import settings
 

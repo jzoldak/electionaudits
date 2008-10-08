@@ -14,7 +14,8 @@ Margin of victory is {{ object.margin|floatformat:3 }}%
   {% if forloop.first %}
    <tr>
    <td>AuditUnit</td>
-   <td>Batch</td>
+   <td>Type</td>
+   <td>Batches</td>
    <td>Ballots</td>
    <td>Contest Ballots</td>
    {% for votecount in contestbatch.votecount_set.all %}
@@ -23,6 +24,7 @@ Margin of victory is {{ object.margin|floatformat:3 }}%
    </tr>
    <tr>
    <td>Totals</td>
+   <td></td>
    <td></td>
    <td></td>
    <td></td>
@@ -37,7 +39,8 @@ Margin of victory is {{ object.margin|floatformat:3 }}%
  {% for contestbatch in object.contestbatch_set.all %}
   <tr>
    <td>{{ forloop.counter|stringformat:"04d" }}</td>
-   <td>{{ contestbatch.batch }}</td>
+   <td>{{ contestbatch.batch.type }}</td>
+   <td>{{ contestbatch.batch.name }}</td>
    <td>{{ contestbatch.ballot_count }}</td>
    <td>{{ contestbatch.contest_ballots }}</td>
    {% for votecount in contestbatch.votecount_set.all %}

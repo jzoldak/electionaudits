@@ -45,15 +45,6 @@ class Contest(models.Model):
     def __unicode__(self):
         return "%s" % (self.name)
 
-class AuditUnit(models.Model):
-    """A collection of all the VoteCounts for a particular Contest
-    in a set of Batches which can be published for auditing"""
-
-    name = models.CharField(max_length=200)
-
-    def __unicode__(self):
-        return "%s" % (self.name)
-
 class Batch(models.Model):
     "A batch of ballots all counted at the same time and stored together"
 
@@ -104,8 +95,6 @@ class VoteCount(models.Model):
     votes = models.IntegerField()
     choice = models.ForeignKey(Choice)
     contest_batch = models.ForeignKey(ContestBatch)
-
-    cumulative = models.BooleanField()
 
     def __unicode__(self):
         return "%d\t%s\t%s\t%s" % (self.votes, self.choice.name, self.contest_batch.contest, self.contest_batch.batch)
