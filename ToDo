@@ -5,6 +5,9 @@ incremental reports via --subtract in addition to std output reports as now
 
 Check for duplicate records
 
+scenarios: test lots of data - speed, ease of fixing problem files
+take directory name for xml reports, sort by timestamp for --subtract
+
 Provide makeauditunits option to name election for xml files.
 separate out Contests by CountyElection in audit report
 
@@ -43,6 +46,7 @@ Allow user to sort them by winner or alphabetically
 Perhaps for privacy, print "few" rather than a number less than 3?
 
 Provide variant methods of combining batches for privacy (class Push)
+ really want to deal with entropy, not number
  preserve more audit units: try to only combine small units together
  can also generate a different CountyElection with more or less detail
 

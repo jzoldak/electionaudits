@@ -1,3 +1,8 @@
+2008-10-09    <neal@bcn.boulder.co.us>
+
+	* electionaudit/templates/electionaudit/report.html: 
+	sort columns alphabetically to deal with variable order, mismatches
+	
 2008-10-08    <neal@bcn.boulder.co.us>
 
 	* audittools/templates/base.html: 

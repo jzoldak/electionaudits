@@ -2,6 +2,9 @@
 {% block title %}Audit Report for {{ object }} | {{ block.super }}{% endblock %}
 
 {% block content %}
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
     <h2>Audit Report for {{ object }}</h2>
 <p>Number of audit units: {{ object.contestbatch_set.all|length }}</p>
 <p>
@@ -10,7 +13,7 @@ Margin of victory is {{ object.margin|floatformat:3 }}%
 
 <table border="border" cellpadding="5">
 <thead>
- {% for contestbatch in object.contestbatch_set.all %}
+ {% for contestbatch in object.contestbatch_set.all|dictsort:"batch" %}
   {% if forloop.first %}
    <tr>
    <td>AuditUnit</td>
@@ -18,7 +21,7 @@ Margin of victory is {{ object.margin|floatformat:3 }}%
    <td>Batches</td>
    <td>Ballots</td>
    <td>Contest Ballots</td>
-   {% for votecount in contestbatch.votecount_set.all %}
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
       <td style="writing-mode: tb-rl;">{{ votecount.choice }}</td>
    {% endfor %}
    </tr>
@@ -28,7 +31,7 @@ Margin of victory is {{ object.margin|floatformat:3 }}%
    <td></td>
    <td></td>
    <td></td>
-   {% for votecount in contestbatch.votecount_set.all %}
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
       <td style="writing-mode: tb-rl;">{{ votecount.choice.votes }}</td>
    {% endfor %}
    </tr>
@@ -36,14 +39,14 @@ Margin of victory is {{ object.margin|floatformat:3 }}%
  {% endfor %}
 </thead>
 <tbody>
- {% for contestbatch in object.contestbatch_set.all %}
+ {% for contestbatch in object.contestbatch_set.all|dictsort:"batch" %}
   <tr>
    <td>{{ forloop.counter|stringformat:"04d" }}</td>
    <td>{{ contestbatch.batch.type }}</td>
    <td>{{ contestbatch.batch.name }}</td>
    <td>{{ contestbatch.ballot_count }}</td>
    <td>{{ contestbatch.contest_ballots }}</td>
-   {% for votecount in contestbatch.votecount_set.all %}
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
      <td><b>{{ votecount.votes }}</b></td>
    {% endfor %}
   </tr>
