@@ -1,5 +1,10 @@
 ToDo list for ElectionAudits
 
+Move to bzr-based versions: 0.8-r32
+use the -f option of easy_install for other deps
+move to README.txt?
+move electionaudit => electionaudits
+
 Use AuditUnit in parse_xml_crystal and generate django tables from
 incremental reports via --subtract in addition to std output reports as now 
 
@@ -83,3 +88,27 @@ Auto-sort result files, check for non-incremental results
 Check for results that list different candidates for a contest
 Look for suspicious audit units, anomalous results
 Look for columns that don't agree with previous result
+
+Packaging:
+
+Set DJANGO_SETTINGS_MODULE in makeauditunits.py
+Include data files
+Try to get windows egg
+How to get "pure" package, not platform-dependent?
+Get setup.py to create audittools tree in a demo script directory, not lib
+
+maybe switch from __file__ to resource management system for packaged data files
+ ala  http://peak.telecommunity.com/DevCenter/PythonEggs#resource-management
+  from pkg_resources import Requirement, resource_filename
+  filename = resource_filename(Requirement.parse("MyProject"),"sample.conf")
+ but that won't take care of location for dev.db DATABASE_NAME
+
+describe how to host on google app engine
+
+allow xml files to be compressed with e.g. zip
+easy_install --editable projectname==dev
+add setup.py --test and doctest support: wrapping tests in TestSuite
+
+look at output during easy_install of lxml
+
+setup.py register sdist bdist_egg upload --sign

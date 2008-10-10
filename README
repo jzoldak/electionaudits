@@ -5,13 +5,17 @@ of the
  Principles and Best Practices for Post-Election Audits
  http://electionaudits.org/principles
 
+For up-to-date information, see the project home page at
+
+ http://neal.mcburnett.org/electionaudits/
+
 Authors
 =======
 Neal McBurnett
 
 Copyright and License ("MIT" or "X11" license)
 =====================
-Copyright 2008 Neal McBurnett
+Copyright 2008 Neal McBurnett  http://neal.mcburnett.org/
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -68,6 +72,41 @@ contribute.
 Components:
 ===========
 
+electionaudit module
+====================
+
+Graphical exploration and entry of information, via a
+Django-based web site.
+
+Usage:
+
+First run the internal django server:
+
+$ cd audittools
+$ ./manage.py syncdb
+
+When it asks: 
+
+ "You just installed Django's auth system, which means you don't have
+ any superusers defined.  Would you like to create one now? (yes/no)"
+answer "yes" and provide a username and password for the "admin" system.
+
+$ ./manage.py runserver
+
+Then, in a browser, visit the main URL, e.g.
+
+ http://127.0.0.1:8000/
+
+to see the Audit Reports for the various Contests, etc.
+
+See doc/model_graph.png for a diagram of the various database tables
+and associated fields and relationships.
+
+See http://127.0.0.1:8000/admin/ (using the username and password
+you entered during the "syncdb" step) to enter new data, and
+http://127.0.0.1:8000/admin/doc/ for more documentation on the data models
+and various available views of the information.
+
 makeauditunits.py
 =================
 A program to parse election results data into easily
@@ -115,36 +154,10 @@ or if you have some incremental reports [not working with django right now....]:
 
 $ makeauditunits -s cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
 
-electionaudit module
-====================
+Features:
+=========
 
-Graphical exploration and entry of information, via a
-Django-based web site.
-
-Usage:
-
-First run the internal django server:
-
-$ cd audittools
-$ ./manage.py syncdb
-
-$ ./manage.py runserver
-
-Then, in a browser, visit the main URL, e.g.
-
- http://127.0.0.1:8000/
-
-to see the Audit Reports for the various Contests, etc.
-
-See doc/model_graph.png for a diagram of the various database tables
-and associated fields and relationships.
-
-See http://127.0.0.1:8000/admin/ (using the username and password
-you entered during the "syncdb" step) to enter new data, and
-http://127.0.0.1:8000/admin/doc/ for more documentation on the data models
-and various available views of the information.
-
-Features: self-validation of all xhtml pages generated: see
-a report of any errors at
+ * self-validation of all xhtml pages generated: see a report of any
+errors at
 
  http://127.0.0.1:8000/validator/

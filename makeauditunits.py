@@ -24,7 +24,7 @@ from django.db import transaction
 import electionaudit.models as models
 import electionaudit.util as util
 
-__author__ = "Neal McBurnett <http://mcburnett.org/neal/>"
+__author__ = "Neal McBurnett <http://neal.mcburnett.org/>"
 __version__ = "0.7.0"
 __date__ = "2008-09-08"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
