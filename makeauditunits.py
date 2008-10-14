@@ -3,14 +3,6 @@
 made with Hart's Tally software.
 
 %InsertOptionParserUsage%
-
-Example:
- Currently, you first need to make sure that makeauditunits knows
- how to save the changes in the database i.e. which settings to use.  E.g.
- $ export DJANGO_SETTINGS_MODULE=audittools.settings
-
- $ makeauditunits -s cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
-
 """
 
 import os
@@ -20,17 +12,22 @@ import logging
 import csv
 from datetime import datetime
 
+from django.core.management import setup_environ
 from django.db import transaction
 import electionaudit.models as models
 import electionaudit.util as util
 
 __author__ = "Neal McBurnett <http://neal.mcburnett.org/>"
-__version__ = "0.7.0"
-__date__ = "2008-09-08"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
 __license__ = "MIT"
 
-parser = optparse.OptionParser(prog="makeauditunits", version=__version__)
+
+usage = """Usage: makeauditunits.py [options] [file]....
+
+Example:
+ makeauditunits.py -s 001_EV_p001.xml 002_AB_p022.xml 003_EL_p015.xml"""
+
+parser = optparse.OptionParser(prog="makeauditunits", usage=usage)
 
 parser.add_option("-s", "--subtract",
                   action="store_true", default=False,
@@ -74,6 +71,9 @@ def main(parser):
 
     totals = {}
 
+    from audittools import settings
+    setup_environ(settings)
+
     for file in args:
         if file.endswith(".xml"):
             newtotals = parse_xml_crystal(file, options)
@@ -93,11 +93,6 @@ def parse_csv(file, options):
     If the data is to be aggregated for privacy (the default), the data
     should be sorted by batch (precinct).
     """
-
-    from django.core.management import setup_environ
-    from audittools import settings
-
-    setup_environ(settings)
 
     election = os.path.basename(file)[0:-4]
 
@@ -136,18 +131,37 @@ def parse_xml_crystal(file, options):
     file"""
 
     import lxml.etree as ET
-    from django.core.management import setup_environ
-    from audittools import settings
-
-    setup_environ(settings)
 
     election, created = models.CountyElection.objects.get_or_create(name="BoulderGeneral")
+    if os.path.basename(file) == "cumulative.xml":
+        # if it's the borind default, use alternate naming scheme:
+        #  parent directory of canonical path
+        name = os.path.basename(os.path.dirname(os.path.realpath(file)))
+    else:
+        name = os.path.basename(file)[0:-4] 	# trim directory and ".xml"
+
     absentee_batch, created = models.Batch.objects.get_or_create(
-        name=os.path.basename(file)[0:-4],	# trim directory and ".xml"
+        name=name,
         election=election,
         type="AB" )
+    early_batch, created = models.Batch.objects.get_or_create(
+        name=name,
+        election=election,
+        type="EV" )
+    election_batch, created = models.Batch.objects.get_or_create(
+        name=name,
+        election=election,
+        type="EL" )
 
-    root = ET.parse(file).getroot()
+    # filter out this confounding unprefixed namespace attribute
+    # ...or figure out how to parse it...
+    filterout = "xmlns = 'urn:crystal-reports:schemas'"
+    import StringIO
+    newfile = StringIO.StringIO()
+    newfile.write(open(file).read().replace(filterout, ""))
+    newfile.seek(0)
+
+    root = ET.parse(newfile).getroot()
     logging.debug("root = %s" % root)
 
     # The Hart system forces the use of some odd contest names.
@@ -172,7 +186,9 @@ def parse_xml_crystal(file, options):
         # hmm - this won't work in primary, when there are multiple
         # contests per election, one for each party
         contest, created = models.Contest.objects.get_or_create(name=contest_name.strip())
-        contest_batch = models.ContestBatch.objects.create(contest=contest, batch=absentee_batch)
+        ab_cb = models.ContestBatch.objects.create(contest=contest, batch=absentee_batch)
+        ev_cb = models.ContestBatch.objects.create(contest=contest, batch=early_batch)
+        el_cb = models.ContestBatch.objects.create(contest=contest, batch=election_batch)
 
         over, created = models.Choice.objects.get_or_create(name="Over", contest=contest)
         under, created = models.Choice.objects.get_or_create(name="Under", contest=contest)
@@ -200,19 +216,23 @@ def parse_xml_crystal(file, options):
               '{@_Combine_Over}': 'Over',	# Report combined AB/Early here
               '{@AB_Over_Votes}': 'Over' } )
 
-        v = models.VoteCount.objects.create(choice=over, votes=absenteer['Over'], contest_batch=contest_batch)
-        v = models.VoteCount.objects.create(choice=under, votes=absenteer['Under'], contest_batch=contest_batch)
+        v = models.VoteCount.objects.create(choice=over, votes=absenteer['Over'], contest_batch=ab_cb)
+        v = models.VoteCount.objects.create(choice=under, votes=absenteer['Under'], contest_batch=ab_cb)
 
         earlyr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
             { '{@EA_Under_Votes}': 'Under',
               '{@EA_Over_Votes}': 'Over' } )
 
+        v = models.VoteCount.objects.create(choice=over, votes=earlyr['Over'], contest_batch=ev_cb)
+        v = models.VoteCount.objects.create(choice=under, votes=earlyr['Under'], contest_batch=ev_cb)
         electionr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
             { '{sp_cumulative_rpt.c_under_votes_election}': 'Under',
               '{sp_cumulative_rpt.c_over_votes_election}': 'Over' } )
 
+        v = models.VoteCount.objects.create(choice=over, votes=electionr['Over'], contest_batch=el_cb)
+        v = models.VoteCount.objects.create(choice=under, votes=electionr['Under'], contest_batch=el_cb)
         #logging.debug(contesttree.getchildren())
 
         parties = set()
@@ -229,11 +249,14 @@ def parse_xml_crystal(file, options):
                   '{@EA_Votes}': 'Early' } )
 
             logging.debug("candidate: %s" % cv['Name'])
-            absenteer.update({cv['Name']: cv['Absentee']})
             choice, created = models.Choice.objects.get_or_create(name=cv['Name'], contest=contest)
-            v = models.VoteCount.objects.create(choice=choice, votes=absenteer[cv['Name']], contest_batch=contest_batch)
+            absenteer.update({cv['Name']: cv['Absentee']})
+            v = models.VoteCount.objects.create(choice=choice, votes=absenteer[cv['Name']], contest_batch=ab_cb)
             earlyr.update({cv['Name']: cv['Early']})
+            v = models.VoteCount.objects.create(choice=choice, votes=earlyr[cv['Name']], contest_batch=ev_cb)
             electionr.update({cv['Name']: cv['Election day']})
+            v = models.VoteCount.objects.create(choice=choice, votes=electionr[cv['Name']], contest_batch=el_cb)
+
             parties.add(cv['Party'])
 
         assert len(parties) > 0		# or == 1 for primary?

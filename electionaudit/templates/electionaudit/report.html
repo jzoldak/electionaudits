@@ -32,7 +32,7 @@ Margin of victory is {{ object.margin|floatformat:3 }}%
    <td></td>
    <td></td>
    {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
-      <td style="writing-mode: tb-rl;">{{ votecount.choice.votes }}</td>
+      <td>{{ votecount.choice.votes }}</td>
    {% endfor %}
    </tr>
   {% endif %}

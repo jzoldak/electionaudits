@@ -1,5 +1,19 @@
+2008-10-14    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (parse_xml_crystal): 
+	finally, create EL and EV database records, now that I can test those
+	if xml file is "cumulative.xml", use parent directory name
+	
+2008-10-13    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (main): 
+	define settings module without environment var DJANGO_SETTINGS_MODULE
+	
 2008-10-10    <neal@bcn.boulder.co.us>
 
+	add setup.py and ez_setup.py
+	* electionaudit/templates/electionaudit/report.html: 
+	don't use writing-mode: tb-rl on vote totals
 	* audittools/settings.py: 
 	comment out 'lukeplant_me_uk.django.validator' and 'django_extensions'
 	Improve documentation

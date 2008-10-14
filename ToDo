@@ -1,6 +1,8 @@
 ToDo list for ElectionAudits
 
-Move to bzr-based versions: 0.8-r32
+Ignore zero batches from -s
+get batch type right for xml
+Move to bzr-based versions: 0.7-r32 or 0.8.dev-r33 (would want bzr support)
 use the -f option of easy_install for other deps
 move to README.txt?
 move electionaudit => electionaudits
@@ -8,7 +10,11 @@ move electionaudit => electionaudits
 Use AuditUnit in parse_xml_crystal and generate django tables from
 incremental reports via --subtract in addition to std output reports as now 
 
-Check for duplicate records
+Use custom view for more efficiently sorted audit report detail and report.html
+no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
+
+Check for duplicate records: maybe model meta Options.unique_together
+check for negative vote counts, etc.
 
 scenarios: test lots of data - speed, ease of fixing problem files
 take directory name for xml reports, sort by timestamp for --subtract
@@ -16,6 +22,7 @@ take directory name for xml reports, sort by timestamp for --subtract
 Provide makeauditunits option to name election for xml files.
 separate out Contests by CountyElection in audit report
 
+Fix contest detail report - not finding contestbatches (but little-used)
 Paginate votecount report
 Provide good html titles for all pages
 
@@ -23,13 +30,22 @@ Produce output in csv format also
 
 Deal with namespace issues - auto-edit file, or handle it another way.
 
-Improve documentation
+Improve documentation - put model diagram in media
 Get rid of or document unused stuff
 
 Figure out ballot counts (CVRs) based on max of all contests in batch?
   or 'Total Number of Voters' from pdf?
 Incorporate Rivest's varsize.py code to report statistics and confidence
- levels and select audit units to be audited.
+ paper() => # to audit via rule of thumb, APR, SAFE, Negexp, PPEBWR, 
+ evaluate() => stats for specified # selected precincts, precinct sizes, margin
+  levels and select audit units to be audited.
+ change stdout to do logging, or replace "print" with logger.debug
+ or convert to templates
+ def evaluate: return calculated values
+ parameterize max_shift_per_precinct
+
+ pps.py: actually chooses audit units.  Link to throw of dice, ala RFC 3797?
+
 
 Add table relating batch names to description - type, source, mbbs, etc
 and link to that from batch name
@@ -51,7 +67,7 @@ Allow user to sort them by winner or alphabetically
 Perhaps for privacy, print "few" rather than a number less than 3?
 
 Provide variant methods of combining batches for privacy (class Push)
- really want to deal with entropy, not number
+ really want to deal with entropy of results, not number
  preserve more audit units: try to only combine small units together
  can also generate a different CountyElection with more or less detail
 
@@ -72,7 +88,6 @@ Set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
 
 Put contest abbreviation in a new field, option to print with it or not
 
-Package up, as an egg?  And submit to http://pypi.python.org/pypi
 Test on windows
 
 Need a way to sort DRE results out separately.
@@ -89,9 +104,12 @@ Check for results that list different candidates for a contest
 Look for suspicious audit units, anomalous results
 Look for columns that don't agree with previous result
 
-Packaging:
 
-Set DJANGO_SETTINGS_MODULE in makeauditunits.py
+Packaging:
+Package up, as an egg?  And submit to http://pypi.python.org/pypi
+
+avoid dependency on setuptools version 0.6c9 to run (even to display help)
+take out bzr dependencies for users
 Include data files
 Try to get windows egg
 How to get "pure" package, not platform-dependent?
@@ -103,8 +121,6 @@ maybe switch from __file__ to resource management system for packaged data files
   filename = resource_filename(Requirement.parse("MyProject"),"sample.conf")
  but that won't take care of location for dev.db DATABASE_NAME
 
-describe how to host on google app engine
-
 allow xml files to be compressed with e.g. zip
 easy_install --editable projectname==dev
 add setup.py --test and doctest support: wrapping tests in TestSuite
@@ -112,3 +128,5 @@ add setup.py --test and doctest support: wrapping tests in TestSuite
 look at output during easy_install of lxml
 
 setup.py register sdist bdist_egg upload --sign
+
+describe how to host on google app engine

@@ -61,7 +61,6 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    #'lukeplant_me_uk.django.validator.middleware.ValidatorMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -84,8 +83,6 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.databrowse',
 
-    #'lukeplant_me_uk.django.validator',
-    #'django_extensions',
     'electionaudit',
 )
 
