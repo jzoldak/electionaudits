@@ -13,7 +13,7 @@ Authors
 =======
 Neal McBurnett
 
-Copyright and License ("MIT" or "X11" license)
+Copyright and License ("MIT" aka "X11" license)
 =====================
 Copyright 2008 Neal McBurnett  http://neal.mcburnett.org/
 
@@ -71,6 +71,12 @@ distributed version control software, making it easy for you to
 contribute.
 
 
+Support
+=======
+
+Visit #electionaudits on irc.freenode.net
+
+
 Components:
 ===========
 
@@ -86,6 +92,10 @@ First run the internal django server:
 
 $ cd audittools
 $ ./manage.py syncdb
+
+In Windows leave off the "./":
+
+C:> manage.py syncdb
 
 When it asks: 
 
@@ -148,17 +158,15 @@ Test data is provided, so you can just run
 $ cd audittools
 $ ./manage.py syncdb
 
-$ export DJANGO_SETTINGS_MODULE=audittools.settings
 $ ../makeauditunits.py ../testdata/testcum.xml
 
-or in windows:
+In Windows:
 
-C:> set DJANGO_SETTINGS_MODULE=audittools.settings
-C:> ../makeauditunits.py ../testdata/testcum.xml
+C:> ..\makeauditunits.py ..\testdata\testcum.xml
 
-or if you have some incremental reports [not working with django right now....]:
+or use the incremental reports in testdata/t0 :
 
-$ makeauditunits -s cumulative-pe-s23-b005-m800.xml cumulative-pe-s24-b006-m803.xml cumulative-pe-s25-b007-m804.xml
+$ ../makeauditunits.py -s ../testdata/t0/*.xml
 
 Features:
 =========

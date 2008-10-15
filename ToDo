@@ -2,6 +2,15 @@ ToDo list for ElectionAudits
 
 Sort by timestamp or end of file name
 
+Find a way to distinguish paper from dre batches and not combine them
+ add option ala "don't combine if batch letter 14 is different"
+ or general RE logic to compare batch names?
+
+Allow filtering by type or precinct in audit report
+
+Figure out how to have Contest.margin default to float('nan') without
+ odd NULL errors
+
 Move to bzr-based versions: 0.7-r32 or 0.8.dev-r33 (would want bzr support)
 use the -f option of easy_install for other deps
 move to README.txt?

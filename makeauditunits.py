@@ -90,7 +90,9 @@ def main(parser):
 
     # Update tallies on all contests, just in case
     for contest in models.Contest.objects.all():
-        contest.tally()
+        dict = contest.tally()
+
+        print("%(contest)-34.34s: %(total)8d %(winnervotes)8d %(winner)-8.8s %(secondvotes)8d %(second)-8.8s  %(margin)6.2f%%" % dict)
 
 @transaction.commit_on_success
 def parse_csv(file, options):
@@ -111,11 +113,12 @@ def parse_csv(file, options):
     for r in reader:
         batch = [r['Precinct_name']]
         contest = r['Contest_title']
+        if r['Party_Code']:
+            contest += ":" + r['Party_Code']
+
         if options.contest != None and options.contest != contest:
             continue
 
-        if r['Party_Code']:
-            contest += ":" + r['Party_Code']
         choice = r['candidate_name']
 
         if batch != au_AB.batches  or  contest != au_AB.contest:

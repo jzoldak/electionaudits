@@ -18,29 +18,41 @@ class Contest(models.Model):
     name = models.CharField(max_length=200)
 
     # or provide external vote counts and calculate this?
-    margin = models.FloatField(null=True, blank=True, help_text="(Winner - Second) / total, in percent")
+    margin = models.FloatField(blank=True, null=True,
+                    help_text="(Winner - Second) / total, in percent" )
 
     def tally(self):
         "Tally up all the choices and calculate margins"
 
         total = 0
-        winner = None
-        second = None
+        winner = Choice(name="None", votes=0, contest=self)
+        second = Choice(name="None", votes=0, contest=self)
 
         for choice in self.choice_set.all():
             choice.tally()
             total += choice.votes
             if choice.name not in ["Under", "Over"]:
-                if not winner or choice.votes > winner.votes:
+                if choice.votes >= winner.votes:
                     second = winner
                     winner = choice
-                elif not second or choice.votes > second.votes:
+                elif choice.votes >= second.votes:
                     second = choice
 
-        if second and winner.votes > 0:
+        if winner.votes > 0:
             self.margin = (winner.votes - second.votes) * 100.0 / total
             self.save()
-        return self.margin
+        else:
+            self.margin = float('nan')
+            # don't save for now - may run in to odd NULL problems
+
+        return {'contest': self.name,
+                'total': total,
+                'winner': winner.name,
+                'winnervotes': winner.votes,
+                'second': second.name,
+                'secondvotes': second.votes,
+                'margin': self.margin }
+
 
     def __unicode__(self):
         return "%s" % (self.name)
