@@ -1,6 +1,11 @@
 2008-10-15    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py (main): 
+	fix DJANGO_SETTINGS_MODULE bug	
+	
+2008-10-15    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (main): 
 	print summary results of tally at end
 
 2008-10-14    <neal@bcn.boulder.co.us>

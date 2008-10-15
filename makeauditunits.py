@@ -12,7 +12,9 @@ import logging
 import csv
 from datetime import datetime
 
+from audittools import settings
 from django.core.management import setup_environ
+setup_environ(settings)
 from django.db import transaction
 import electionaudit.models as models
 import electionaudit.util as util
@@ -73,9 +75,6 @@ def main(parser):
         logging.debug("using test file: " + args[0])
 
     totals = {}
-
-    from audittools import settings
-    setup_environ(settings)
 
     for file in args:
         logging.info("Processing %s " % file)
