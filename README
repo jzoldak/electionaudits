@@ -127,10 +127,14 @@ Currently supported input formats:
    'candidate_name'
    'cand_seq_nbr'
    'absentee_votes'
+   'early_votes',
    'election_votes'
-   and these columns, only used for 1st candidate (when 'cand_seq_nbr' is 1)
+ 
+  and these columns, only used for 1st candidate (when 'cand_seq_nbr' is 1)
     'absentee_under_votes'
     'absentee_over_votes'
+    'early_under_votes',
+    'early_over_votes',
     'election_under_votes'
     'election_over_votes'
 

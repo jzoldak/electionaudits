@@ -1,20 +1,21 @@
 ToDo list for ElectionAudits
 
-Ignore zero batches from -s
-get batch type right for xml
+Sort by timestamp or end of file name
+
 Move to bzr-based versions: 0.7-r32 or 0.8.dev-r33 (would want bzr support)
 use the -f option of easy_install for other deps
 move to README.txt?
 move electionaudit => electionaudits
+
+deal better with "Not enough ballots for privacy" in entire input for a contest
+ complain more loudly, prompt user for OK?
+ Save temp db record for next input batch?
 
 Use AuditUnit in parse_xml_crystal and generate django tables from
 incremental reports via --subtract in addition to std output reports as now 
 
 Use custom view for more efficiently sorted audit report detail and report.html
 no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
-
-Check for duplicate records: maybe model meta Options.unique_together
-check for negative vote counts, etc.
 
 scenarios: test lots of data - speed, ease of fixing problem files
 take directory name for xml reports, sort by timestamp for --subtract
@@ -34,7 +35,7 @@ Improve documentation - put model diagram in media
 Get rid of or document unused stuff
 
 Figure out ballot counts (CVRs) based on max of all contests in batch?
-  or 'Total Number of Voters' from pdf?
+  too bad @ballots_cast != 'Total Number of Voters' from pdf?
 Incorporate Rivest's varsize.py code to report statistics and confidence
  paper() => # to audit via rule of thumb, APR, SAFE, Negexp, PPEBWR, 
  evaluate() => stats for specified # selected precincts, precinct sizes, margin

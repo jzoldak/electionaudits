@@ -1,6 +1,18 @@
 2008-10-14    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py (parse_xml_crystal): 
+	convert parse_xml_crystal etc to use AuditUnits
+	Add "--election" option to name the election.
+	(parse_csv): 
+	add EarlyVotes
+
+	* electionaudit/models.py (Batch): 
+	Change election day abbreviation to "ED", not "EL" (similar to Early)
+	Avoid duplicate VoteCount, Batch, ContestBatch via Meta unique_together
+
+2008-10-14    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (parse_xml_crystal): 
 	finally, create EL and EV database records, now that I can test those
 	if xml file is "cumulative.xml", use parent directory name
 	

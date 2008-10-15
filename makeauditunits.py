@@ -25,7 +25,7 @@ __license__ = "MIT"
 usage = """Usage: makeauditunits.py [options] [file]....
 
 Example:
- makeauditunits.py -s 001_EV_p001.xml 002_AB_p022.xml 003_EL_p015.xml"""
+ makeauditunits.py -s 001_EV_p001.xml 002_AB_p022.xml 003_ED_p015.xml"""
 
 parser = optparse.OptionParser(prog="makeauditunits", usage=usage)
 
@@ -38,7 +38,10 @@ parser.add_option("-m", "--min_ballots", dest="min_ballots", type="int",
                   help="combine audit units with less than MINIMUM contest ballots", metavar="MINIMUM")
 
 parser.add_option("-c", "--contest", dest="contest",
-                  help="report on CONTEST", metavar="CONTEST")
+                  help="only process CONTEST", metavar="CONTEST")
+
+parser.add_option("-e", "--election", default="test",
+                  help="the name for this ELECTION")
 
 parser.add_option("-v", "--verbose",
                   action="store_true", default=False,
@@ -75,12 +78,15 @@ def main(parser):
     setup_environ(settings)
 
     for file in args:
+        logging.info("Processing %s " % file)
         if file.endswith(".xml"):
             newtotals = parse_xml_crystal(file, options)
             make_audit_unit(totals, newtotals, options)
             totals = newtotals
         elif file.endswith(".csv"):
             parse_csv(file, options)
+
+    util.flushPipes()
 
     # Update tallies on all contests, just in case
     for contest in models.Contest.objects.all():
@@ -99,59 +105,53 @@ def parse_csv(file, options):
     reader = csv.DictReader(open(file))
 
     au_AB = util.AuditUnit()
-    au_EL = util.AuditUnit()
+    au_EV = util.AuditUnit()
+    au_ED = util.AuditUnit()
 
     for r in reader:
         batch = [r['Precinct_name']]
         contest = r['Contest_title']
+        if options.contest != None and options.contest != contest:
+            continue
+
         if r['Party_Code']:
             contest += ":" + r['Party_Code']
         choice = r['candidate_name']
 
         if batch != au_AB.batches  or  contest != au_AB.contest:
-            logging.debug("new batch '%s' at line %d" % (batch, reader.reader.line_num))
+            logging.debug("now batch '%s' contest '%s' at line %d" % (batch, contest, reader.reader.line_num))
             util.pushAuditUnit(au_AB, min_ballots = options.min_ballots)
             au_AB = util.AuditUnit(election, contest, 'AB', batch)
-            util.pushAuditUnit(au_EL, min_ballots = options.min_ballots)
-            au_EL = util.AuditUnit(election, contest, 'EL', batch)
+            util.pushAuditUnit(au_EV, min_ballots = options.min_ballots)
+            au_EV = util.AuditUnit(election, contest, 'EV', batch)
+            util.pushAuditUnit(au_ED, min_ballots = options.min_ballots)
+            au_ED = util.AuditUnit(election, contest, 'ED', batch)
         
         au_AB.update(choice, r['absentee_votes'])
-        au_EL.update(choice, r['election_votes'])
+        au_EV.update(choice, r['early_votes'])
+        au_ED.update(choice, r['election_votes'])
         if r['cand_seq_nbr'] == '1':	# duplicated for each candidate - silly
             au_AB.update('Under', r['absentee_under_votes'])
             au_AB.update('Over', r['absentee_over_votes'])
-            au_EL.update('Under', r['election_under_votes'])
-            au_EL.update('Over', r['election_over_votes'])
+            au_EV.update('Under', r['early_under_votes'])
+            au_EV.update('Over', r['early_over_votes'])
+            au_ED.update('Under', r['election_under_votes'])
+            au_ED.update('Over', r['election_over_votes'])
 
-    util.flushPipes()
-
-@transaction.commit_on_success
 def parse_xml_crystal(file, options):
     """Extract relevant data from each contest in a given crystalreports xml
     file"""
 
     import lxml.etree as ET
 
-    election, created = models.CountyElection.objects.get_or_create(name="BoulderGeneral")
+    election = options.election
+
     if os.path.basename(file) == "cumulative.xml":
         # if it's the borind default, use alternate naming scheme:
         #  parent directory of canonical path
-        name = os.path.basename(os.path.dirname(os.path.realpath(file)))
+        batch = os.path.basename(os.path.dirname(os.path.realpath(file)))
     else:
-        name = os.path.basename(file)[0:-4] 	# trim directory and ".xml"
-
-    absentee_batch, created = models.Batch.objects.get_or_create(
-        name=name,
-        election=election,
-        type="AB" )
-    early_batch, created = models.Batch.objects.get_or_create(
-        name=name,
-        election=election,
-        type="EV" )
-    election_batch, created = models.Batch.objects.get_or_create(
-        name=name,
-        election=election,
-        type="EL" )
+        batch = os.path.basename(file)[0:-4] 	# trim directory and ".xml"
 
     # filter out this confounding unprefixed namespace attribute
     # ...or figure out how to parse it...
@@ -185,13 +185,10 @@ def parse_xml_crystal(file, options):
 
         # hmm - this won't work in primary, when there are multiple
         # contests per election, one for each party
-        contest, created = models.Contest.objects.get_or_create(name=contest_name.strip())
-        ab_cb = models.ContestBatch.objects.create(contest=contest, batch=absentee_batch)
-        ev_cb = models.ContestBatch.objects.create(contest=contest, batch=early_batch)
-        el_cb = models.ContestBatch.objects.create(contest=contest, batch=election_batch)
-
-        over, created = models.Choice.objects.get_or_create(name="Over", contest=contest)
-        under, created = models.Choice.objects.get_or_create(name="Under", contest=contest)
+        contest = contest_name.strip()
+        au_AB = util.AuditUnit(election, contest, "AB", [batch])
+        au_EV = util.AuditUnit(election, contest, "EV", [batch])
+        au_ED = util.AuditUnit(election, contest, "ED", [batch])
 
         logging.debug("Contest: %s (%s)" % (contest, tree[0].text))
 
@@ -216,23 +213,25 @@ def parse_xml_crystal(file, options):
               '{@_Combine_Over}': 'Over',	# Report combined AB/Early here
               '{@AB_Over_Votes}': 'Over' } )
 
-        v = models.VoteCount.objects.create(choice=over, votes=absenteer['Over'], contest_batch=ab_cb)
-        v = models.VoteCount.objects.create(choice=under, votes=absenteer['Under'], contest_batch=ab_cb)
+        au_AB.update('Under', absenteer['Under'])
+        au_AB.update('Over', absenteer['Over'])
 
         earlyr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
             { '{@EA_Under_Votes}': 'Under',
               '{@EA_Over_Votes}': 'Over' } )
 
-        v = models.VoteCount.objects.create(choice=over, votes=earlyr['Over'], contest_batch=ev_cb)
-        v = models.VoteCount.objects.create(choice=under, votes=earlyr['Under'], contest_batch=ev_cb)
+        au_EV.update('Under', earlyr['Under'])
+        au_EV.update('Over', earlyr['Over'])
+
         electionr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
             { '{sp_cumulative_rpt.c_under_votes_election}': 'Under',
               '{sp_cumulative_rpt.c_over_votes_election}': 'Over' } )
 
-        v = models.VoteCount.objects.create(choice=over, votes=electionr['Over'], contest_batch=el_cb)
-        v = models.VoteCount.objects.create(choice=under, votes=electionr['Under'], contest_batch=el_cb)
+        au_ED.update('Under', electionr['Under'])
+        au_ED.update('Over', electionr['Over'])
+
         #logging.debug(contesttree.getchildren())
 
         parties = set()
@@ -249,13 +248,10 @@ def parse_xml_crystal(file, options):
                   '{@EA_Votes}': 'Early' } )
 
             logging.debug("candidate: %s" % cv['Name'])
-            choice, created = models.Choice.objects.get_or_create(name=cv['Name'], contest=contest)
-            absenteer.update({cv['Name']: cv['Absentee']})
-            v = models.VoteCount.objects.create(choice=choice, votes=absenteer[cv['Name']], contest_batch=ab_cb)
-            earlyr.update({cv['Name']: cv['Early']})
-            v = models.VoteCount.objects.create(choice=choice, votes=earlyr[cv['Name']], contest_batch=ev_cb)
-            electionr.update({cv['Name']: cv['Election day']})
-            v = models.VoteCount.objects.create(choice=choice, votes=electionr[cv['Name']], contest_batch=el_cb)
+
+            au_AB.update(cv['Name'], cv['Absentee'])
+            au_EV.update(cv['Name'], cv['Early'])
+            au_ED.update(cv['Name'], cv['Election day'])
 
             parties.add(cv['Party'])
 
@@ -264,7 +260,7 @@ def parse_xml_crystal(file, options):
 
         key = "%s:%s" % (contest, party)
 
-        values[key] = [absenteer, earlyr, electionr]
+        values[key] = [au_AB, au_EV, au_ED]
 
     return values
 
@@ -290,14 +286,14 @@ def extract_values(tree, fields):
     logging.debug("values for %s = %s" % (fields, values))
     return values
 
+@transaction.commit_on_success
 def make_audit_unit(totals, newtotals, options):
     """Subtract totals from newtotals and report the results for one audit unit.
-    Sample of totals: {contest1: [AB, EV, EL], c2: [AB, EV, EL] }
+    Sample of totals: {contest1: [AB, EV, ED], c2: [AB, EV, ED] }
      where e.g. AB = {'Under': 14, 'John': 23}
     """
 
-    import pprint
-
+    #import pprint
     #pprint.pprint(newtotals)
 
     if options.subtract and totals == {}:	# skip first time around
@@ -307,20 +303,13 @@ def make_audit_unit(totals, newtotals, options):
         if options.contest != None and options.contest != contest:
             continue
         if options.subtract:
-            if contest in totals:
-                for n, o in zip(newtotals[contest], totals[contest]):
-                    printf(contest)
-                    for f in sorted(n):
-                        printf("	%s	%s" % (f[0:6], int(n[f]) - int(o[f])))
-                    printf('\n')
+            for n, o in zip(newtotals[contest], totals[contest]):
+                diff = n.combine(o, subtract=True)
+                util.pushAuditUnit(diff, min_ballots = options.min_ballots)
 
         else:
-            print contest
-            
-            for n in newtotals[contest]:
-                print "---"
-                for f in sorted(n):
-                    print("	%s	%s" % (n[f], f))
+            for au in newtotals[contest]:
+                util.pushAuditUnit(au, min_ballots = options.min_ballots)
 
 def printf(string):
     sys.stdout.write(string)

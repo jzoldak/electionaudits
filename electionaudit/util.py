@@ -14,6 +14,11 @@ class Pipe:
     """
 
     def __init__(self):
+        """self.building: build up enough ballots to save privately
+        self.preserve: hold on to one unit prior to saving it in case we need
+        to combine another undersized one with it.
+        """
+
         self.preserve = AuditUnit()
         self.building = AuditUnit()
 
@@ -21,6 +26,8 @@ class Pipe:
         return "preserve: %s\nbuilding: %s" % (self.preserve, self.building)
 
     def push(self, au, min_ballots):
+        "push the audit unit into the queue, and save any full units no longer needed"
+
         logging.debug("pushing %s" % au)
 
         if au.contest_ballots() + self.building.contest_ballots() >= min_ballots:
@@ -31,10 +38,11 @@ class Pipe:
             self.building = self.building.combine(au)
 
     def flush(self):
+        "flush the rest out"
         if self.building:
             if not self.preserve:
-                raise RuntimeError("Not enough ballots for privacy")
-            self.preserve = self.building.combine(self.preserve)
+                logging.error("Not enough ballots for privacy" % self)
+            self.preserve = self.preserve.combine(self.building)
 
         self.preserve.save()
 
@@ -78,7 +86,7 @@ class AuditUnit:
         self.election = election
         self.contest = contest
         self.type = type
-        self.batches = batches
+        self.batches = batches		# a list of batch names
         self.votecounts = votecounts
 
     def update(self, choice, votes):
@@ -89,9 +97,13 @@ class AuditUnit:
         self.votecounts[choice] = int(votes)
 
     def contest_ballots(self):
+        "Return total number of ballots for this contest, including over, under"
+
         return sum(votes for votes in self.votecounts.values())
 
     def save(self):
+        "Save the AuditUnit to the database"
+
         if self.votecounts == {}:
             return
 
@@ -100,33 +112,65 @@ class AuditUnit:
         election, created = models.CountyElection.objects.get_or_create(name=self.election)
         batch, created = models.Batch.objects.get_or_create(name=' '.join(self.batches), election=election, type=self.type )
         contest, created = models.Contest.objects.get_or_create(name=self.contest)
+
+        # After contest etc is registered, we bail if no actual vote counts
+        if self.contest_ballots() == 0:
+            logging.debug("Zero batch: %s" % self)
+            return
+
         contest_batch, created = models.ContestBatch.objects.get_or_create(contest=contest, batch=batch)
         for (choice, votes) in self.votecounts.items():
             choice, created = models.Choice.objects.get_or_create(name=choice, contest=contest)
             models.VoteCount.objects.create(choice=choice, votes=votes, contest_batch=contest_batch)
 
     def __cmp__(self, other):
+        "Numerically compare number of contest_ballots in AuditUnit"
         return cmp(self.contest_ballots(), other.contest_ballots())
 
     def __str__(self):
         return "%s_%s_%s_%s_%d" % (self.election, self.contest, self.type, self.batches, self.contest_ballots())
 
     def __neg__(self):
+        "Negate the AuditUnit, for subtraction"
+
         return AuditUnit(self.election, self.contest, self.type, self.batches, **dict((key, -val) for (key, val) in self.votecounts.iteritems()))
 
-    def combine(self, other):
+    def combine(self, other, subtract=False):
+        """Combine two audit units into a new one.  If subtract is set,
+        subtract "other" and only show batches from self.
+        """
+
         if self.votecounts == {}:
             return other
 
         if other.votecounts == {}:
             return self
 
+        if self.contest_ballots() == 0:
+            logging.debug("Zero batch: %s" % other)
+            return other
+
+        if other.contest_ballots() == 0:
+            if not subtract:	# if subtract, don't care about previous total
+                logging.debug("Zero batch: %s" % self)
+            return self
+
+        if subtract:
+            other = -other
+
         logging.debug("combining batches %s_%s (%d) and %s_%s (%d)\n%s\n%s" % (self.batches, self.type, self.contest_ballots(), other.batches, other.type, other.contest_ballots(), self, other))
         if self.election != other.election or self.contest != other.contest or self.type != other.type:
-            raise ValueError("election, contest, and type must match")
+            raise ValueError("election, contest, and type must match:\n%s vs\n%s" % (self, other) )
 
         vcs = self.votecounts.copy()
         for (key, v2) in other.votecounts.items():
+            if v2 < 0 and not subtract:
+                raise ValueError("Negative vote count in %s: %s is %d" % (other, key, v2))
             vcs[key] = vcs.get(key, 0) + v2
 
-        return AuditUnit(self.election, self.contest, self.type, self.batches + other.batches, **vcs )
+        if subtract:
+            newbatches = self.batches	# don't care about previous
+        else:
+            newbatches = self.batches + other.batches
+            
+        return AuditUnit(self.election, self.contest, self.type, newbatches, **vcs )

@@ -50,10 +50,13 @@ class Batch(models.Model):
 
     name = models.CharField(max_length=200)
     election = models.ForeignKey(CountyElection)
-    type = models.CharField(max_length=20, help_text="AB for Absentee, EV for Early, EL for Election")
+    type = models.CharField(max_length=20, help_text="AB for Absentee, EV for Early, ED for Election")
 
     def __unicode__(self):
         return "%s:%s" % (self.name, self.type)
+
+    class Meta:
+        unique_together = ("name", "election", "type")
 
 class ContestBatch(models.Model):
     "The set of VoteCounts for a given Contest and Batch"
@@ -66,6 +69,9 @@ class ContestBatch(models.Model):
 
     def __unicode__(self):
         return "%s:%s" % (self.contest, self.batch)
+
+    class Meta:
+        unique_together = ("contest", "batch")
 
 class Choice(models.Model):
     "A candidate or issue name: an alternative for a Contest"
@@ -98,3 +104,6 @@ class VoteCount(models.Model):
 
     def __unicode__(self):
         return "%d\t%s\t%s\t%s" % (self.votes, self.choice.name, self.contest_batch.contest, self.contest_batch.batch)
+
+    class Meta:
+        unique_together = ("choice", "contest_batch")
