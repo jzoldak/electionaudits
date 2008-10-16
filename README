@@ -54,7 +54,7 @@ Helpful but optional Django apps used in settings.DEBUG mode:
     debug-toolbar: http://github.com/robhudson/django-debug-toolbar/tree/master
 
 Comment them out of audittools/settings_debug.py and
-electionaudit/urls.py if you don't want them.
+electionaudits/urls.py if you don't want them.
 
 It has been tested on Ubuntu Linux, but shouldn't be hard to get
 running on OSX or Windows.
@@ -77,6 +77,28 @@ Support
 Visit #electionaudits on irc.freenode.net
 
 
+Initialization
+==============
+
+Once, when you first install or upgrade the software, you need to
+initialize the database:
+
+$ cd audittools
+$ ./manage.py syncdb
+
+In Windows leave off the "./":
+
+C:> manage.py syncdb
+
+When it asks: 
+
+ "You just installed Django's auth system, which means you don't have
+ any superusers defined.  Would you like to create one now? (yes/no)"
+
+answer "yes" and provide a username and password for the "admin" system.
+Provide a valid email address also, though it won't be used unless
+you customize things.
+
 Components:
 ===========
 
@@ -87,25 +109,26 @@ manipulated databases and clean csv files.
 
 Use the --help option to print usage instructions:
 
-$ ./makeauditunits --help
+$ ./makeauditunits.py --help
 
 In Windows leave off the "./":
 
-C:> makeauditunits --help
+C:> makeauditunits.py --help
 
 Test data is provided, so you can just run
-
-$ cd audittools
-$ ./manage.py syncdb
 
 $ ../makeauditunits.py -s ../testdata/t0/*.xml
 
 In Windows:
 
-C:> manage.py syncdb
-C:> ..\makeauditunits.py ..\testdata\t0\*.xml
+C:> ..\makeauditunits.py
 
-Use "manage.py reset electionaudit" to clear the database before
+C:> ..\makeauditunits.py -s ..\testdata\t0\*.xml
+
+cd ..\testdata\t0
+..\..\makeauditunits.py -s 000<tab> 001<tab> 
+
+Use "manage.py reset electionaudits" to clear the database before
 trying to re-enter data.
 
 Currently supported input formats:
@@ -113,6 +136,11 @@ Currently supported input formats:
  * Hart InterCivic Tally "cumulative" reports in xml (crystal-reports)
    format (including all options: Absentee, Early and Election day, and
    the info box)
+
+   One file per cumulative batch of input.  Use the "-s" option to
+   makeauditunits.py to subtract each cumulative report from the previous one.
+
+   Examples: testdata/t0/*.xml
 
  * CSV input with one line per candidate using these headers:
    'Precinct_name'
@@ -132,29 +160,24 @@ Currently supported input formats:
     'election_under_votes'
     'election_over_votes'
 
+  Examples: testdata/t1.csv
 
-electionaudit module
+
+electionaudits module
 ====================
 
-Graphical exploration and entry of information, via a
-Django-based web site.
+This provides a web-based graphical user interface for exploration and entry
+of information.  It is built on the Django framework.
 
 Usage:
 
 First run the internal django server:
 
 $ cd audittools
-$ ./manage.py syncdb
-
-When it asks: 
-
- "You just installed Django's auth system, which means you don't have
- any superusers defined.  Would you like to create one now? (yes/no)"
-answer "yes" and provide a username and password for the "admin" system.
-Provide a valid email address also, though it won't be used unless
-you customize things.
-
 $ ./manage.py runserver
+
+This will remain running until you kill it with ctrl-c or close the window.
+It will show each web page you visit.
 
 Then, in a browser, visit the main URL, e.g.
 
@@ -173,7 +196,10 @@ and various available views of the information.
 Features:
 =========
 
- * self-validation of all xhtml pages generated: see a report of any
-errors at
+If you install the django html validator app
+lukeplant_me_uk.django.validator and use debug settins (manage.py
+runserver --settings settings_debug) the server will do
+self-validation of all xhtml pages generated.  You can then see a
+report of any errors at
 
  http://127.0.0.1:8000/validator/

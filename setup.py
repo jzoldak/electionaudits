@@ -3,7 +3,7 @@ ez_setup.use_setuptools()
 from setuptools import setup, find_packages
 setup(
     name = "ElectionAudits",
-    version = "0.7-r36",
+    version = "0.7-r37",
     author = "Neal McBurnett",
     author_email = "neal@bcn.boulder.co.us",
     description = "Help audit elections with good statistical confidence",
@@ -35,7 +35,7 @@ information.
 
     #entry_points = {
     #    'console_scripts': [
-    #        'makeauditunits = electionaudit.makeauditunits:main',
+    #        'makeauditunits = electionaudits.makeauditunits:main',
     #        ],
     #    },
 )

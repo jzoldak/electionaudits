@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from electionaudit.models import *
+from electionaudits.models import *
 from django.contrib import databrowse
 from django.conf import settings
 
@@ -24,9 +24,9 @@ votecount_detail_dict = {
     'template_object_name' : 'votecount',
 }
 
-# electionaudit custom views
+# electionaudits custom views
 
-urlpatterns = patterns('electionaudit.views',
+urlpatterns = patterns('electionaudits.views',
     #(r'^reports/(?P<contest>\w*)/$',            'report'),
 )
 
@@ -37,12 +37,12 @@ urlpatterns += patterns('',
 # Generic views
 
 urlpatterns += patterns('django.views.generic.simple',
-    (r'^$',             'direct_to_template', {'template': 'electionaudit/index.html'}),
+    (r'^$',             'direct_to_template', {'template': 'electionaudits/index.html'}),
 )
 
 urlpatterns += patterns('django.views.generic.list_detail',
-    (r'^reports/$',                     'object_list',     dict(contest_dict, template_name="electionaudit/reports.html")),
-    (r'^reports/(?P<object_id>\d+)/$',  'object_detail',   dict(contest_dict, template_name="electionaudit/report.html")),
+    (r'^reports/$',                     'object_list',     dict(contest_dict, template_name="electionaudits/reports.html")),
+    (r'^reports/(?P<object_id>\d+)/$',  'object_detail',   dict(contest_dict, template_name="electionaudits/report.html")),
     (r'^contests/$',                    'object_list',     contest_dict),
     (r'^contests/(?P<object_id>\d+)/$', 'object_detail',   contest_dict),
     (r'^votecounts/$',                    'object_list',     votecount_dict),

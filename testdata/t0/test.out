@@ -1,3 +1,7 @@
+INFO:root:Processing ../testdata/t0/000_08general_boulder_zero.xml 
+INFO:root:Processing ../testdata/t0/001_lat_ed_p008.xml 
+INFO:root:Processing ../testdata/t0/002_lat_ed_p014.xml 
+INFO:root:Processing ../testdata/t0/003_lat_ed_p011.xml 
 AMENDMENT 46                      :       75       28 YES            19 NO         12.00%
 AMENDMENT 47                      :       75       29 NO             27 YES         2.67%
 AMENDMENT 48                      :       75       31 NO             22 YES        12.00%
@@ -50,12 +54,12 @@ REGENT - UNIVERSITY OF COLORADO CO:       45       24 Jerry Re        3 Joe Negu
 REPRESENTATIVE TO THE 111TH UNITED:       45       20 Scott St        6 J. A. Ca   31.11%
 STATE REPRESENTATIVE - DISTRICT 11:       17       10 Catherin        6 Jack Pom   23.53%
 CITY OF BOULDER BALLOT QUESTION NO:       14        8 FOR THE         4 AGAINST    28.57%
-ESTES VALLEY RECREATION AND PARK D:        0        0 None            0 None         nan%
+ESTES VALLEY RECREATION AND PARK D:        0        0 None            0 None       -1.00%
 STATE REPRESENTATIVE - DISTRICT 13:        9        8 Robert E        0 Claire L   88.89%
 STATE SENATE - DISTRICT 16        :        9        8 Don Ytte        0 Dan Gibb   88.89%
-TOWN OF NEDERLAND BALLOT ISSUE 2A :        0        0 None            0 None         nan%
+TOWN OF NEDERLAND BALLOT ISSUE 2A :        0        0 None            0 None       -1.00%
 CITY OF LAFAYETTE BALLOT ISSUE 2B :       20       13 YES             5 NO         40.00%
-CITY OF LOUISVILLE BALLOT ISSUE 2A:        0        0 None            0 None         nan%
+CITY OF LOUISVILLE BALLOT ISSUE 2A:        0        0 None            0 None       -1.00%
 SUNSHINE FIRE PROTECTION DISTRICT :        1        1 YES             0 NO        100.00%
 CITY OF BOULDER BALLOT QUESTION NO:       14        8 AGAINST         5 FOR THE    21.43%
 CITY OF BOULDER BALLOT QUESTION NO:       14        6 AGAINST         3 FOR THE    21.43%
@@ -64,7 +68,7 @@ STATE REPRESENTATIVE - DISTRICT 10:        2        1 Dorothy         0 Dickey L
 CITY OF BOULDER BALLOT QUESTION NO:       14        5 AGAINST         3 FOR THE    14.29%
 CITY OF BOULDER BALLOT ISSUE NO. 2:       14        6 FOR THE         4 AGAINST    14.29%
 CITY OF BOULDER BALLOT ISSUE NO. 2:       14        3 FOR THE         0 AGAINST    21.43%
-ESTES VALLEY RECREATION AND PARK D:        0        0 None            0 None         nan%
+ESTES VALLEY RECREATION AND PARK D:        0        0 None            0 None       -1.00%
 STATE SENATE - DISTRICT 18        :       16        4 Rollie H        0 None       25.00%
 MOUNTAIN VIEW FIRE PROTECTION DIST:       12        6 NO              3 YES        25.00%
 CITY OF LAFAYETTE BALLOT ISSUE 2A :       20       13 NO              6 YES        35.00%

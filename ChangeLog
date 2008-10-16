@@ -1,4 +1,8 @@
 2008-10-15    <neal@bcn.boulder.co.us>
+	rename electionaudit module to electionaudits
+	improve README
+	
+2008-10-15    <neal@bcn.boulder.co.us>
 
 	* makeauditunits.py (main): 
 	fix DJANGO_SETTINGS_MODULE bug	

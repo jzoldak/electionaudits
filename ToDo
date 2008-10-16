@@ -1,20 +1,36 @@
 ToDo list for ElectionAudits
 
-Sort by timestamp or end of file name
+Allow directory entry and sort files by timestamp
+figure out *.xml in windows - expand it myself with glob
+Add small san-mateo sample file, ref in README
+ask user where they want the database to be [must do very early on]
+do .bat file for path, with path %PATH%;__dir__??
+set pythonpath with __file__ in manage.py?
+
+print message before lengthy save process
+
+Add ability to hide votecounts until hand count done - just totals and contest ballots
+ability to track what has been selected for audit
+separate report of audited stuff, with hand count results
+use prettier error message for duplicate data entry
+define "incoming" directory and automatically parse files put in there
+and/or provide gui for makeauditunits file input
+keep track of batches seen, and what is new, and which batch is "previous"
+for use with the 1st in a new run
+
+explain how to upgrade software - perhaps preserving database
 
 Find a way to distinguish paper from dre batches and not combine them
  add option ala "don't combine if batch letter 14 is different"
  or general RE logic to compare batch names?
 
-Allow filtering by type or precinct in audit report
+makeauditunits: accept xml precinct reports also
 
-Figure out how to have Contest.margin default to float('nan') without
- odd NULL errors
+Allow filtering by type or precinct in audit report
 
 Move to bzr-based versions: 0.7-r32 or 0.8.dev-r33 (would want bzr support)
 use the -f option of easy_install for other deps
 move to README.txt?
-move electionaudit => electionaudits
 
 deal better with "Not enough ballots for privacy" in entire input for a contest
  complain more loudly, prompt user for OK?
@@ -31,6 +47,8 @@ take directory name for xml reports, sort by timestamp for --subtract
 
 Provide makeauditunits option to name election for xml files.
 separate out Contests by CountyElection in audit report
+
+describe use of IDLE IDE for windows?
 
 Fix contest detail report - not finding contestbatches (but little-used)
 Paginate votecount report
@@ -113,6 +131,9 @@ Auto-sort result files, check for non-incremental results
 Check for results that list different candidates for a contest
 Look for suspicious audit units, anomalous results
 Look for columns that don't agree with previous result
+
+Figure out how to have Contest.margin default to float('nan') without
+ odd NULL errors.  After python 2.6 so it works in Windows also
 
 
 Packaging:

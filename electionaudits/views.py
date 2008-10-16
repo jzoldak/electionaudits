@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import list_detail
-from electionaudit.models import *
+from electionaudits.models import *
 
 def report(request, contest):
     # Look up the contest (and raise a 404 if it can't be found).

@@ -16,8 +16,8 @@ from audittools import settings
 from django.core.management import setup_environ
 setup_environ(settings)
 from django.db import transaction
-import electionaudit.models as models
-import electionaudit.util as util
+import electionaudits.models as models
+import electionaudits.util as util
 
 __author__ = "Neal McBurnett <http://neal.mcburnett.org/>"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
@@ -89,9 +89,9 @@ def main(parser):
 
     # Update tallies on all contests, just in case
     for contest in models.Contest.objects.all():
-        dict = contest.tally()
+        stats = contest.tally()
 
-        print("%(contest)-34.34s: %(total)8d %(winnervotes)8d %(winner)-8.8s %(secondvotes)8d %(second)-8.8s  %(margin)6.2f%%" % dict)
+        print("%(contest)-34.34s: %(total)8d %(winnervotes)8d %(winner)-8.8s %(secondvotes)8d %(second)-8.8s  %(margin)6.2f%%" % stats)
 
 @transaction.commit_on_success
 def parse_csv(file, options):

@@ -3,7 +3,7 @@
 # add "save" function to save into database
 
 import logging
-import electionaudit.models as models
+import electionaudits.models as models
 
 class Pipe:
     """Accumulate some AuditUnits to be saved, until they are big enough

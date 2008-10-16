@@ -1,5 +1,5 @@
 """Generate a relationship diagram via django-extensions and
- ./manage.py graph_models electionaudit -g -o ../doc/model_graph.png
+ ./manage.py graph_models electionaudits -g -o ../doc/model_graph.png
 """
 
 from django.db import models
@@ -42,7 +42,7 @@ class Contest(models.Model):
             self.margin = (winner.votes - second.votes) * 100.0 / total
             self.save()
         else:
-            self.margin = float('nan')
+            self.margin = -1.0       # => float('nan') after windows fix in python 2.6 
             # don't save for now - may run in to odd NULL problems
 
         return {'contest': self.name,
@@ -97,7 +97,7 @@ class Choice(models.Model):
 
         from django.db import connection
         cursor = connection.cursor()
-        cursor.execute('SELECT sum(votes) AS total_votes FROM electionaudit_votecount WHERE "choice_id" = %d' % self.id)
+        cursor.execute('SELECT sum(votes) AS total_votes FROM electionaudits_votecount WHERE "choice_id" = %d' % self.id)
 
         row = cursor.fetchone()
         self.votes = row[0]

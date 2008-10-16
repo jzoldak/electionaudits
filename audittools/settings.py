@@ -83,7 +83,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.databrowse',
 
-    'electionaudit',
+    'electionaudits',
 )
 
 LANGUAGE_CODE="en"

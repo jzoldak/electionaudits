@@ -1,5 +1,5 @@
 from django.contrib import admin
-from electionaudit.models import *
+from electionaudits.models import *
 
 class VoteCountAdmin(admin.ModelAdmin):
     "Modify default layout of admin form"
