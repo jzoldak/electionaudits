@@ -12,10 +12,12 @@ For up-to-date information, see the project home page at
 Authors
 =======
 Neal McBurnett
+Ronald L. Rivest
 
 Copyright and License ("MIT" aka "X11" license)
 =====================
 Copyright 2008 Neal McBurnett  http://neal.mcburnett.org/
+varsize.py: Copyright Ronald L. Rivest
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -46,7 +48,7 @@ Python (developed with python version 2.5, but should work with 2.3)
 lxml (xml parsing package, e.g. python-lxml in Ubuntu or easy_install lxml)
 Django 1.0  (makeauditunits.py could be separated out from this pretty easily)
 sqlite3
-
+scipy (if you want statistics on how much to audit)
 
 Helpful but optional Django apps used in settings.DEBUG mode:
     lukeplant_me_uk.django.validator for automatic xhtml validation
@@ -203,3 +205,12 @@ self-validation of all xhtml pages generated.  You can then see a
 report of any errors at
 
  http://127.0.0.1:8000/validator/
+
+Acknowledgements:
+=================
+Thanks to these contributors:
+
+The auditing experts led by Mark Halvorson and John McCarthy at Verified Voting
+
+Very helpful user feedback from
+ Crystal Christman, Mark Lindeman, Hillary Hall

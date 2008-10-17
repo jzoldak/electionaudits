@@ -1,3 +1,12 @@
+2008-10-17    <neal@bcn.boulder.co.us>
+
+	* electionaudits/varsize.py: 
+	add varsize.py for auditing stats - original version from Ron Rivest
+	http://people.csail.mit.edu/rivest/pps/varsize.py  with MIT license
+
+	* README (Acknowledgements): 
+	Add acknowledgements
+	
 2008-10-15    <neal@bcn.boulder.co.us>
 	rename electionaudit module to electionaudits
 	improve README
