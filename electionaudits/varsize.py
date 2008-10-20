@@ -258,7 +258,7 @@ def negexp_probs_for_workload(L,A):
     w = scipy.optimize.brentq(f,min_w,max_w)
     return [1.0-math.exp(-L[i][0]/w) for i in range(len(L))],w
 
-def negexp_probs_for_confidence(L,M,alpha,s):
+def negexp_probs_for_confidence(L,M,alpha,s=0.20):
     """
     Return p,w , where p = vector of probabilities for the precincts, 
     so that they follow the negexp approach, but so that
@@ -441,7 +441,8 @@ def main():
         margin = float(sys.argv[3])   # fraction
         print "Margin of victory = %d (fraction)"%margin
 
-    print_precinct_stats()
+    print_precinct_stats(L)
+    V = sum([x[0] for x in L])
 
     ### Choose one of these three; comment out the others
     p,w = negexp_probs_for_confidence(L,margin*2.5*V,0.08)
@@ -533,4 +534,6 @@ def paper(filename,title,m):
     print "    max difference from negexp = ",maxdev
 
 # paper("oh5votesonly.txt","Ohio 2004 CD-5",0.01)
-paper("MN_Gov_2006-2.csv","Minn 2006 Governors Race",0.0096)
+# paper("MN_Gov_2006-2.csv","Minn 2006 Governors Race",0.0096)
+if __name__ == "__main__":
+    main()

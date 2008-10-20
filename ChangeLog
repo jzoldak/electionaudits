@@ -1,3 +1,11 @@
+2008-10-20    <neal@bcn.boulder.co.us>
+
+	* electionaudits/varsize.py:
+	Don't run anything when simply loading as a module, and call main() when run as command
+	Resolve main() error: "global name 'V' is not defined"
+	Resolve main() error: "print_precinct_stats() takes exactly 2 argument (0 given)"
+	Add default for "s" argument to negexp_probs_for_confidence
+
 2008-10-17    <neal@bcn.boulder.co.us>
 
 	* electionaudits/varsize.py: 
