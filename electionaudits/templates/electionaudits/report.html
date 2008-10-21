@@ -7,9 +7,8 @@
 </ul>
     <h2>Audit Report for {{ object }}</h2>
 <p>Number of audit units: {{ object.contestbatch_set.all|length }}</p>
-<p>
-Margin of victory is {{ object.margin|floatformat:3 }}%
-</p>
+<p>Margin of victory is {{ object.margin|floatformat:3 }}%</p>
+<p>Number of audit units to audit: {{ object.selection_stats.negexp_precincts|floatformat:0 }}</p>
 
 <table border="border" cellpadding="5">
 <thead>

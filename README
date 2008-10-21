@@ -46,7 +46,7 @@ Requirements
 
 Python (developed with python version 2.5, but should work with 2.3)
 lxml (xml parsing package, e.g. python-lxml in Ubuntu or easy_install lxml)
-Django 1.0  (makeauditunits.py could be separated out from this pretty easily)
+Django 1.0  (parsers.py could be separated out from this pretty easily)
 sqlite3
 scipy (if you want statistics on how much to audit)
 
@@ -55,7 +55,7 @@ Helpful but optional Django apps used in settings.DEBUG mode:
     django_extensions - for ease in development and documentation
     debug-toolbar: http://github.com/robhudson/django-debug-toolbar/tree/master
 
-Comment them out of audittools/settings_debug.py and
+Comment them out of root/settings_debug.py and
 electionaudits/urls.py if you don't want them.
 
 It has been tested on Ubuntu Linux, but shouldn't be hard to get
@@ -85,11 +85,12 @@ Initialization
 Once, when you first install or upgrade the software, you need to
 initialize the database:
 
-$ cd audittools
+$ cd root
 $ ./manage.py syncdb
 
 In Windows leave off the "./":
 
+C:> cd root
 C:> manage.py syncdb
 
 When it asks: 
@@ -101,34 +102,34 @@ answer "yes" and provide a username and password for the "admin" system.
 Provide a valid email address also, though it won't be used unless
 you customize things.
 
-Components:
-===========
+Usage
+=====
 
-makeauditunits.py
-=================
-A program to parse election results data into easily
+parse
+=====
+Use the manage.py parse command to parse election results data into easily
 manipulated databases and clean csv files.
 
 Use the --help option to print usage instructions:
 
-$ ./makeauditunits.py --help
+$ ./manage.py parse --help
 
 In Windows leave off the "./":
 
-C:> makeauditunits.py --help
+C:> manage.py parse --help
 
 Test data is provided, so you can just run
 
-$ ../makeauditunits.py -s ../testdata/t0/*.xml
+$ ./manage.py parse -s ../testdata/t0/*.xml
 
 In Windows:
 
-C:> ..\makeauditunits.py
+C:> manage.py parse
 
-C:> ..\makeauditunits.py -s ..\testdata\t0\*.xml
+C:> manage.py parse -s ..\testdata\t0\*.xml
 
-cd ..\testdata\t0
-..\..\makeauditunits.py -s 000<tab> 001<tab> 
+C:> cd ..\testdata\t0
+C:> ..\..\root\manage.py parse -s 000<tab> 001<tab>  #auto-complete with tab
 
 Use "manage.py reset electionaudits" to clear the database before
 trying to re-enter data.
@@ -140,7 +141,7 @@ Currently supported input formats:
    the info box)
 
    One file per cumulative batch of input.  Use the "-s" option to
-   makeauditunits.py to subtract each cumulative report from the previous one.
+   "manage.py parse" to subtract each cumulative report from the previous one.
 
    Examples: testdata/t0/*.xml
 
@@ -165,17 +166,18 @@ Currently supported input formats:
   Examples: testdata/t1.csv
 
 
-electionaudits module
-====================
+web server
+==========
 
-This provides a web-based graphical user interface for exploration and entry
-of information.  It is built on the Django framework.
+This provides a web-based graphical user interface for exploration,
+reporting and even entry of information.  It is built on the Django
+framework.
 
 Usage:
 
 First run the internal django server:
 
-$ cd audittools
+$ cd root
 $ ./manage.py runserver
 
 This will remain running until you kill it with ctrl-c or close the window.
@@ -187,22 +189,25 @@ Then, in a browser, visit the main URL, e.g.
 
 to see the Audit Reports for the various Contests, etc.
 
-See doc/model_graph.png for a diagram of the various database tables
-and associated fields and relationships.
 
 See http://127.0.0.1:8000/admin/ (using the username and password
 you entered during the "syncdb" step) to enter new data, and
 http://127.0.0.1:8000/admin/doc/ for more documentation on the data models
 and various available views of the information.
 
+
+See doc/model_graph.png for a diagram of the various database tables
+and associated fields and relationships.
+
+
 Features:
 =========
 
 If you install the django html validator app
-lukeplant_me_uk.django.validator and use debug settins (manage.py
-runserver --settings settings_debug) the server will do
-self-validation of all xhtml pages generated.  You can then see a
-report of any errors at
+lukeplant_me_uk.django.validator and use debug settings
+  manage.py runserver --settings settings_debug
+the server will do self-validation of all xhtml pages generated.
+You can then see a report of any errors at
 
  http://127.0.0.1:8000/validator/
 

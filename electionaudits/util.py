@@ -46,7 +46,7 @@ class Pipe:
 
         self.preserve.save()
 
-def pushAuditUnit(au, min_ballots=5, method=Pipe):
+def pushAuditUnit(au, min_ballots=25, method=Pipe):
     """push an AuditUnit thru its appropriate pipeline, accumulating
     votes until publicising it won't violate privacy.
 

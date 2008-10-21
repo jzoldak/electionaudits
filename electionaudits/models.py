@@ -2,7 +2,11 @@
  ./manage.py graph_models electionaudits -g -o ../doc/model_graph.png
 """
 
+import sys
+import logging
 from django.db import models
+from electionaudits import varsize
+import StringIO
 
 class CountyElection(models.Model):
     "An election, comprising a set of Contests and Batches of votes"
@@ -53,6 +57,35 @@ class Contest(models.Model):
                 'secondvotes': second.votes,
                 'margin': self.margin }
 
+    def selection_stats(self, alpha=0.08, s=0.20):
+        """Prepare statistics on how many audit units should be selected
+        in order to be able to reduce the risk of confirming an incorrect
+        outcome to a given probability.
+        alpha = significance level desired = 1 - confidence
+        s = maximum within-precinct miscount
+        Capture dictionary of statistics and printed results.
+        """
+
+        logging.debug("selection_stats: contest %d: %s" % (self.id, self.name))
+        if self.margin <= 0.0 or self.margin >= 100.0:
+            return {}
+
+        cbs = [(cb.contest_ballots(), str(cb.batch))
+               for cb in self.contestbatch_set.all()]
+
+        save = sys.stdout
+        sys.stdout = StringIO.StringIO()
+        try:
+            stats = varsize.paper(cbs, self.name, self.margin/100.0, alpha, s)
+        except Exception, e:
+            logging.error("selection_stats error: %s: contest %d: %s" % (e, self.id, self.name))
+            return {}
+        prose = sys.stdout.getvalue()
+        sys.stdout = save
+
+        logging.debug(prose)
+
+        return stats
 
     def __unicode__(self):
         return "%s" % (self.name)

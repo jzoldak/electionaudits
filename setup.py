@@ -20,7 +20,6 @@ information.
 """,
 
     packages = find_packages(),
-    scripts = ['makeauditunits.py'],
     install_requires = ['lxml'], # and non-eggs: Django 1.0 and sqlite
     include_package_data = True,
 
@@ -35,7 +34,7 @@ information.
 
     #entry_points = {
     #    'console_scripts': [
-    #        'makeauditunits = electionaudits.makeauditunits:main',
+    #        'import = root.manage',   ???
     #        ],
     #    },
 )

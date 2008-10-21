@@ -1,7 +1,18 @@
 # varsize.py
 # Author: Ronald L. Rivest
-# Last modified: 2007-11-17
-# Routines to work with various election audit sample size strategies
+# Released under the MIT (aka X11) license
+# Revised for use in ElectionAudits by Neal McBurnett
+# Based on version from Rivest: "Last modified: 2007-11-17"
+#  dated 2008-01-17 from http://people.csail.mit.edu/rivest/pps/varsize.py
+
+"""
+varsize.py: Routines to work with various election audit sample size strategies
+
+Reference: 
+ On Auditing Elections When Precincts Have Different Sizes
+ by Javed A. Aslam, Raluca A. Popa and Ronald L. Rivest, 2007-01-17.
+ http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf
+"""
 
 import math
 import random
@@ -16,15 +27,22 @@ import sys
 #####################################################################
 #####################################################################
 
-def read_precincts_from_csv_file(filename):
+def read_precincts(source):
     """
-    Read a csv (comma-separated values) file where each line has 
-    as its first two components: size and name
-    Return the list of precincts (size,name) pairs
+    Read input from the source and return the list of precinct (size,name)
+    pairs sorted by size.
+    source can be the name of a csv (comma-separated values) file where
+    each line has as its first two components: size and (optional) name,
+    or a python list of (size, name) pairs.
     """
-    lines = open(filename).readlines()
-    L = make_precinct_list(lines)
-    return L
+
+    if hasattr(source,'__iter__'):
+        return sort_by_size(source)
+
+    else:
+        lines = open(source).readlines()
+        L = make_precinct_list(lines)
+        return L
 
 def sort_by_size(L):
     """
@@ -71,9 +89,10 @@ def print_precinct_stats(L):
     Print simple statistics about the precincts in L.
     """
     print
-    print "Precinct list (sorted into decreasing order by size):"
-    for prc in L:
-        print "  Precinct %s: size %d"%(prc[1],prc[0])
+    if __name__ == "__main__":
+        print "Precinct list (sorted into decreasing order by size):"
+        for prc in L:
+            print "  Precinct %s: size %d"%(prc[1],prc[0])
     n = len(L)
     print "Number of precincts:",n
     V = sum([x[0] for x in L])  
@@ -322,7 +341,7 @@ def evaluate(L,k,margin,p,w):
 
     print
     print "Evaluation of negexp strategy"
-    print "For margin of victory m=%f (as a fraction)"%margin
+    print "For margin of victory m=%0.4f (as a fraction)"%margin
     print "Assumes that adversary will shift at most fraction s=%0.2f of votes in precinct."%max_shift_per_precinct
     print "Assumes that adversary shifts C=%0.2f votes."%C
     print
@@ -341,7 +360,7 @@ def evaluate(L,k,margin,p,w):
     # probabilistically, to get expected number of votes in corrupted precincts = C
     print
     print "For uniform auditing strategy with same number (%d) of precincts audited:"%k
-    print "  (Auditor picks precincts independently with probablity %f)"%(float(k)/float(n))
+    print "  (Auditor picks precincts independently with probablity %0.4f)"%(float(k)/float(n))
     print "  (Assumes adversary corrupts largest precincts first.)"
     print "  Confidence of detecting fraud that could have changed winner:",
     miss_prob = 1.0               # probability of missing detection
@@ -370,7 +389,7 @@ def evaluate(L,k,margin,p,w):
     # (number of votes audited) as the negexp strategy.
     print
     print "For uniform auditing strategy with about same workload as negexp:"
-    print "  (Auditor picks precincts independently with probability %f)"%\
+    print "  (Auditor picks precincts independently with probability %0.4f)"%\
           (float(negexp_workload) / float(V))
     print "  (Assumes adversary corrupts largest precincts first.)"
     print "  Confidence of detecting fraud that could have changed winner at least:",
@@ -412,6 +431,11 @@ def main():
         where size is an positive integer 
         where precinct_name is optional (and may have blanks)
         If no filename given, defaults to four precincts 40 A, 30 B, 20 C, 10 D.
+        filename can also be a string that constructs the list directly, e.g.
+          "['500,']*53 + ['41,']*144 + ['7,']*144"
+        represents 53 precincts of size 500, 144 of size 41 and 144 of size 7.
+        For this it should include the ']' character, and it will be passed
+        to eval.
     where (optional) margin gives fraction of the margin of victory (e.g. 0.02)
         If positive margin given, prints some confidence levels.
         If no margin given, defaults to 0.02
@@ -431,7 +455,13 @@ def main():
     else:
         file_name = sys.argv[2]
         print "File name:",file_name
-        L = read_precincts_from_csv_file(filename)
+        if file_name.find("]"):
+            lines = eval(file_name)
+            for line in lines: print "   ",line
+            L = make_precinct_list(lines)
+        else:
+            L = read_precincts(file_name)
+
     assert k<=len(L)
 
     if len(sys.argv) < 4:
@@ -439,7 +469,7 @@ def main():
         print "No margin given. Defaulting to 0.02 (two percent)"
     else:
         margin = float(sys.argv[3])   # fraction
-        print "Margin of victory = %d (fraction)"%margin
+        print "Margin of victory = %0.4f (fraction)"%margin
 
     print_precinct_stats(L)
     V = sum([x[0] for x in L])
@@ -457,30 +487,34 @@ def main():
 import matplotlib.numerix as nx
 import pylab
 
-def plotprobs(filename,title,p):
+def plotprobs(title,p):
     pylab.plot(p, color='red', lw=4)
     pylab.title(title)
     pylab.show()
 
-def paper(filename,title,m):
+def paper(source,title,m,alpha=0.08,s=0.20):
     """
     Compute results mentioned in our paper.
     m = margin of victory (as a fraction)
+    alpha = significance level desired = 1 - confidence
+    s = maximum within-precinct miscount
+    Return a dictionary with the main results.
     """
+
+    results = {}
+
     print
-    print "Reading data from:",filename
-    L = read_precincts_from_csv_file(filename)
+    print "Contest:", title
+    L = read_precincts(source)
     print_precinct_stats(L)
     v = [x[0] for x in L]
     n = len(v)
     V = sum(v)
     ave = float(V)/n
     M = m*V
-    s = 0.20
-    alpha = 0.08
     print "margin = ",m*100.0,"percent,",M,"votes"
-    print "s = ",s
-    print "alpha = ",alpha
+    print "s = ",s, " (maximum within-precinct-miscount)"
+    print "alpha = ",alpha, " (confidence is 1 - alpha: ", 1.0-alpha, ")"
     print
     print "Rule of Thumb says:"
     print "    ",1.0/m,"precincts."
@@ -505,8 +539,11 @@ def paper(filename,title,m):
     u = (n - (bm-1)/2.0)*(1.0-math.pow(alpha,1.0/bm))
     u = int(math.ceil(u))
     print "    Number of precincts to audit = u =",u
-    print "    Confidence level achieved = ",confidence_for_uniform_audit(n,u,bm)
+    c = confidence_for_uniform_audit(n,u,bm)
+    print "    Confidence level achieved = ",c
     print "    expected workload = ",u*ave
+    results.update({'safe_precincts': u, 'safe_work': u*ave, 'safe_confidence': c})
+
     print
     print "Negexp says:"
     pn,wn = negexp_probs_for_confidence(L,M,alpha,s)
@@ -517,7 +554,10 @@ def paper(filename,title,m):
     print "    expected number of precincts audited = ",u
     A = sum([pn[i]*v[i] for i in range(n)])
     print "    expected workload = ",A,"votes counted"
-    plotprobs(filename,title,pn)
+    results.update({'negexp_precincts': u, 'negexp_work': A, 'negexp_confidence': None})
+
+    if __name__ == "__main__":
+        plotprobs(title,pn)
     print
     print "PPEBWR says:"
     E = 2.0*s*V
@@ -530,10 +570,15 @@ def paper(filename,title,m):
     print "    expected number of precincts audited =",sum(pt)
     A = sum([pt[i]*v[i] for i in range(n)])
     print "    expected workload = ",A,"votes counted."
+    results.update({'ppebwr_precincts': u, 'ppebwr_work': A})
     maxdev = max([abs(pn[i]-pt[i]) for i in range(n)])
     print "    max difference from negexp = ",maxdev
 
+    return results
+
 # paper("oh5votesonly.txt","Ohio 2004 CD-5",0.01)
 # paper("MN_Gov_2006-2.csv","Minn 2006 Governors Race",0.0096)
+# paper("120x100-precincts.csv","120 batches of 100 ballots",0.01)
+
 if __name__ == "__main__":
     main()

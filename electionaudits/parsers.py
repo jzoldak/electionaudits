@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Produce a report of audit units from incremental cumulative reports
-made with Hart's Tally software.
+made with Hart's Tally software.  Normally called via manage.py parse ...
 
 %InsertOptionParserUsage%
 """
@@ -8,11 +8,12 @@ made with Hart's Tally software.
 import os
 import sys
 import optparse
+from optparse import make_option
 import logging
 import csv
 from datetime import datetime
 
-from audittools import settings
+from root import settings
 from django.core.management import setup_environ
 setup_environ(settings)
 from django.db import transaction
@@ -24,42 +25,53 @@ __copyright__ = "Copyright (c) 2008 Neal McBurnett"
 __license__ = "MIT"
 
 
-usage = """Usage: makeauditunits.py [options] [file]....
+usage = """Usage: manage.py parse [options] [file]....
 
 Example:
- makeauditunits.py -s 001_EV_p001.xml 002_AB_p022.xml 003_ED_p015.xml"""
+ manage.py parse -s 001_EV_p001.xml 002_AB_p022.xml 003_ED_p015.xml"""
 
-parser = optparse.OptionParser(prog="makeauditunits", usage=usage)
+parser = optparse.OptionParser(prog="parse", usage=usage)
 
-parser.add_option("-s", "--subtract",
+option_list = (
+    make_option("-s", "--subtract",
                   action="store_true", default=False,
-                  help="Input files are incremental snapshots.   Subtract data in each file from previous data to generate batch results" )
+                  help="Input files are incremental snapshots.   Subtract data in each file from previous data to generate batch results" ),
 
-parser.add_option("-m", "--min_ballots", dest="min_ballots", type="int",
-                  default=5,
-                  help="combine audit units with less than MINIMUM contest ballots", metavar="MINIMUM")
+    make_option("-m", "--min_ballots", dest="min_ballots", type="int",
+                  default=25,
+                  help="combine audit units with less than MINIMUM contest ballots", metavar="MINIMUM"),
 
-parser.add_option("-c", "--contest", dest="contest",
-                  help="only process CONTEST", metavar="CONTEST")
+    make_option("-c", "--contest", dest="contest",
+                  help="only process CONTEST", metavar="CONTEST"),
 
-parser.add_option("-e", "--election", default="test",
-                  help="the name for this ELECTION")
+    make_option("-e", "--election", default="test",
+                  help="the name for this ELECTION"),
 
-parser.add_option("-v", "--verbose",
+    make_option("-v", "--verbose",
                   action="store_true", default=False,
-                  help="Verbose output" )
+                  help="Verbose output" ),
 
-parser.add_option("-d", "--debug",
+    make_option("-d", "--debug",
                   action="store_true", default=False,
-                  help="turn on debugging output")
+                  help="turn on debugging output"),
+)
 
 # incorporate OptionParser usage documentation into our docstring
 __doc__ = __doc__.replace("%InsertOptionParserUsage%\n", parser.format_help())
 
 def main(parser):
-    "Produce a report of audit units, subtracting each file from previous"
+    "Parse and import files into the database and report summary statistics"
 
     (options, args) = parser.parse_args()
+
+    if len(args) == 0:
+        args.append(os.path.join(os.path.dirname(__file__), '../../../testdata/testcum.xml'))
+        logging.debug("using test file: " + args[0])
+
+    parse(args, options)
+
+def parse(files, options):
+    "parse the files and tally the results"
 
     if options.debug:
         loglevel = logging.DEBUG
@@ -68,15 +80,11 @@ def main(parser):
 
     logging.basicConfig(level=loglevel) # format='%(message)s'
 
-    logging.debug("args = %s" % args)
-
-    if len(args) == 0:
-        args.append(os.path.join(os.path.dirname(__file__), 'testdata/testcum.xml'))
-        logging.debug("using test file: " + args[0])
+    logging.debug("files = %s" % list(files))
 
     totals = {}
 
-    for file in args:
+    for file in files:
         logging.info("Processing %s " % file)
         if file.endswith(".xml"):
             newtotals = parse_xml_crystal(file, options)
@@ -84,6 +92,8 @@ def main(parser):
             totals = newtotals
         elif file.endswith(".csv"):
             parse_csv(file, options)
+        else:
+            logging.warning("Ignoring %s - unknown extension" % file)
 
     util.flushPipes()
 

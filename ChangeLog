@@ -1,5 +1,31 @@
 2008-10-20    <neal@bcn.boulder.co.us>
 
+	* electionaudits/parsers.py (main): 
+	Rename makeauditunits to electionaudits/parsers.py
+	Make it easier to use, via a new manage.py "parse" command:
+	   electionaudits/management/commands/parse.py
+	Rename audittools directory to "root"
+
+	* electionaudits/util.py (pushAuditUnit): 
+	change min_ballots from 5 to 25
+
+	* electionaudits/models.py (Contest.selection_stats): 
+	Make varsize statistics for Contest available via selection_stats()
+	First cut - not saving results - really inefficient....
+	
+	* electionaudits/varsize.py (read_precincts): 
+	Make it easier to use varsize logic from electionaudits
+	Accept a list (iterable) of precincts as the input source as well as a
+	filename.
+	Return the most interesting results from paper() in a dict.
+	Add parameters (with existing defaults) to paper(): alpha and s
+	Don't generate plot or print full precinct list unless called
+	as main program.
+	Print various quantities to 4 decimal places.
+	Add shorthand for specifying precinct sizes on the command-line
+	
+2008-10-20    <neal@bcn.boulder.co.us>
+
 	* electionaudits/varsize.py:
 	Don't run anything when simply loading as a module, and call main() when run as command
 	Resolve main() error: "global name 'V' is not defined"
