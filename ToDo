@@ -1,13 +1,9 @@
 ToDo list for ElectionAudits
 
-Speed up use of stats via selection_stats() - cache them somehow.
+Use django.middleware.gzip.GZipMiddleware?
 
-List stats in report.html also
-
-fix stats for margin == 0.0, 100.0, and these:
- ERROR:root:selection_stats error: list index out of range: contest 57: STATE REPRESENTATIVE - DISTRICT 10
- ERROR:root:selection_stats error: math range error: contest 29: DISTRICT ATTORNEY 20TH JUDICIAL DISTRICT
-Add line numbers to those error messages
+Append batchid to type, not batch, for csv?
+Peel it off of file name for xml?
 
 Take confidence level and alpha parameters in template from varsize.
 Display header rows more compactly and clearly in reports.html

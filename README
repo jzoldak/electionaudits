@@ -48,7 +48,6 @@ Python (developed with python version 2.5, but should work with 2.3)
 lxml (xml parsing package, e.g. python-lxml in Ubuntu or easy_install lxml)
 Django 1.0  (parsers.py could be separated out from this pretty easily)
 sqlite3
-scipy (if you want statistics on how much to audit)
 
 Helpful but optional Django apps used in settings.DEBUG mode:
     lukeplant_me_uk.django.validator for automatic xhtml validation

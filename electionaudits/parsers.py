@@ -47,6 +47,9 @@ option_list = (
     make_option("-e", "--election", default="test",
                   help="the name for this ELECTION"),
 
+    make_option("-b", "--batchid", default="",
+                  help="batch identifier to append to precinct name"),
+
     make_option("-v", "--verbose",
                   action="store_true", default=False,
                   help="Verbose output" ),
@@ -111,7 +114,7 @@ def parse_csv(file, options):
     should be sorted by batch (precinct).
     """
 
-    election = os.path.basename(file)[0:-4]
+    election = options.election
 
     reader = csv.DictReader(open(file))
 
@@ -120,7 +123,7 @@ def parse_csv(file, options):
     au_ED = util.AuditUnit()
 
     for r in reader:
-        batch = [r['Precinct_name']]
+        batch = [r['Precinct_name'] + options.batchid]
         contest = r['Contest_title']
         if r['Party_Code']:
             contest += ":" + r['Party_Code']

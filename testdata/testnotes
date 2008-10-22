@@ -4,6 +4,10 @@ to test: .manage.py parse > /tmp/q;  diff /tmp/q testcum.out
   ./manage.py parse -s ../testdata/t0/* > /tmp/test.out 2>&1
   diff /tmp/test.out ../testdata/t0|more
 
+  ./manage.py parse ../testdata/test-san-mateo-dp-92-p.csv > /tmp/test-san-mateo-dp-92-p.out 2>&1
+  ./manage.py parse -b e ../testdata/test-san-mateo-dp-92-e.csv > /tmp/test-san-mateo-dp-92-e.out 2>&1
+
+
 to profile:
       python -m cProfile -s time ./manage.py parse 2>&1 > profile-0.3.0
 

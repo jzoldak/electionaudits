@@ -7,3 +7,4 @@ datasets
 debug_toolbar
 q
 save
+djangologging

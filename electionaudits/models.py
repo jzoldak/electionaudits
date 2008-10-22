@@ -7,6 +7,7 @@ import logging
 from django.db import models
 from electionaudits import varsize
 import StringIO
+from django.core.cache import cache
 
 class CountyElection(models.Model):
     "An election, comprising a set of Contests and Batches of votes"
@@ -66,8 +67,14 @@ class Contest(models.Model):
         Capture dictionary of statistics and printed results.
         """
 
-        logging.debug("selection_stats: contest %d: %s" % (self.id, self.name))
-        if self.margin <= 0.0 or self.margin >= 100.0:
+        cachekey = "%s:%r:%f:%f" % (self.name, self.margin, alpha, s)
+        saved = cache.get(cachekey)
+        logging.debug("selection_stats: %d cached. contest %d: %s" % (len(cache._expire_info), self.id, self.name))
+
+        if saved:
+            return saved
+
+        if not self.margin:
             return {}
 
         cbs = [(cb.contest_ballots(), str(cb.batch))
@@ -78,13 +85,12 @@ class Contest(models.Model):
         try:
             stats = varsize.paper(cbs, self.name, self.margin/100.0, alpha, s)
         except Exception, e:
-            logging.error("selection_stats error: %s: contest %d: %s" % (e, self.id, self.name))
+            logging.exception("selection_stats: contest %d: %s" % (self.id, self.name))
             return {}
-        prose = sys.stdout.getvalue()
+        stats['prose'] = sys.stdout.getvalue()
         sys.stdout = save
 
-        logging.debug(prose)
-
+        cache.set(cachekey, stats, 86400)
         return stats
 
     def __unicode__(self):

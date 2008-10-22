@@ -16,7 +16,6 @@ Reference:
 
 import math
 import random
-import scipy.optimize
 import sys
 
 # A precinct is represented as a pair (size, name)
@@ -30,7 +29,7 @@ import sys
 def read_precincts(source):
     """
     Read input from the source and return the list of precinct (size,name)
-    pairs sorted by size.
+    pairs sorted by decreasing size.
     source can be the name of a csv (comma-separated values) file where
     each line has as its first two components: size and (optional) name,
     or a python list of (size, name) pairs.
@@ -132,6 +131,8 @@ def APR(n,m,alpha=0.08,s=0.20):
        alpha = significance level desired = 1 - confidence
        s = maximum within-precinct-miscount
     """
+    if m == 0.0:
+        return n
     b = math.ceil(n * (m / (2 * s)))
     u = (n - (b-1)/2.0)*(1.0-math.pow(alpha,1.0/b))
     return u
@@ -177,10 +178,10 @@ def bmin(L,M,s=0.20):
            from runner-up
        s = maximum within-precinct miscount
     """
-    assert 0 < M <= sum(x[0] for x in L)
+    assert 0 <= M <= sum(x[0] for x in L)
     votes_so_far = 0
     k = 0          # precincts taken
-    while votes_so_far < M:
+    while votes_so_far < M  and  k < len(L):
         votes_so_far += 2.0*s*L[k][0]
         k += 1
     return k
@@ -248,6 +249,9 @@ def negexp_probs_for_number_of_precincts(L,u):
 
     Assumes input list L of precincts is sorted by decreasing size.
     """
+
+    import scipy.optimize
+
     def f(w):
         """
         Auxiliary function: return expected number of precinct audited, minus k.
@@ -266,6 +270,9 @@ def negexp_probs_for_workload(L,A):
     the expected workload (number of votes audited) is
     exactly A.  Assumes L is sorted by decreasing size.
     """
+
+    import scipy.optimize
+
     def f(w):
         """
         Auxiliary function returns expected number of votes to be audited, minus A.
@@ -286,7 +293,10 @@ def negexp_probs_for_confidence(L,M,alpha,s=0.20):
     Assumes that L is sorted into decreasing order.
     """
     w = -M/math.log(alpha)
-    return [(1.0-math.exp(-L[i][0]*2.0*s/w)) for i in range(len(L))],w
+    if w != 0.0:
+        return [(1.0-math.exp(-L[i][0]*2.0*s/w)) for i in range(len(L))],w
+    else:
+        return [(1.0) for i in range(len(L))],w
 
 def negexp_strategy(L,k):
     """
@@ -517,9 +527,13 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     print "alpha = ",alpha, " (confidence is 1 - alpha: ", 1.0-alpha, ")"
     print
     print "Rule of Thumb says:"
-    print "    ",1.0/m,"precincts."
-    A = ave*int(math.ceil(1.0/m))
-    print "    expected workload = ",A,"votes counted."
+    if m != 0.0:
+        print "   ",1.0/m,"precincts."
+        A = ave*int(math.ceil(1.0/m))
+        print "    expected workload = ",A,"votes counted."
+    else:
+        print "   ",n,"precincts."
+        print "    expected workload = ",V,"votes counted."
     print
     print "APR says:"
     u = APR(n,m,alpha,s)
@@ -536,8 +550,11 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     print "SAFE says:"
     bm = bmin(L,M)
     print "    bmin =",bm
-    u = (n - (bm-1)/2.0)*(1.0-math.pow(alpha,1.0/bm))
-    u = int(math.ceil(u))
+    if bm != 0:
+        u = (n - (bm-1)/2.0)*(1.0-math.pow(alpha,1.0/bm))
+        u = int(math.ceil(u))
+    else:
+        u = n
     print "    Number of precincts to audit = u =",u
     c = confidence_for_uniform_audit(n,u,bm)
     print "    Confidence level achieved = ",c
@@ -561,7 +578,7 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     print
     print "PPEBWR says:"
     E = 2.0*s*V
-    t = math.log(alpha)/math.log(1.0-M/E)
+    t = math.log(alpha)/math.log(1.0-max(0.00000001, min(M/E, .999999)))
     t = int(math.ceil(t))
     print "    t = ",t
     pt = [(1.0-(1.0-float(v[i])/V)**t) for i in range(n)]
@@ -570,7 +587,7 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     print "    expected number of precincts audited =",sum(pt)
     A = sum([pt[i]*v[i] for i in range(n)])
     print "    expected workload = ",A,"votes counted."
-    results.update({'ppebwr_precincts': u, 'ppebwr_work': A})
+    results.update({'ppebwr_precincts': sum(pt), 'ppebwr_work': A, 'ppebwr_t': t})
     maxdev = max([abs(pn[i]-pt[i]) for i in range(n)])
     print "    max difference from negexp = ",maxdev
 

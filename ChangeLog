@@ -1,3 +1,21 @@
+2008-10-22    <neal@bcn.boulder.co.us>
+
+	* electionaudits/parsers.py (parse_csv): 
+	introduce --batchid option for distinguishing data from different files
+
+	* electionaudits/models.py (Contest.selection_stats): 
+	Cache selection_stats varsize results for speed
+	Include prose form of stats in audit report
+	
+2008-10-21    <neal@bcn.boulder.co.us>
+
+	* electionaudits/varsize.py (bmin): 
+	Handle infinities with margin of 0 votes and problems with large margins
+	Eliminate scipy requirement for electionaudits: only import where needed
+	
+	* electionaudits/parsers.py (parse_csv): 
+	use -e option as election name for csv also
+
 2008-10-20    <neal@bcn.boulder.co.us>
 
 	* electionaudits/parsers.py (main): 
