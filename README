@@ -5,9 +5,42 @@ of the
  Principles and Best Practices for Post-Election Audits
  http://electionaudits.org/principles
 
+Features:
+=========
+
+It helps with several facets of the task of auditing elections:
+
+ * Imports standard election report files
+ * Protects voter anonymity by combining results for very small precincts or
+   batches into larger audit units.
+ * Enables audits of central-count systems and mail-in ballots
+   without requiring that the paper ballots be sorted into piles by precinct.
+   Works with election systems which can't produce batch results, by
+   importing full election results for each batch and subtracting the result
+   for the previous batch from the current batch.
+ * Facilitates risk-limiting audits by calculating relevant statistics
+   based on the margin, number, size, and results of the audit units.
+   Support for PPEBWR, SAFE, and NEGEXP is provided, with more on the
+   drawing board.
+ * Ad-hoc query form lets you quickly enter information about hypothetical
+   contests and get selection statistics for them also.  This supports
+   planning for future audits, e.g. deciding how many batches to report
+   on so as to minimize the fraction of the ballots you'll have to audit.
+ * Helps candidates target unusual audit units for elective audit [planned]
+ * Convenient platform for publication and archiving of auditable reports
+   for the public.
+ * Reports "bins" next to audit units to speed random selection with dice.
+   [planned]
+
+The software is "Open source" via the very permissive MIT license.  It
+can be used with no obligation by anyone from elections officials, to
+citizens to election system vendors.
+
+
 For up-to-date information, see the project home page at
 
  http://neal.mcburnett.org/electionaudits/
+
 
 Authors
 =======
@@ -44,26 +77,27 @@ OTHER DEALINGS IN THE SOFTWARE.
 Requirements
 ============
 
-Python (developed with python version 2.5, but should work with 2.3)
-lxml (xml parsing package, e.g. python-lxml in Ubuntu or easy_install lxml)
-Django 1.0  (parsers.py could be separated out from this pretty easily)
-sqlite3
+ * Python (developed with python version 2.5, but should work with 2.3)
+ * lxml (xml parsing package, e.g. python-lxml in Ubuntu or easy_install lxml)
+ * Django 1.0
+ * sqlite3
 
 Helpful but optional Django apps used in settings.DEBUG mode:
-    lukeplant_me_uk.django.validator for automatic xhtml validation
-    django_extensions - for ease in development and documentation
-    debug-toolbar: http://github.com/robhudson/django-debug-toolbar/tree/master
 
-Comment them out of root/settings_debug.py and
-electionaudits/urls.py if you don't want them.
+ * lukeplant_me_uk.django.validator for automatic xhtml validation
+ * django_extensions - for ease in development and documentation
+ * debug-toolbar: http://github.com/robhudson/django-debug-toolbar/tree/master
 
-It has been tested on Ubuntu Linux, but shouldn't be hard to get
-running on OSX or Windows.
+If you want to run in DEBUG mode and don't have them, just comment
+them out of root/settings_debug.py and electionaudits/urls.py
+
+It has been tested on Ubuntu Linux and Windows, and should run fine
+on Mac OS X and others.
 
 
 Versions, Bug reports
 =====================
-The software uses launchpad.net for project support.  Visit
+See launchpad.net for project support at
 
  https://launchpad.net/electionaudits
 
@@ -81,7 +115,7 @@ Visit #electionaudits on irc.freenode.net
 Initialization
 ==============
 
-Once, when you first install or upgrade the software, you need to
+when you first install or upgrade the software, you need to
 initialize the database:
 
 $ cd root
@@ -98,16 +132,16 @@ When it asks:
  any superusers defined.  Would you like to create one now? (yes/no)"
 
 answer "yes" and provide a username and password for the "admin" system.
-Provide a valid email address also, though it won't be used unless
-you customize things.
+It asks for a valid email address also, but doesn't share it or use
+it unless you customize things.
 
 Usage
 =====
 
 parse
 =====
-Use the manage.py parse command to parse election results data into easily
-manipulated databases and clean csv files.
+Use the manage.py parse command to import election results data into easily
+manipulated databases.
 
 Use the --help option to print usage instructions:
 
@@ -121,14 +155,19 @@ Test data is provided, so you can just run
 
 $ ./manage.py parse -s ../testdata/t0/*.xml
 
+It may take a while to run.  A brief synopsis of each contest is
+printed at the end.
+
 In Windows:
 
 C:> manage.py parse
 
-C:> manage.py parse -s ..\testdata\t0\*.xml
+Until "*.xml" is supported, it is easier to use the "tab" command
+to fill in full file names:
 
 C:> cd ..\testdata\t0
-C:> ..\..\root\manage.py parse -s 000<tab> 001<tab>  #auto-complete with tab
+C:> ..\..\root\manage.py parse -s 000<tab> 001<tab>
+
 
 Use "manage.py reset electionaudits" to clear the database before
 trying to re-enter data.
@@ -164,8 +203,10 @@ Currently supported input formats:
 
   Examples: testdata/t1.csv
 
+Planned
+ * Hart "precinct" reports
 
-web server
+Web server
 ==========
 
 This provides a web-based graphical user interface for exploration,
@@ -199,7 +240,7 @@ See doc/model_graph.png for a diagram of the various database tables
 and associated fields and relationships.
 
 
-Features:
+Debugging
 =========
 
 If you install the django html validator app

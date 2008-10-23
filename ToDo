@@ -1,4 +1,4 @@
-ToDo list for ElectionAudits
+ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
 Use django.middleware.gzip.GZipMiddleware?
 
@@ -13,46 +13,46 @@ Take confidence level and alpha parameters in template from varsize.
 Display header rows more compactly and clearly in reports.html
 Avoid repeating footnote text - make an include or template tag or the like.
 
-Add small san-mateo sample file, ref in README
-incorporate state-wide info on #precincts and margin
+Design way to incorporate state-wide info on #precincts and margin
 
-How to package django-based windows apps?
-Handle argument of *.xml in windows also - expand it myself with glob?
-Allow directory entry and sort files by timestamp
-
+How to package django-based windows apps so they are easier to use?
 Any way to get a windows GUI interface to manage.py?
 
-Add tests, e.g. output for varsize.py
+Handle argument of *.xml in windows also - expand it myself with glob?
+Allow user to specify a directory and sort all the files by timestamp
+for --subtract
+
+Add tests, e.g. output from varsize.py
 
 Provide a way to save all audit reports for publication from another server.
+Include signature or sha1 hash of report so it is easier to authenticate
 
-to help with discretionary selection by runner-up, display margin for each
-audit unit, and flag outliers
+To help with targetted selection by runner-up, display margin for each
+audit unit, and flag outliers.
 
-ask user where they want the database to be [must do very early on]
-do .bat file for path, with path %PATH%;__dir__??
+Make upgrades easier.
+Ask user where they want the database to be [must do very early on]
+Do .bat file for path, with path %PATH%;__dir__??
 set pythonpath with __file__ in manage.py?
 
-parsers: print message before lengthy save process
+parsers.py: print message before lengthy save process
 
 Add ability to hide votecounts until hand count done - just totals and contest ballots
 ability to track what has been selected for audit
 Add a way to calculate stats given what was audited, according to Stark
 and PPEBWR or whatever.
-separate report of audited stuff, with hand count results
-use prettier error message for duplicate data entry
-define "incoming" directory and automatically parse files put in there
+Add separate report of audited stuff, with hand count results
+Use clearer error message for duplicate data entry
+Define "incoming" directory and automatically parse files put in there
 and/or provide gui for parse file input
-keep track of batches seen, and what is new, and which batch is "previous"
+Keep track of batches seen, and what is new, and which batch is "previous"
 for use with the 1st in a new run
-
-explain how to upgrade software - perhaps preserving database
 
 Find a way to distinguish paper from dre batches and not combine them
  add option ala "don't combine if batch letter 14 is different"
  or general RE logic to compare batch names?
 
-parsers: accept xml precinct reports also
+parsers.py: accept xml precinct reports also
 
 Allow filtering by type or precinct in audit report
 
@@ -60,21 +60,19 @@ Move to bzr-based versions: 0.7-r32 or 0.8.dev-r33 (would want bzr support)
 use the -f option of easy_install for other deps
 move to README.txt?
 
-deal better with "Not enough ballots for privacy" in entire input for a contest
+Deal better with "Not enough ballots for privacy" at end of input for a contest
  complain more loudly, prompt user for OK?
  Save temp db record for next input batch?
 
-Use AuditUnit in parse_xml_crystal and generate django tables from
-incremental reports via --subtract in addition to std output reports as now 
-
 Use custom view for more efficiently sorted audit report detail and report.html
 no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
+Separate out Contests by CountyElection in audit report
+Don't assume or check that audit report rows are all in the same sequence
+Put Under, Over at end
+Allow user to sort them by winner or alphabetically
 
 scenarios: test lots of data - speed, ease of fixing problem files
 take directory name for xml reports, sort by timestamp for --subtract
-
-Provide parse option to name election for xml files.
-separate out Contests by CountyElection in audit report
 
 describe use of IDLE IDE for windows?
 
@@ -84,13 +82,13 @@ Provide good html titles for all pages
 
 Produce output in csv format also
 
-Deal with namespace issues - auto-edit file, or handle it another way.
+Deal with xml namespace issue more elegantly
 
 Improve documentation - put model diagram in media
-fix parsers options for pydoc
+Fix parsers optparse options for pydoc
 Get rid of or document unused stuff
 
-Figure out how to include ballot counts (CVRs)in batch?
+Figure out how to include ballot counts (CVRs) in batch?
  Use csv report?  or excel?
  Based on president, or max of all contests?
  nope: there is no contest that that everyone can vote on -
@@ -98,26 +96,20 @@ Figure out how to include ballot counts (CVRs)in batch?
  too bad @ballots_cast != 'Total Number of Voters' from pdf?
 
 Generate actual selection of audit units via pps.py
-Link that to throw of dice, ala RFC 3797?
+based on random input from throw of dice, ala RFC 3797?
 
 Add table relating batch names to description - type, source, mbbs, etc
 and link to that from batch name
 
 Separate parsers.py and util.py from django dependencies - use plugins?
-separate import.py from particular site.settings - pass arg?
-rename/move electionaudit directory/module to electionaudits
 look thru pylint advice
 perhaps automatically generate doc and put in doc directory before packaging
 auto-update README on web site
 
-Use django choices for batch.type
+Use django choices for batch.type(?)
 Add info about file arguments to auto-usage message
 
-Don't assume or check that audit report rows are all in the same sequence
-Put Under, Over at end
-Allow user to sort them by winner or alphabetically
-
-Perhaps for privacy, print "few" rather than a number less than 3?
+Perhaps for anonymity, print "few" rather than a number less than 3?
 
 Provide variant methods of combining batches for privacy (class Push)
  really want to deal with entropy of results, not number
@@ -141,20 +133,12 @@ Set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
 
 Put contest abbreviation in a new field, option to print with it or not
 
-Test on windows
-
-Need a way to sort DRE results out separately.
-
-Option to produce full collection of auditable reports for all contests,
- in pdf?
-
 Encapsulate election-specific data in specific classes
   including list of contest edits ("replacements var"), fields of relevance, etc
   some day: do that based on "programming" data from Hart system?
 
 Auto-sort result files, check for non-incremental results
 Check for results that list different candidates for a contest
-Look for suspicious audit units, anomalous results
 Look for columns that don't agree with previous result
 
 Figure out how to have Contest.margin default to float('nan') without
@@ -164,15 +148,15 @@ Figure out how to have Contest.margin default to float('nan') without
 Packaging:
 Package up, as an egg?  And submit to http://pypi.python.org/pypi
 
-generate unique settings.SECRET_KEY ala extensions: generate_secret_key.py
+use unique settings.SECRET_KEY, ala django_extensions: generate_secret_key.py
 set up time zone?
 
-avoid dependency on setuptools version 0.6c9 to run (even to display help)
+Avoid dependency on setuptools version 0.6c9 to run (even to display help)
 take out bzr dependencies for users
 Include data files
 Try to get windows egg
 How to get "pure" package, not platform-dependent?
-Get setup.py to create site tree in a demo script directory, not lib
+Get setup.py to create root directory in a demo script directory, not lib
 
 maybe switch from __file__ to resource management system for packaged data files
  ala  http://peak.telecommunity.com/DevCenter/PythonEggs#resource-management
@@ -180,7 +164,7 @@ maybe switch from __file__ to resource management system for packaged data files
   filename = resource_filename(Requirement.parse("MyProject"),"sample.conf")
  but that won't take care of location for dev.db DATABASE_NAME
 
-allow xml files to be compressed with e.g. zip
+Parse xml files that have been compressed with e.g. zip
 easy_install --editable projectname==dev
 add setup.py --test and doctest support: wrapping tests in TestSuite
 
