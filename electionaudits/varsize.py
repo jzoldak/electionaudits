@@ -120,7 +120,7 @@ def rule_of_thumb(m,alpha=0.92,s=0.20):
         m = margin of victory a fraction of total votes cast
     Roughly 92\% confidence rate.
     """
-    return 1.0/m * (- 2.0 * s * math.ln(alpha))
+    return 1.0/m * (- 2.0 * s * math.log(alpha))
 
 def APR(n,m,alpha=0.08,s=0.20):
     """
@@ -195,7 +195,7 @@ def safe_u(L,M,alpha=0.08,s=0.20):
         alpha = significance level desired = 1 - confidence
         s = maximum within-precinct miscount
     """
-    b = bmin(L,M)
+    b = bmin(L,M,s)
     V = float(sum([x[0] for x in L]))
     u = (n - (b-1)/2.0)*(1.0-math.pow(alpha,1.0/b))
     return u
@@ -528,7 +528,7 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     print
     print "Rule of Thumb says:"
     if m != 0.0:
-        print "   ",1.0/m,"precincts."
+        print "   ",rule_of_thumb(m,alpha,s),"precincts."
         A = ave*int(math.ceil(1.0/m))
         print "    expected workload = ",A,"votes counted."
     else:
@@ -548,7 +548,7 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     print "    confidence level to find one of bmin = ",confidence_for_uniform_audit(n,u,bm)
     print
     print "SAFE says:"
-    bm = bmin(L,M)
+    bm = bmin(L,M,s)
     print "    bmin =",bm
     if bm != 0:
         u = (n - (bm-1)/2.0)*(1.0-math.pow(alpha,1.0/bm))

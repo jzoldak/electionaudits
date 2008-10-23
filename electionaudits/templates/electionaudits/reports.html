@@ -39,10 +39,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td><a href="{{ contest.id }}">{{ contest.name }}</a></td>
  <td style="text-align: right;">{{ contest.margin|floatformat:3 }}</td>
  <td style="text-align: right;">{{ contest.contestbatch_set.all|length }}</td>
- <td style="text-align: right;">{{ contest.selection_stats.ppebwr_precincts|floatformat:0 }}</td>
- <td style="text-align: right;">{{ contest.selection_stats.safe_precincts|floatformat:0 }}</td>
- <td style="text-align: right;">{{ contest.selection_stats.ppebwr_work|floatformat:0 }}</td>
- <td style="text-align: right;">{{ contest.selection_stats.safe_work|floatformat:0 }}</td>
+ <td style="text-align: right;">{{ contest.stats.ppebwr_precincts|floatformat:0 }}</td>
+ <td style="text-align: right;">{{ contest.stats.safe_precincts|floatformat:0 }}</td>
+ <td style="text-align: right;">{{ contest.stats.ppebwr_work|floatformat:0 }}</td>
+ <td style="text-align: right;">{{ contest.stats.safe_work|floatformat:0 }}</td>
 </tr>
         {% endfor %}
 </tbody>

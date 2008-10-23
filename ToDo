@@ -5,6 +5,10 @@ Use django.middleware.gzip.GZipMiddleware?
 Append batchid to type, not batch, for csv?
 Peel it off of file name for xml?
 
+Ad-hoc form: add text box with list of contest sizes, or size*x
+ or offer common size distributions
+   Minnesota, Colorado, Boulder, California, San Mateo, 
+
 Take confidence level and alpha parameters in template from varsize.
 Display header rows more compactly and clearly in reports.html
 Avoid repeating footnote text - make an include or template tag or the like.

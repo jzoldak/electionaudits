@@ -4,10 +4,10 @@
 
 import sys
 import logging
-from django.db import models
-from electionaudits import varsize
 import StringIO
+from django.db import models
 from django.core.cache import cache
+from electionaudits import varsize
 
 class CountyElection(models.Model):
     "An election, comprising a set of Contests and Batches of votes"
@@ -58,40 +58,13 @@ class Contest(models.Model):
                 'secondvotes': second.votes,
                 'margin': self.margin }
 
-    def selection_stats(self, alpha=0.08, s=0.20):
-        """Prepare statistics on how many audit units should be selected
-        in order to be able to reduce the risk of confirming an incorrect
-        outcome to a given probability.
-        alpha = significance level desired = 1 - confidence
-        s = maximum within-precinct miscount
-        Capture dictionary of statistics and printed results.
-        """
-
-        cachekey = "%s:%r:%f:%f" % (self.name, self.margin, alpha, s)
-        saved = cache.get(cachekey)
-        logging.debug("selection_stats: %d cached. contest %d: %s" % (len(cache._expire_info), self.id, self.name))
-
-        if saved:
-            return saved
-
-        if not self.margin:
-            return {}
+    def stats(self):
+        "Generate selection statistics for this Contest."
 
         cbs = [(cb.contest_ballots(), str(cb.batch))
                for cb in self.contestbatch_set.all()]
 
-        save = sys.stdout
-        sys.stdout = StringIO.StringIO()
-        try:
-            stats = varsize.paper(cbs, self.name, self.margin/100.0, alpha, s)
-        except Exception, e:
-            logging.exception("selection_stats: contest %d: %s" % (self.id, self.name))
-            return {}
-        stats['prose'] = sys.stdout.getvalue()
-        sys.stdout = save
-
-        cache.set(cachekey, stats, 86400)
-        return stats
+        return selection_stats(cbs, self.margin/100.0, self.name)
 
     def __unicode__(self):
         return "%s" % (self.name)
@@ -158,3 +131,40 @@ class VoteCount(models.Model):
 
     class Meta:
         unique_together = ("choice", "contest_batch")
+
+def selection_stats(units, margin=0.01, name="test", alpha=0.08, s=0.20):
+    """Prepare statistics on how many audit units should be selected
+    in order to be able to reduce the risk of confirming an incorrect
+    outcome to a given probability.
+    units = a list of audit units, giving just size of each
+    margin = margin of victory, between 0 and 1
+    name = name for this contest
+    alpha = significance level desired = 1 - confidence
+    s = maximum within-precinct miscount as a fraction from 0.0 to 1.0
+
+    Capture a dictionary of statistics and printed results.
+    Cache the results for speed.
+    """
+
+    cachekey = "%s:%r:%f:%f" % (name, margin, alpha, s)
+    saved = cache.get(cachekey)
+    logging.debug("selection_stats: %d cached. contest %s" % (len(cache._expire_info), name))
+
+    if saved:
+        return saved
+
+    if not margin:
+        return {}
+
+    save = sys.stdout
+    sys.stdout = StringIO.StringIO()
+    try:
+        stats = varsize.paper(units, name, margin, alpha, s)
+    except Exception, e:
+        logging.exception("selection_stats: contest %s" % (name))
+        return {}
+    stats['prose'] = sys.stdout.getvalue()
+    sys.stdout = save
+
+    cache.set(cachekey, stats, 86400)
+    return stats

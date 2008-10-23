@@ -1,5 +1,12 @@
 2008-10-22    <neal@bcn.boulder.co.us>
 
+	* electionaudits/views.py (StatsForm): 
+	New ad-hoc /stats/ form: statistics for a given margin, confidence
+
+	* electionaudits/varsize.py (rule_of_thumb): 
+	Call rule_of_thumb from paper() for consistency
+	Bug: needed "s" parameter to bmin() call for SAFE
+	
 	* electionaudits/parsers.py (parse_csv): 
 	introduce --batchid option for distinguishing data from different files
 

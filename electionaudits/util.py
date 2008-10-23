@@ -1,6 +1,6 @@
-# Add "push" function to push into pipeline (static lists) of stuff to commit
-#  maintain list for each (election, contest, type)
-# add "save" function to save into database
+"""
+AuditUnit class and logic to combine AuditUnits for anonymity.
+"""
 
 import logging
 import electionaudits.models as models

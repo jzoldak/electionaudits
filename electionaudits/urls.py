@@ -28,6 +28,7 @@ votecount_detail_dict = {
 
 urlpatterns = patterns('electionaudits.views',
     #(r'^reports/(?P<contest>\w*)/$',            'report'),
+    (r'^stats/$',     		         'stats'),
 )
 
 urlpatterns += patterns('',

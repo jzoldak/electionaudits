@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import list_detail
+from django import forms
 from electionaudits.models import *
 
 def report(request, contest):
@@ -21,42 +22,34 @@ def report(request, contest):
         extra_context = {"contest" : contest}
     )
 
-"""
-Need some stats/invariants - who won contest, total votes, etc
+class StatsForm(forms.Form):
+    margin = forms.FloatField(label="Margin of Victory", initial="0.01", max_value=1.0, min_value=0.0)
+    confidence = forms.FloatField(label="Confidence level desired", initial="0.99", max_value=1.0, min_value=0.0)
+    s = forms.FloatField(label="Maximum Within-Precinct-Miscount assumed", initial="0.20", max_value=1.0, min_value=0.0)
+    contest_name = forms.CharField(initial="Test Contest", max_length=100)
 
-load primary data.  support multiple elections....
+def stats(request):
+    """A form allowing the user to get selection statistics for a
+    given margin, confidence, etc.  The result is returned via the
+    same page.
+    """
 
-Need a restful way to make auditable units
-perhaps a form button on the auditable report to say "not for public"
-or something?  and logic to provide either full report or public one.
-
-or duplicate data totally?
-
-def consolidate(...):
-
-def detail(request, poll_id):
-    p = get_object_or_404(Poll, pk=poll_id)
-    return render_to_response('polls/detail.html', {'poll': p})
-
-def vote(request, poll_id):
-    p = get_object_or_404(Poll, pk=poll_id)
-    try:
-        selected_choice = p.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the poll voting form.
-        return render_to_response('polls/detail.html', {
-            'poll': p,
-            'error_message': "You didn't select a choice.",
-        })
+    if request.method == 'POST':
+        form = StatsForm(request.POST)
+        if form.is_valid():
+            return render_to_response('electionaudits/stats.html', {
+                    'form': form,
+                    'stats': selection_stats(
+                        [(500,)]*100 + [(200,)]*200 + [(10,)]*200,
+                        float(form.cleaned_data['margin']),
+                        form.cleaned_data['contest_name'],
+                        1.0 - float(form.cleaned_data['confidence']),
+                        float(form.cleaned_data['s']),
+                        )
+                    })
     else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect('/polls/%s/results/' % p.id)
+        form = StatsForm()
 
-def results(request, poll_id):
-    p = get_object_or_404(Poll, pk=poll_id)
-    return render_to_response('polls/results.html', {'poll': p})
-"""
+    return render_to_response('electionaudits/stats.html', {
+        'form': form,
+    })
