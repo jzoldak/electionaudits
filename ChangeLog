@@ -1,3 +1,8 @@
+2008-10-30    <neal@bcn.boulder.co.us>
+
+	* README (C): 
+	Document new -c and directory options in README
+
 2008-10-29    <neal@bcn.boulder.co.us>
 
 	* electionaudits/parsers.py (parse): 

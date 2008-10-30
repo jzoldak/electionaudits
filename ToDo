@@ -10,7 +10,10 @@ Figure out how to include ballot counts (CVRs) in batch?
  too bad @ballots_cast != 'Total Number of Voters' from pdf?
 
 new approach, user interface: move files from "incoming" to "processed"
-maybe via another directory until done   for --subtract, etc
+view /parse/ with get keywords for not sorted, not incremental
+ shows what is in "incoming" directory, and moves all but last one to
+ "processed" directory which is also shown
+ maybe via another directory until done   for --subtract, etc
 
 Use django.middleware.gzip.GZipMiddleware?
 

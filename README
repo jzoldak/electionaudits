@@ -153,20 +153,17 @@ C:> manage.py parse --help
 
 Test data is provided, so you can just run
 
-$ ./manage.py parse -s ../testdata/t0/*.xml
+$ ./manage.py parse -s -c ../testdata/t0
 
+which parses all the files in that directory in chronological order.
 It may take a while to run.  A brief synopsis of each contest is
 printed at the end.
 
 In Windows:
 
 C:> manage.py parse
-
-Until "*.xml" is supported, it is easier to use the "tab" command
-to fill in full file names:
-
-C:> cd ..\testdata\t0
-C:> ..\..\root\manage.py parse -s 000<tab> 001<tab>
+or
+C:> manage.py parse -s -c ..\testdata\t0
 
 
 Use "manage.py reset electionaudits" to clear the database before
