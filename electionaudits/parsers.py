@@ -37,11 +37,15 @@ option_list = (
                   action="store_true", default=False,
                   help="Input files are incremental snapshots.   Subtract data in each file from previous data to generate batch results" ),
 
+    make_option("-c", "--chronological",
+                  action="store_true", default=False,
+                  help="Sort all file arguments by last modification time" ),
+
     make_option("-m", "--min_ballots", dest="min_ballots", type="int",
                   default=25,
                   help="combine audit units with less than MINIMUM contest ballots", metavar="MINIMUM"),
 
-    make_option("-c", "--contest", dest="contest",
+    make_option("--contest", dest="contest",
                   help="only process CONTEST", metavar="CONTEST"),
 
     make_option("-e", "--election", default="test",
@@ -73,7 +77,7 @@ def main(parser):
 
     parse(args, options)
 
-def parse(files, options):
+def parse(args, options):
     "parse the files and tally the results"
 
     if options.debug:
@@ -82,6 +86,22 @@ def parse(files, options):
         loglevel = logging.INFO
 
     logging.basicConfig(level=loglevel) # format='%(message)s'
+
+    logging.debug("args = %s" % list(args))
+
+    files = []
+
+    for arg in args:
+        if os.path.isdir(arg):
+            files += [os.path.join(arg, f) for f in os.listdir(arg)]
+        else:
+            files.append(arg)
+
+    if options.chronological:
+         filetimes = [(os.path.getmtime(f), f) for f in files]
+         logging.debug("s = %s" % list(filetimes))
+         filetimes.sort()
+         files = [f[1] for f in filetimes]
 
     logging.debug("files = %s" % list(files))
 

@@ -1,5 +1,17 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
+parsers.py: accept xml precinct reports also
+
+Figure out how to include ballot counts (CVRs) in batch?
+ Use csv report?  or excel?
+ Based on president, or max of all contests?
+ nope: there is no contest that that everyone can vote on -
+   e.g. absentee landowners can't vote for president in boulder county
+ too bad @ballots_cast != 'Total Number of Voters' from pdf?
+
+new approach, user interface: move files from "incoming" to "processed"
+maybe via another directory until done   for --subtract, etc
+
 Use django.middleware.gzip.GZipMiddleware?
 
 Append batchid to type, not batch, for csv?
@@ -8,6 +20,7 @@ Peel it off of file name for xml?
 Ad-hoc form: add text box with list of contest sizes, or size*x
  or offer common size distributions
    Minnesota, Colorado, Boulder, California, San Mateo, 
+ Call it a "calculator"?
 
 Take confidence level and alpha parameters in template from varsize.
 Display header rows more compactly and clearly in reports.html
@@ -19,8 +32,6 @@ How to package django-based windows apps so they are easier to use?
 Any way to get a windows GUI interface to manage.py?
 
 Handle argument of *.xml in windows also - expand it myself with glob?
-Allow user to specify a directory and sort all the files by timestamp
-for --subtract
 
 Add tests, e.g. output from varsize.py
 
@@ -52,8 +63,6 @@ Find a way to distinguish paper from dre batches and not combine them
  add option ala "don't combine if batch letter 14 is different"
  or general RE logic to compare batch names?
 
-parsers.py: accept xml precinct reports also
-
 Allow filtering by type or precinct in audit report
 
 Move to bzr-based versions: 0.7-r32 or 0.8.dev-r33 (would want bzr support)
@@ -72,7 +81,6 @@ Put Under, Over at end
 Allow user to sort them by winner or alphabetically
 
 scenarios: test lots of data - speed, ease of fixing problem files
-take directory name for xml reports, sort by timestamp for --subtract
 
 describe use of IDLE IDE for windows?
 
@@ -88,18 +96,14 @@ Improve documentation - put model diagram in media
 Fix parsers optparse options for pydoc
 Get rid of or document unused stuff
 
-Figure out how to include ballot counts (CVRs) in batch?
- Use csv report?  or excel?
- Based on president, or max of all contests?
- nope: there is no contest that that everyone can vote on -
-   e.g. absentee landowners can't vote for president in boulder county
- too bad @ballots_cast != 'Total Number of Voters' from pdf?
-
 Generate actual selection of audit units via pps.py
 based on random input from throw of dice, ala RFC 3797?
 
 Add table relating batch names to description - type, source, mbbs, etc
 and link to that from batch name
+
+Support contests with multiple winners, instant runoff voting, etc
+(Already supports Approval voting)
 
 Separate parsers.py and util.py from django dependencies - use plugins?
 look thru pylint advice
