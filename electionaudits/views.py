@@ -1,8 +1,11 @@
+import os
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import list_detail
 from django import forms
+from django.contrib.admin.views.decorators import staff_member_required
 from electionaudits.models import *
+import electionaudits.parsers
 
 def report(request, contest):
     # Look up the contest (and raise a 404 if it can't be found).
@@ -21,6 +24,30 @@ def report(request, contest):
         template_object_name = "votecounts",
         extra_context = {"contest" : contest}
     )
+
+@staff_member_required
+def parse(request):
+    """
+    A form that lets an authorized user import and the parse data files in
+    the incoming directory.
+    """
+
+    dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'incoming')
+
+    if request.method == 'POST':
+        parse_form = forms.Form(request.POST)
+        if parse_form.is_valid():
+            options = electionaudits.parsers.set_options(["-c", "-s"])
+            electionaudits.parsers.parse([dir], options)
+
+    else:
+        parse_form = forms.Form()
+
+    return render_to_response('electionaudits/parse.html', {
+        'parse_form': parse_form,
+        'parse': os.listdir(dir)
+    })
+
 
 class StatsForm(forms.Form):
     margin = forms.FloatField(label="Margin of Victory", initial="0.01", max_value=1.0, min_value=0.0)

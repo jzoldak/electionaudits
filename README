@@ -132,6 +132,9 @@ When it asks:
  any superusers defined.  Would you like to create one now? (yes/no)"
 
 answer "yes" and provide a username and password for the "admin" system.
+Logging in with this account, or another "staff" account, is necessary
+for parsing new data files from within the web interface.
+
 It asks for a valid email address also, but doesn't share it or use
 it unless you customize things.
 

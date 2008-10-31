@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Parse incoming data files | {{ block.super }}{% endblock %}
+
+{% block content %}
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
+
+<h2>Parse data files in "incoming" directory</h2>
+
+<h2><a name="stats">Files to be parsed</a></h2>
+
+<pre>
+{{ parse }}
+</pre>
+
+<form action="/parse/" method="post">
+<table>
+{{ parse_form.as_table }}
+<tr><th></th><td><strong><input type="submit" value="Parse incoming data" /></strong></td></tr>
+</table>
+</form>
+
+{% endblock %}

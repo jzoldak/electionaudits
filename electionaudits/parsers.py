@@ -30,8 +30,6 @@ usage = """Usage: manage.py parse [options] [file]....
 Example:
  manage.py parse -s 001_EV_p001.xml 002_AB_p022.xml 003_ED_p015.xml"""
 
-parser = optparse.OptionParser(prog="parse", usage=usage)
-
 option_list = (
     make_option("-s", "--subtract",
                   action="store_true", default=False,
@@ -63,11 +61,20 @@ option_list = (
                   help="turn on debugging output"),
 )
 
+parser = optparse.OptionParser(prog="parse", usage=usage, option_list=option_list)
+
 # incorporate OptionParser usage documentation into our docstring
 __doc__ = __doc__.replace("%InsertOptionParserUsage%\n", parser.format_help())
 
+def set_options(args):
+    "Return options for parser given specified arguments"
+
+    (options, args) = parser.parse_args(args)
+    return options
+
 def main(parser):
-    "Parse and import files into the database and report summary statistics"
+    """obsolete and maybe broken - using management/commands/parse.py now.
+    Parse and import files into the database and report summary statistics"""
 
     (options, args) = parser.parse_args()
 

@@ -1,5 +1,13 @@
 2008-10-30    <neal@bcn.boulder.co.us>
 
+	* electionaudits/views.py (parse): 
+	New /parse/ form to parse incoming directory with -s -c
+	
+	* electionaudits/templates/electionaudits/stats.html: 
+	Call Ad-Hoc Contest Statistics a "Calculator" and fix title
+	
+2008-10-30    <neal@bcn.boulder.co.us>
+	
 	* README (C): 
 	Document new -c and directory options in README
 

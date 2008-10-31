@@ -8,3 +8,4 @@ debug_toolbar
 q
 save
 djangologging
+root/settings_neal.py

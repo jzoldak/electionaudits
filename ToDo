@@ -14,6 +14,9 @@ view /parse/ with get keywords for not sorted, not incremental
  shows what is in "incoming" directory, and moves all but last one to
  "processed" directory which is also shown
  maybe via another directory until done   for --subtract, etc
+ --chronological: track high-water mark, and show error given out-of-order run
+ improve feedback somehow: show progress (javascript?)
+ do really long test for timeouts
 
 Use django.middleware.gzip.GZipMiddleware?
 
