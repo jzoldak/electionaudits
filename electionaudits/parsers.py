@@ -207,7 +207,7 @@ def parse_xml_crystal(file, options):
     logging.debug("root = %s" % root)
 
     # The Hart system forces the use of some odd contest names.
-    # This is a table of fixes for them.
+    # This is a table of fixes for what Boulder needed in the 2008 general
     replacements = [
         (", Vote For 1", ""),
         ("THE EARNINGS FROM THE INVESTMENT", "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B"),

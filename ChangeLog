@@ -1,3 +1,9 @@
+2008-11-01    <neal@bcn.boulder.co.us>
+
+	* README (C): 
+	Improve installation and use instructions in README
+	Version 0.9.dev-r47
+
 2008-10-30    <neal@bcn.boulder.co.us>
 
 	* electionaudits/views.py (parse): 

@@ -74,6 +74,26 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 
+Support and Participation
+=========================
+
+Join the https://launchpad.net/~electionaudits team and get support
+via that mailing list.
+
+Or for real-time chat support try #electionaudits on irc.freenode.net
+
+
+Versions, Bug reports
+=====================
+See launchpad.net for project support at
+
+ https://launchpad.net/electionaudits
+
+to download the latest version or report bugs.  It uses the bzr ("Bazaar")
+distributed version control software, making it easy for you to
+contribute.
+
+
 Requirements
 ============
 
@@ -95,27 +115,46 @@ It has been tested on Ubuntu Linux and Windows, and should run fine
 on Mac OS X and others.
 
 
-Versions, Bug reports
-=====================
-See launchpad.net for project support at
+Installation
+============
 
- https://launchpad.net/electionaudits
+First install a release of python 2.5 (e.g. 2.5.2, though 2.6 might
+work) If you have a recent version of Linux, e.g. any Ubuntu release
+since "feisty" in 2006, you probably have it already.
 
-to get the latest version or report bugs.  It uses the bzr ("Bazaar")
-distributed version control software, making it easy for you to
-contribute.
+For Windows, see http://www.python.org/download/
 
+Next install the official version of Django 1.0 using the simple steps
+described at http://www.djangoproject.com/download/
 
-Support
-=======
+Then install lxml and sqlite3.
 
-Visit #electionaudits on irc.freenode.net
+ On Ubuntu Linux:
 
+  $ sudo apt-get install python-lxml libsqlite3-0
+
+ On Windows, first install setuptools:
+
+  http://pypi.python.org/packages/2.5/s/setuptools/setuptools-0.6c9.win32-py2.5.exe
+
+  You can then just run this:
+  C:> easy-install lxml
+
+  Or use the MS Windows Installer for lxml that matches your version of
+  python at http://pypi.python.org/pypi/lxml/2.1.2, e.g.
+
+   http://pypi.python.org/packages/2.5/l/lxml/lxml-2.1.2.win32-py2.5.exe
+
+  Finally, get the sqlite3 library DLL from
+   http://www.sqlite.org/download.html
+   e.g. http://www.sqlite.org/sqlitedll-3_6_4.zip
+  unzip it and put the .dll file with your other DLLs in
+  your default System directory, e.g. C:\WINDOWS\system32
 
 Initialization
 ==============
 
-when you first install or upgrade the software, you need to
+When you first install or upgrade the software, you need to
 initialize the database:
 
 $ cd root
@@ -143,8 +182,13 @@ Usage
 
 parse
 =====
-Use the manage.py parse command to import election results data into easily
-manipulated databases.
+
+You can import and parse new files in two ways: via the
+http://127.0.0.1:8000/parse/ page (see below) or from the
+command line.
+
+From the command line, use the manage.py parse command to import
+election results data into easily manipulated databases.
 
 Use the --help option to print usage instructions:
 
@@ -229,6 +273,13 @@ Then, in a browser, visit the main URL, e.g.
 
 to see the Audit Reports for the various Contests, etc.
 
+The "Parse incoming data files" page <http://127.0.0.1:8000/parse/>
+provides an alternative to the command line for importing xml data files.
+It automatically selects the --subtract and --chronological options.
+
+Just put the files in the "incoming" directory, visit that page to see
+a list of the files, and click the button.  Beware that there is
+currently no feedback during the import, so just be patient.
 
 See http://127.0.0.1:8000/admin/ (using the username and password
 you entered during the "syncdb" step) to enter new data, and

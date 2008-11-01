@@ -1,5 +1,11 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
+Need a logo.  e.g.
+  magnifying glass looking at a checkmark
+  http://whtalk.blogspot.com/2008/07/citizens-audit-completed-in-enfield.html
+  a grid of checkboxes, with some of them randomly selected and
+   colored/highlighted/focussed/whatever - colored magnifying glass?
+
 parsers.py: accept xml precinct reports also
 
 Figure out how to include ballot counts (CVRs) in batch?
@@ -11,6 +17,7 @@ Figure out how to include ballot counts (CVRs) in batch?
 
 new approach, user interface: move files from "incoming" to "processed"
 view /parse/ with get keywords for not sorted, not incremental
+ display files in sorted order
  shows what is in "incoming" directory, and moves all but last one to
  "processed" directory which is also shown
  maybe via another directory until done   for --subtract, etc
@@ -51,6 +58,8 @@ Make upgrades easier.
 Ask user where they want the database to be [must do very early on]
 Do .bat file for path, with path %PATH%;__dir__??
 set pythonpath with __file__ in manage.py?
+
+Test with python 2.6
 
 parsers.py: print message before lengthy save process
 
