@@ -127,6 +127,11 @@ For Windows, see http://www.python.org/download/
 Next install the official version of Django 1.0 using the simple steps
 described at http://www.djangoproject.com/download/
 
+On Windows you can use a tool like 7-zip (http://www.7-zip.org/) to
+unpack the .tar.gz file, or bsdtar
+(http://gnuwin32.sourceforge.net/packages/bsdtar.htm) for more
+straightforward command-line use.
+
 Then install lxml and sqlite3.
 
  On Ubuntu Linux:

@@ -1,29 +1,39 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
+parsers.py: accept xml precinct reports also
+
+Add version number to database, check it, maybe auto-convert.
+Make it easy to run with debug but no other dependencies.
+Report 500 errors better.
+
+Add some references to audit reports
+Provide a way to save all audit reports for publication from another server.
+Do some sort of simple signature via keyed hash based on settings.SECRET_KEY?
+
 Need a logo.  e.g.
   magnifying glass looking at a checkmark
   http://whtalk.blogspot.com/2008/07/citizens-audit-completed-in-enfield.html
   a grid of checkboxes, with some of them randomly selected and
    colored/highlighted/focussed/whatever - colored magnifying glass?
 
-parsers.py: accept xml precinct reports also
+Get setup.py sdist to create empty "incoming" directory; delete DELETEME.txt
 
 Figure out how to include ballot counts (CVRs) in batch?
  Use csv report?  or excel?
  Based on president, or max of all contests?
- nope: there is no contest that that everyone can vote on -
-   e.g. absentee landowners can't vote for president in boulder county
+ nope: there is no contest that everyone can vote on -
+   e.g. a dozen absentee landowners can't vote for president in Boulder County?
  too bad @ballots_cast != 'Total Number of Voters' from pdf?
 
 new approach, user interface: move files from "incoming" to "processed"
 view /parse/ with get keywords for not sorted, not incremental
+ do really long test for timeouts
  display files in sorted order
  shows what is in "incoming" directory, and moves all but last one to
  "processed" directory which is also shown
  maybe via another directory until done   for --subtract, etc
  --chronological: track high-water mark, and show error given out-of-order run
  improve feedback somehow: show progress (javascript?)
- do really long test for timeouts
 
 Use django.middleware.gzip.GZipMiddleware?
 
@@ -33,7 +43,6 @@ Peel it off of file name for xml?
 Ad-hoc form: add text box with list of contest sizes, or size*x
  or offer common size distributions
    Minnesota, Colorado, Boulder, California, San Mateo, 
- Call it a "calculator"?
 
 Take confidence level and alpha parameters in template from varsize.
 Display header rows more compactly and clearly in reports.html
@@ -47,9 +56,6 @@ Any way to get a windows GUI interface to manage.py?
 Handle argument of *.xml in windows also - expand it myself with glob?
 
 Add tests, e.g. output from varsize.py
-
-Provide a way to save all audit reports for publication from another server.
-Include signature or sha1 hash of report so it is easier to authenticate
 
 To help with targetted selection by runner-up, display margin for each
 audit unit, and flag outliers.

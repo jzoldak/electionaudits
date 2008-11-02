@@ -494,10 +494,9 @@ def main():
 
     evaluate(L,k,margin,p,w)
 
-import matplotlib.numerix as nx
-import pylab
-
 def plotprobs(title,p):
+    import pylab
+
     pylab.plot(p, color='red', lw=4)
     pylab.title(title)
     pylab.show()

@@ -67,7 +67,7 @@ def stats(request):
             return render_to_response('electionaudits/stats.html', {
                     'form': form,
                     'stats': selection_stats(
-                        [(500,)]*100 + [(200,)]*200 + [(10,)]*200,
+                        [(500,)]*300 + [(200,)]*200 + [(40,)]*100,
                         float(form.cleaned_data['margin']),
                         form.cleaned_data['contest_name'],
                         1.0 - float(form.cleaned_data['confidence']),

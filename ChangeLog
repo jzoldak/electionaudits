@@ -1,3 +1,15 @@
+2008-11-02    <neal@bcn.boulder.co.us>
+
+	* electionaudits/varsize.py (plotprobs): 
+	Fix hidden dependency: Only import pylab when necessary
+	drop unused import matplotlib.numerix
+
+	* electionaudits/views.py (stats): 
+	make default batch size distribution more like boulder county 2008
+
+	* root/settings.py: 
+	Configure CsrfMiddleware to avoid CSRF attacks with POSTs
+
 2008-11-01    <neal@bcn.boulder.co.us>
 
 	* README (C): 
