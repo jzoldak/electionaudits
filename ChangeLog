@@ -1,3 +1,14 @@
+2008-11-03    <neal@bcn.boulder.co.us>
+
+	* setup.py: 
+	Generate sdist from original trunk rather than a different bzr branch,
+	to avoid bzr munging of mod times.
+	See https://bugs.edge.launchpad.net/bzr/+bug/245170
+	Drop use of find_packages, which was bringing in unneeded files
+
+	* README (FAQ): 
+	Begin an FAQ
+	
 2008-11-02    <neal@bcn.boulder.co.us>
 
 	* electionaudits/varsize.py (plotprobs): 

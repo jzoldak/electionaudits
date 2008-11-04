@@ -1,10 +1,23 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
+Handle subdirectories in incoming.  handle zips also?
+Test parse while ignoring pdfs
+In new custom report view add column for rolling dice
+Provide help for selecting contests weighted by inverse margin up to 1/.005
+
+Help with selection of contests
+Incorporate e.g. state-wide info on #precincts, margin, and confidence level
+Provide statistics with appropriate confidence level for race
+Any way to reuse selections for different contests and count multiple
+contests on same batch?  Complicated because they may not match when
+batches were combined into audit units.
+
 parsers.py: accept xml precinct reports also
 
 Add version number to database, check it, maybe auto-convert.
 Make it easy to run with debug but no other dependencies.
-Report 500 errors better.
+ And perhaps no sql logging?
+Report 500 errors better, e.g. http://www.djangosnippets.org/snippets/638/
 
 Add some references to audit reports
 Provide a way to save all audit reports for publication from another server.
@@ -19,13 +32,20 @@ Need a logo.  e.g.
 Get setup.py sdist to create empty "incoming" directory; delete DELETEME.txt
 
 Figure out how to include ballot counts (CVRs) in batch?
+ from pdf: pyPdf or pdftotext: Total Number of Voters : 568 of 170,066 = 0.33%
  Use csv report?  or excel?
  Based on president, or max of all contests?
  nope: there is no contest that everyone can vote on -
    e.g. a dozen absentee landowners can't vote for president in Boulder County?
  too bad @ballots_cast != 'Total Number of Voters' from pdf?
 
+Add pdf file name to batch model
+Add xml file modification date to batch model
+Add link to pdf file in report.html or batch.html
+Add links to batches in report.html
+
 new approach, user interface: move files from "incoming" to "processed"
+ and directories....  all at end?  and keep timestamp
 view /parse/ with get keywords for not sorted, not incremental
  do really long test for timeouts
  display files in sorted order
@@ -35,7 +55,12 @@ view /parse/ with get keywords for not sorted, not incremental
  --chronological: track high-water mark, and show error given out-of-order run
  improve feedback somehow: show progress (javascript?)
 
-Use django.middleware.gzip.GZipMiddleware?
+
+
+Advise user to use django.middleware.gzip.GZipMiddleware if deploying
+on public site.
+
+set USE_ETAGS=True ?
 
 Append batchid to type, not batch, for csv?
 Peel it off of file name for xml?
@@ -44,11 +69,12 @@ Ad-hoc form: add text box with list of contest sizes, or size*x
  or offer common size distributions
    Minnesota, Colorado, Boulder, California, San Mateo, 
 
+Customize admin login screen to refer to help/README and initial
+credential creation, along with how to remove those hints for a public site.
+
 Take confidence level and alpha parameters in template from varsize.
 Display header rows more compactly and clearly in reports.html
 Avoid repeating footnote text - make an include or template tag or the like.
-
-Design way to incorporate state-wide info on #precincts and margin
 
 How to package django-based windows apps so they are easier to use?
 Any way to get a windows GUI interface to manage.py?
@@ -62,6 +88,7 @@ audit unit, and flag outliers.
 
 Make upgrades easier.
 Ask user where they want the database to be [must do very early on]
+ or put in Documents
 Do .bat file for path, with path %PATH%;__dir__??
 set pythonpath with __file__ in manage.py?
 
@@ -171,6 +198,15 @@ Figure out how to have Contest.margin default to float('nan') without
 
 
 Packaging:
+==========
+Currently for each new release:
+ make sure version number is updated in setup.py
+ test
+ commit changes in bzr
+ check for bzr diff
+ generate MANIFEST.in via bzr
+ generate .tar.gz file: python setup.py sdist
+
 Package up, as an egg?  And submit to http://pypi.python.org/pypi
 
 use unique settings.SECRET_KEY, ala django_extensions: generate_secret_key.py

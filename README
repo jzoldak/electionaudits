@@ -313,5 +313,29 @@ Thanks to these contributors:
 
 The auditing experts led by Mark Halvorson and John McCarthy at Verified Voting
 
-Very helpful user feedback from
- Crystal Christman, Mark Lindeman, Hillary Hall
+Users with very helpful feedback:
+ Crystal Christman, Mark Lindeman, Hillary Hall, Aaron D. Gerber,
+
+FAQ - Frequently Asked Questions
+================================
+
+Q: Parsing failed with a "Negative vote count" error - why?
+
+A: When parsing xml files with the --subtract option, you need to 
+make sure they are processed in sequential order, or else the
+subtraction will result in negative vote counts.  If you can preserve
+the modification timestamps on the files, you should be able to use the
+"--chronological" option to process them in order.  But note that
+various ways of copying will change the timestamps - e.g. via cp without
+the "-p" option, or via bzr, or via some versions of Nautilus.
+
+This can also happen if you read the same data in twice.  Before
+re-reading data, you should clear out all vote counts in the database
+with
+
+ manage.py reset electionaudits
+
+
+Q: I've forgotten the admin password and can't access staff pages!
+
+A: See http://coderseye.com/2007/howto-reset-the-admin-password-in-django.html

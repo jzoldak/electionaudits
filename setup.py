@@ -3,7 +3,7 @@ ez_setup.use_setuptools()
 from setuptools import setup, find_packages
 setup(
     name = "ElectionAudits",
-    version = "0.9.dev-r48",
+    version = "0.9.dev-r49",
     author = "Neal McBurnett",
     author_email = "neal@bcn.boulder.co.us",
     description = "Help audit elections with good statistical confidence",
@@ -19,7 +19,7 @@ ElectionAudits.org, the nation's clearinghouse for election audit
 information.
 """,
 
-    packages = find_packages(),
+    #packages = find_packages(),
     install_requires = ['lxml'], # and non-eggs: Django 1.0 and sqlite
     include_package_data = True,
 
