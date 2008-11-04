@@ -14,6 +14,8 @@ class Command(BaseCommand):
     can_import_settings = True
 
     def handle(self, *args, **options):
+        "create the options argument from electionaudits.parsers.set_options()"
+
         if len(args) < 1:
             args = [(os.path.join(os.path.dirname(__file__), '../../../testdata/testcum.xml'))]
             logging.debug("using test file: " + args[0])

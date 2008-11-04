@@ -299,6 +299,10 @@ and associated fields and relationships.
 Debugging
 =========
 
+You can run the test cases via this command:
+
+ manage.py test electionaudits
+
 If you install the django html validator app
 lukeplant_me_uk.django.validator and use debug settings
   manage.py runserver --settings settings_debug

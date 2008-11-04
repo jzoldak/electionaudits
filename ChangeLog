@@ -1,5 +1,8 @@
 2008-11-03    <neal@bcn.boulder.co.us>
 
+	* electionaudits/tests.py (SimpleTest.test_reports): 
+	Add some unit tests: run via `manage.py test electionaudits`
+
 	* setup.py: 
 	Generate sdist from original trunk rather than a different bzr branch,
 	to avoid bzr munging of mod times.

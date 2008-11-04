@@ -3,7 +3,7 @@ ez_setup.use_setuptools()
 from setuptools import setup, find_packages
 setup(
     name = "ElectionAudits",
-    version = "0.9.dev-r49",
+    version = "0.9.dev-r50",
     author = "Neal McBurnett",
     author_email = "neal@bcn.boulder.co.us",
     description = "Help audit elections with good statistical confidence",

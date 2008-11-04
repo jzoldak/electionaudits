@@ -201,11 +201,20 @@ Packaging:
 ==========
 Currently for each new release:
  make sure version number is updated in setup.py
- test
+ check bzr diff
+ i=Elect...
+ bzr ls --versioned | sed 's/^/include /' > MANIFEST.in
+ python setup.py sdist
+ #maybe manually delete incoming/DELETME.txt
+ cd /tmp
+ tar zxf /srv/s/electionaudits/trunk/dist/$i.tar.gz
+ cd $i/root
+ ./manage.py test electionaudits
+
  commit changes in bzr
- check for bzr diff
- generate MANIFEST.in via bzr
- generate .tar.gz file: python setup.py sdist
+ scp -p dist/$i.tar.gz bcn:public_html/electionaudits/download/
+
+why does the order of auditunits sometimes change?
 
 Package up, as an egg?  And submit to http://pypi.python.org/pypi
 

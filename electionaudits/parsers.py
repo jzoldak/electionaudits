@@ -67,7 +67,9 @@ parser = optparse.OptionParser(prog="parse", usage=usage, option_list=option_lis
 __doc__ = __doc__.replace("%InsertOptionParserUsage%\n", parser.format_help())
 
 def set_options(args):
-    "Return options for parser given specified arguments"
+    """Return options for parser given specified arguments.
+    E.g. options = set_options(["-c", "-s"])
+    """
 
     (options, args) = parser.parse_args(args)
     return options
