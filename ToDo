@@ -1,13 +1,15 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
 Handle subdirectories in incoming.  handle zips also?
-Test parse while ignoring pdfs
 In new custom report view add column for rolling dice
-Provide help for selecting contests weighted by inverse margin up to 1/.005
 
-Help with selection of contests
+Test candidate totals given some write-in candidates
+
+Provide help for selecting contests weighted by inverse margin up to 1/.005
 Incorporate e.g. state-wide info on #precincts, margin, and confidence level
 Provide statistics with appropriate confidence level for race
+ print out csv for all contests with blanks
+ include sequence number for contest based on order in report?
 Any way to reuse selections for different contests and count multiple
 contests on same batch?  Complicated because they may not match when
 batches were combined into audit units.
@@ -77,6 +79,8 @@ Display header rows more compactly and clearly in reports.html
 Avoid repeating footnote text - make an include or template tag or the like.
 
 How to package django-based windows apps so they are easier to use?
+Try http://www.python.org/doc/2.5/dist/postinstallation-script.html
+and look at Nullsoft Scriptable Install System (NSIS).
 Any way to get a windows GUI interface to manage.py?
 
 Handle argument of *.xml in windows also - expand it myself with glob?
@@ -214,7 +218,10 @@ Currently for each new release:
  commit changes in bzr
  scp -p dist/$i.tar.gz bcn:public_html/electionaudits/download/
 
-why does the order of auditunits sometimes change?
+Do it via the launchpad api:
+ http://news.launchpad.net/api/recipe-for-uploading-files-via-the-api
+
+Why does the order of auditunits sometimes change in the test?
 
 Package up, as an egg?  And submit to http://pypi.python.org/pypi
 

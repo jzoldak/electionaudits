@@ -7,8 +7,12 @@
 </ul>
     <h2>Audit Report for {{ object }}</h2>
 <p>Number of audit units: {{ object.contestbatch_set.all|length }}</p>
-<p>Margin of victory is {{ object.margin|floatformat:3 }}%</p>
-<p>Number of audit units to audit (PPEBWR): {{ object.stats.ppebwr_precincts|floatformat:0 }} <a href="#stats">more stats below...</a></p>
+<p>If there aren't any ballots in other counties or uncounted ballots:</p>
+<ul>
+<li>Margin of victory is {{ object.margin|floatformat:3 }}%</li>
+<li>Number of audit units to audit (PPEBWR, 92% confidence): {{ object.stats.ppebwr_precincts|floatformat:0 }}</li>
+</ul>
+<p>See <a href="#stats">additional statistical information below...</a></p>
 
 <table border="border" cellpadding="5">
 <thead>
@@ -52,8 +56,22 @@
  {% endfor %}
 </tbody>
 </table>
+
+<h3><a name="stats">Audit statistics</a></h3>
+<p>
+The "Number of audit units to audit" is based on the PPEBWR method, which is very efficient and requires selecting larger audit units
+with higher probability than smaller ones.
+The numbers given here are based on a confidence 
+level of 92%.  I.e. they are designed so the
+audit will either 1) find a discrepancy and call for an escalation or
+full hand recount, or 2) reduce the risk of confirming an incorrect
+outcome to 8%, even if the tally system has been manipulated.
+A maximum "within-precinct-miscount" of 20% is assumed.
+See <a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
+On Auditing Elections When Precincts Have Different Sizes, by Javed
+A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
+
 <pre>
-<a name="stats">Audit statistics:</a>
 {{ object.stats.prose }}
 </pre>
 {% endblock %}
