@@ -1,5 +1,9 @@
 2008-11-05    <neal@bcn.boulder.co.us>
 
+	* electionaudits/util.py (AuditUnit.__init__): 
+	Create election and contest database records when first mentioned,
+	so they are created and listed in sequence.
+
 	* electionaudits/templates/electionaudits/report.html: 
 	Clarify statistics more
 	Improve README

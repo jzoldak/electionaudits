@@ -89,6 +89,10 @@ class AuditUnit:
         self.batches = batches		# a list of batch names
         self.votecounts = votecounts
 
+        if election and contest:
+            election, created = models.CountyElection.objects.get_or_create(name=self.election)
+            contest, created = models.Contest.objects.get_or_create(name=self.contest)
+
     def update(self, choice, votes):
         "Add votes to the audit unit.  Should really be a dict update?"
 

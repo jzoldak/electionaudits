@@ -5,6 +5,8 @@ In new custom report view add column for rolling dice
 
 Test candidate totals given some write-in candidates
 
+cache election, batch and contest looks for better speed
+
 Provide help for selecting contests weighted by inverse margin up to 1/.005
 Incorporate e.g. state-wide info on #precincts, margin, and confidence level
 Provide statistics with appropriate confidence level for race
