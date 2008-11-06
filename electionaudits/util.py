@@ -91,7 +91,7 @@ class AuditUnit:
 
         if election and contest:
             election, created = models.CountyElection.objects.get_or_create(name=self.election)
-            contest, created = models.Contest.objects.get_or_create(name=self.contest)
+            contest, created = models.Contest.objects.get_or_create(name=self.contest, election=election)
 
     def update(self, choice, votes):
         "Add votes to the audit unit.  Should really be a dict update?"
@@ -115,7 +115,7 @@ class AuditUnit:
 
         election, created = models.CountyElection.objects.get_or_create(name=self.election)
         batch, created = models.Batch.objects.get_or_create(name=' '.join(self.batches), election=election, type=self.type )
-        contest, created = models.Contest.objects.get_or_create(name=self.contest)
+        contest, created = models.Contest.objects.get_or_create(name=self.contest, election=election)
 
         # After contest etc is registered, we bail if no actual vote counts
         if self.contest_ballots() == 0:

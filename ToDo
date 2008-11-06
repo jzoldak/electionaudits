@@ -3,18 +3,20 @@ ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 Handle subdirectories in incoming.  handle zips also?
 In new custom report view add column for rolling dice
 
+Append batchid to type, not batch, for csv?
+Peel it off of file name for xml?
+
 Test candidate totals given some write-in candidates
 
 cache election, batch and contest looks for better speed
 
 Provide help for selecting contests weighted by inverse margin up to 1/.005
-Incorporate e.g. state-wide info on #precincts, margin, and confidence level
-Provide statistics with appropriate confidence level for race
- print out csv for all contests with blanks
- include sequence number for contest based on order in report?
+
 Any way to reuse selections for different contests and count multiple
 contests on same batch?  Complicated because they may not match when
 batches were combined into audit units.
+
+Incorporate state-wide info on #precincts
 
 parsers.py: accept xml precinct reports also
 
@@ -23,7 +25,6 @@ Make it easy to run with debug but no other dependencies.
  And perhaps no sql logging?
 Report 500 errors better, e.g. http://www.djangosnippets.org/snippets/638/
 
-Add some references to audit reports
 Provide a way to save all audit reports for publication from another server.
 Do some sort of simple signature via keyed hash based on settings.SECRET_KEY?
 
@@ -66,9 +67,6 @@ on public site.
 
 set USE_ETAGS=True ?
 
-Append batchid to type, not batch, for csv?
-Peel it off of file name for xml?
-
 Ad-hoc form: add text box with list of contest sizes, or size*x
  or offer common size distributions
    Minnesota, Colorado, Boulder, California, San Mateo, 
@@ -76,7 +74,6 @@ Ad-hoc form: add text box with list of contest sizes, or size*x
 Customize admin login screen to refer to help/README and initial
 credential creation, along with how to remove those hints for a public site.
 
-Take confidence level and alpha parameters in template from varsize.
 Display header rows more compactly and clearly in reports.html
 Avoid repeating footnote text - make an include or template tag or the like.
 
@@ -202,6 +199,9 @@ Look for columns that don't agree with previous result
 Figure out how to have Contest.margin default to float('nan') without
  odd NULL errors.  After python 2.6 so it works in Windows also
 
+Make it easier to provide statistics with appropriate confidence level for race
+ print out csv for all contests with blanks
+ include sequence number for contest based on order in report?
 
 Packaging:
 ==========

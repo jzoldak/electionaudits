@@ -21,10 +21,14 @@ class Contest(models.Model):
     "The name of a race, and the associated margin of victory, etc"
 
     name = models.CharField(max_length=200)
+    election = models.ForeignKey(CountyElection)
+    confidence = models.IntegerField(default = 75,
+                    help_text="Desired level of confidence in percent, from 0 to 100" )
 
-    # or provide external vote counts and calculate this?
     margin = models.FloatField(blank=True, null=True,
-                    help_text="(Winner - Second) / total, in percent" )
+                    help_text="Calculated when data is parsed" )
+    overall_margin = models.FloatField(blank=True, null=True,
+                    help_text="(Winner - Second) / total including under and over votes, in percent" )
 
     def tally(self):
         "Tally up all the choices and calculate margins"
@@ -64,7 +68,8 @@ class Contest(models.Model):
         cbs = [(cb.contest_ballots(), str(cb.batch))
                for cb in self.contestbatch_set.all()]
 
-        return selection_stats(cbs, self.margin/100.0, self.name)
+        m = self.overall_margin  or  self.margin
+        return selection_stats(cbs, m/100.0, self.name, alpha=((100-self.confidence)/100.0))
 
     def __unicode__(self):
         return "%s" % (self.name)

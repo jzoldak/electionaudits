@@ -4,18 +4,21 @@
     <h2>Contest List</h2>
 
 <p>Number of contests: {{ object_list|length }}</p>
-<p>The statistics here currently do not incorporate votes for the
-same contests from other counties, and any audit should be
-based on the overall margin in the race.</p>
+<p>The auditing selection statistics are based
+on the Overall Margin % if it has been entered to reflect results from
+other counties.  Otherwise the margin used for the statistics comes from
+the Margin calculated based on just the ballots reflected in the given report.
+</p>
 <p>Information on two alternative auditing sampling methods is presented:
 SAFE (in which each audit unit has an equal chance of being picked).
 and PPEBWR (which is more efficient and requires selecting larger audit units
 with higher probability than smaller ones).
-The numbers given here are based on a confidence 
-level of 92%.  I.e. they are designed so the
+The numbers given here are based on the given confidence 
+level.  I.e. they are designed so the
 audit will either 1) find a discrepancy and call for an escalation or
 full hand recount, or 2) reduce the risk of confirming an incorrect
-outcome to 8%, even if the tally system has been manipulated.
+outcome to 25% (for a confidence level of 75%),
+even if the tally system has been manipulated.
 A maximum "within-precinct-miscount" of 20% is assumed.
 See <a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
 On Auditing Elections When Precincts Have Different Sizes, by Javed
@@ -25,8 +28,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
 <thead>
 <tr>
  <td>Contest Name</td>
- <td>Margin %</td>
  <td>Audit Units</td>
+ <td>Overall Margin %</td>
+ <td>Margin %</td>
+ <td>Confidence %</td>
  <td>Units to audit: PPEBWR</td>
  <td>Units to audit: SAFE</td>
  <td>Ballots to audit: PPEBWR</td>
@@ -37,8 +42,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
         {% for contest in object_list %}
 <tr>
  <td><a href="{{ contest.id }}">{{ contest.name }}</a></td>
- <td style="text-align: right;">{{ contest.margin|floatformat:3 }}</td>
  <td style="text-align: right;">{{ contest.contestbatch_set.all|length }}</td>
+ <td style="text-align: right;">{{ contest.overall_margin|floatformat:3 }}</td>
+ <td style="text-align: right;">{{ contest.margin|floatformat:3 }}</td>
+ <td style="text-align: right;">{{ contest.confidence }}</td>
  <td style="text-align: right;">{{ contest.stats.ppebwr_precincts|floatformat:0 }}</td>
  <td style="text-align: right;">{{ contest.stats.safe_precincts|floatformat:0 }}</td>
  <td style="text-align: right;">{{ contest.stats.ppebwr_work|floatformat:0 }}</td>

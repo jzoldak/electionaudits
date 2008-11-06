@@ -1,5 +1,13 @@
 2008-11-05    <neal@bcn.boulder.co.us>
 
+	* electionaudits/models.py (Contest): 
+	Add confidence and overall_margin to Contest and use them
+	in calculating and displaying statistics.
+
+	* electionaudits/admin.py (CountyElectionAdmin): 
+	Allow all contest margins, confidence levels to be audited inline by
+	linking them to the appropriate CountyElection and using ContestInline
+
 	* electionaudits/util.py (AuditUnit.__init__): 
 	Create election and contest database records when first mentioned,
 	so they are created and listed in sequence.

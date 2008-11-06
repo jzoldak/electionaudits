@@ -316,6 +316,12 @@ you entered during the "syncdb" step) to enter new data, and
 http://127.0.0.1:8000/admin/doc/ for more documentation on the data models
 and various available views of the information.
 
+For example, you will usually want to edit the countyelection to
+specifiy the confidence level for each contest, and the overall margin
+of victory if there are ballots that are outside the county.  Visit:
+
+ http://127.0.0.1:8000/admin/electionaudits/countyelection/
+
 
 See doc/model_graph.png for a diagram of the various database tables
 and associated fields and relationships.

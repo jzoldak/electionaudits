@@ -9,8 +9,9 @@
 <p>Number of audit units: {{ object.contestbatch_set.all|length }}</p>
 <p>If there aren't any ballots in other counties or uncounted ballots:</p>
 <ul>
+<li>Overall margin of victory is {{ object.overall_margin|floatformat:3 }}%</li>
 <li>Margin of victory is {{ object.margin|floatformat:3 }}%</li>
-<li>Number of audit units to audit (PPEBWR, 92% confidence): {{ object.stats.ppebwr_precincts|floatformat:0 }}</li>
+<li>Number of audit units to audit (PPEBWR, {{ object.confidence }}% confidence): {{ object.stats.ppebwr_precincts|floatformat:0 }}</li>
 </ul>
 <p>See <a href="#stats">additional statistical information below...</a></p>
 
