@@ -32,8 +32,11 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td>Overall Margin %</td>
  <td>Margin %</td>
  <td>Confidence %</td>
+ <td>Proportion %</td>
+ <td>Units to audit: NEGEXP</td>
  <td>Units to audit: PPEBWR</td>
  <td>Units to audit: SAFE</td>
+ <td>Ballots to audit: NEGEXP</td>
  <td>Ballots to audit: PPEBWR</td>
  <td>Ballots to audit: SAFE</td>
 </tr>
@@ -46,8 +49,11 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">{{ contest.overall_margin|floatformat:3 }}</td>
  <td style="text-align: right;">{{ contest.margin|floatformat:3 }}</td>
  <td style="text-align: right;">{{ contest.confidence }}</td>
- <td style="text-align: right;">{{ contest.stats.ppebwr_precincts|floatformat:0 }}</td>
- <td style="text-align: right;">{{ contest.stats.safe_precincts|floatformat:0 }}</td>
+ <td style="text-align: right;">{{ contest.proportion|floatformat:0 }}</td>
+ <td style="text-align: right;">{{ contest.stats.negexp_precincts|floatformat:1 }}</td>
+ <td style="text-align: right;">{{ contest.stats.ppebwr_precincts|floatformat:1 }}</td>
+ <td style="text-align: right;">{{ contest.stats.safe_precincts|floatformat:1 }}</td>
+ <td style="text-align: right;">{{ contest.stats.negexp_work|floatformat:0 }}</td>
  <td style="text-align: right;">{{ contest.stats.ppebwr_work|floatformat:0 }}</td>
  <td style="text-align: right;">{{ contest.stats.safe_work|floatformat:0 }}</td>
 </tr>

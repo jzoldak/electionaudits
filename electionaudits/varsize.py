@@ -504,6 +504,8 @@ def plotprobs(title,p):
 def paper(source,title,m,alpha=0.08,s=0.20):
     """
     Compute results mentioned in our paper.
+    source = the precinct list - an argument suitable for read_precincts()
+    title = a name for this contest
     m = margin of victory (as a fraction)
     alpha = significance level desired = 1 - confidence
     s = maximum within-precinct miscount
@@ -583,10 +585,11 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     pt = [(1.0-(1.0-float(v[i])/V)**t) for i in range(n)]
     print "    largest total probability = ",pt[0]
     print "    smallest total probability = ",pt[-1]
-    print "    expected number of precincts audited =",sum(pt)
+    u = sum(pt)
+    print "    expected number of precincts audited =",u
     A = sum([pt[i]*v[i] for i in range(n)])
     print "    expected workload = ",A,"votes counted."
-    results.update({'ppebwr_precincts': sum(pt), 'ppebwr_work': A, 'ppebwr_t': t})
+    results.update({'ppebwr_precincts': u, 'ppebwr_work': A, 'ppebwr_t': t})
     maxdev = max([abs(pn[i]-pt[i]) for i in range(n)])
     print "    max difference from negexp = ",maxdev
 

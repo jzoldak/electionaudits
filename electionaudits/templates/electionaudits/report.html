@@ -7,10 +7,10 @@
 </ul>
     <h2>Audit Report for {{ object }}</h2>
 <p>Number of audit units: {{ object.contestbatch_set.all|length }}</p>
-<p>If there aren't any ballots in other counties or uncounted ballots:</p>
+<p>Proportion of the total number of votes for this contest that were cast within this county: {{ object.proportion|floatformat:1 }}%</p>
 <ul>
 <li>Overall margin of victory is {{ object.overall_margin|floatformat:3 }}%</li>
-<li>Margin of victory is {{ object.margin|floatformat:3 }}%</li>
+<li>Margin of victory in this county is {{ object.margin|floatformat:3 }}%</li>
 <li>Number of audit units to audit (PPEBWR, {{ object.confidence }}% confidence): {{ object.stats.ppebwr_precincts|floatformat:0 }}</li>
 </ul>
 <p>See <a href="#stats">additional statistical information below...</a></p>
@@ -48,7 +48,7 @@
    <td>{{ forloop.counter|stringformat:"04d" }}</td>
    <td>{{ contestbatch.batch.type }}</td>
    <td>{{ contestbatch.batch.name }}</td>
-   <td>{{ contestbatch.ballot_count }}</td>
+   <td>{{ contestbatch.batch.ballots }}</td>
    <td>{{ contestbatch.contest_ballots }}</td>
    {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
      <td><b>{{ votecount.votes }}</b></td>

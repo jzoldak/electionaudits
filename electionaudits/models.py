@@ -1,8 +1,9 @@
 """Generate a relationship diagram via django-extensions and
- ./manage.py graph_models electionaudits -g -o ../doc/model_graph.png
+ ./manage.py graph_models electionaudits -g -o ../doc/model_graph.png --settings settings_debug
 """
 
 import sys
+import math
 import logging
 import StringIO
 from django.db import models
@@ -13,6 +14,8 @@ class CountyElection(models.Model):
     "An election, comprising a set of Contests and Batches of votes"
 
     name = models.CharField(max_length=200)
+    random_seed = models.CharField(max_length=50, blank=True, null=True,
+       help_text="The seed for random selections, from verifiably random sources.  E.g. 15 digits" )
 
     def __unicode__(self):
         return "%s" % (self.name)
@@ -24,7 +27,8 @@ class Contest(models.Model):
     election = models.ForeignKey(CountyElection)
     confidence = models.IntegerField(default = 75,
                     help_text="Desired level of confidence in percent, from 0 to 100" )
-
+    proportion = models.FloatField(default = 100.0,
+                    help_text="This county's proportion of the overall number of votes in this contest" )
     margin = models.FloatField(blank=True, null=True,
                     help_text="Calculated when data is parsed" )
     overall_margin = models.FloatField(blank=True, null=True,
@@ -69,7 +73,10 @@ class Contest(models.Model):
                for cb in self.contestbatch_set.all()]
 
         m = self.overall_margin  or  self.margin
-        return selection_stats(cbs, m/100.0, self.name, alpha=((100-self.confidence)/100.0))
+        # Test stats with lots of audit units: Uncomment to use
+        #  (Better to turn this on and off via a GET parameter....)
+        # cbs = [(500,)]*300 + [(200,)]*200 + [(40,)]*100
+        return selection_stats(cbs, m/100.0, self.name, alpha=((100-self.confidence)/100.0), proportion=self.proportion)
 
     def __unicode__(self):
         return "%s" % (self.name)
@@ -80,6 +87,12 @@ class Batch(models.Model):
     name = models.CharField(max_length=200)
     election = models.ForeignKey(CountyElection)
     type = models.CharField(max_length=20, help_text="AB for Absentee, EV for Early, ED for Election")
+    ballots = models.IntegerField(null=True, blank=True,
+                    help_text="Number of ballots in the batch" )
+    random = models.FloatField(null=True, blank=True,
+                    help_text="Random number assigned for selection" )
+    notes = models.CharField(max_length=200, null=True, blank=True,
+                    help_text="Free-form notes" )
 
     def __unicode__(self):
         return "%s:%s" % (self.name, self.type)
@@ -92,6 +105,10 @@ class ContestBatch(models.Model):
 
     contest = models.ForeignKey(Contest)
     batch = models.ForeignKey(Batch)
+    selected = models.NullBooleanField(null=True, blank=True,
+                    help_text="Whether audit unit has been selected for audit" )
+    notes = models.CharField(max_length=200, null=True, blank=True,
+                    help_text="Free-form notes" )
 
     def contest_ballots(self):
         return sum(a.votes for a in self.votecount_set.all())
@@ -137,7 +154,7 @@ class VoteCount(models.Model):
     class Meta:
         unique_together = ("choice", "contest_batch")
 
-def selection_stats(units, margin=0.01, name="test", alpha=0.08, s=0.20):
+def selection_stats(units, margin=0.01, name="test", alpha=0.08, s=0.20, proportion=100.0):
     """Prepare statistics on how many audit units should be selected
     in order to be able to reduce the risk of confirming an incorrect
     outcome to a given probability.
@@ -170,6 +187,11 @@ def selection_stats(units, margin=0.01, name="test", alpha=0.08, s=0.20):
         return {}
     stats['prose'] = sys.stdout.getvalue()
     sys.stdout = save
+
+    for stat in ['ppebwr_work', 'ppebwr_precincts',
+                 'negexp_work', 'negexp_precincts', 
+                 'safe_work', 'safe_precincts', ]:
+        stats[stat] = stats[stat] * proportion/100.0
 
     cache.set(cachekey, stats, 86400)
     return stats

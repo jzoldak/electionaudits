@@ -349,7 +349,7 @@ Thanks to these contributors:
 The auditing experts led by Mark Halvorson and John McCarthy at Verified Voting
 
 Users with very helpful feedback:
- Crystal Christman, Mark Lindeman, Hillary Hall, Aaron D. Gerber.
+ Crystal Christman, Mark Lindeman, Hillary Hall, Aaron D. Gerber, Mary Eberle.
 
 
 FAQ - Frequently Asked Questions
@@ -375,3 +375,11 @@ with
 Q: I've forgotten the admin password and can't access staff pages!
 
 A: See http://coderseye.com/2007/howto-reset-the-admin-password-in-django.html
+
+
+Q: I forgot to get a zero cumulative xml report before reading in ballots.
+What do I do now?
+
+A: You can specify the same report as the first two cumulative
+reports, and it will subtract one from the other, and not add any
+audit units because everything subtracts out to be zero.

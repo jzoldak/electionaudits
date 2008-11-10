@@ -1,3 +1,14 @@
+2008-11-10    <neal@bcn.boulder.co.us>
+
+	* electionaudits/util.py (AuditUnit.update): 
+	Allow commas in vote counts, e.g. 1,345
+	
+	* electionaudits/models.py (ContestBatch): 
+	Add "proportion" to Contest for scaling selection numbers
+	Add random_seed, for use of verifiably seeded RNGs like Rivest's SSR
+	Add "selected" to ContestBatch
+	Add "notes" to ContestBatch and Batch
+
 2008-11-05    <neal@bcn.boulder.co.us>
 
 	* electionaudits/models.py (Contest): 

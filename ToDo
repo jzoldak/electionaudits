@@ -1,22 +1,45 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
+Set sequence of Choices on first save
+
 Handle subdirectories in incoming.  handle zips also?
-In new custom report view add column for rolling dice
 
-Append batchid to type, not batch, for csv?
-Peel it off of file name for xml?
+Use custom view for more efficiently sorted audit report detail and report.html
+no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
+Separate out Contests by CountyElection in audit report
+Don't assume or check that audit report rows are all in the same sequence
+Put Under, Over at end
+Allow user to sort them by winner or alphabetically
 
-Test candidate totals given some write-in candidates
+In new custom report view add column for selection, highlight selected
+Error for -s with only one batch?
+report.html: Incorporate style="text-align: right;" into css
 
-cache election, batch and contest looks for better speed
+Put explanatory notes (e.g. about margins) in FAQ or help html,
+and add link from report, reports, etc
+
+Deal better with "Not enough ballots for privacy" at end of input for a contest
+ complain more loudly, prompt user for OK?
+ Save temp db record for next input batch?
+
+cache election, batch and contest lookups for better speed
 
 Provide help for selecting contests weighted by inverse margin up to 1/.005
 
-Any way to reuse selections for different contests and count multiple
-contests on same batch?  Complicated because they may not match when
-batches were combined into audit units.
+Synergy between selections for different contests to count multiple
+contests on same batch: Use NEGEXP, setting probability for each batch,
+and using same random number for the batch for all contests.
 
-Incorporate state-wide info on #precincts
+ Need to combine batches the same way across contests, or refer to other contestbatches.
+ Combine based on overall batch size?  Or based on min of all races??
+  And mask small numbers, to be revealed in combination with others later on?
+
+Find a way to distinguish paper from dre batches and not combine them
+ add option ala "don't combine if batch letter 14 is different"
+ or general RE logic to compare batch names?
+
+Append batchid to type, not batch, for csv input?
+Peel it off of file name for xml?
 
 parsers.py: accept xml precinct reports also
 
@@ -26,6 +49,8 @@ Make it easy to run with debug but no other dependencies.
 Report 500 errors better, e.g. http://www.djangosnippets.org/snippets/638/
 
 Provide a way to save all audit reports for publication from another server.
+Provide secure timestamps via online timestamp server
+  http://en.wikipedia.org/wiki/Trusted_timestamping
 Do some sort of simple signature via keyed hash based on settings.SECRET_KEY?
 
 Need a logo.  e.g.
@@ -38,6 +63,9 @@ Get setup.py sdist to create empty "incoming" directory; delete DELETEME.txt
 
 Figure out how to include ballot counts (CVRs) in batch?
  from pdf: pyPdf or pdftotext: Total Number of Voters : 568 of 170,066 = 0.33%
+  But note that that doesn't provide ballot counts by type!
+  So e.g. if a batch has both ED and EV votes, may need to just apportion
+  all of them to one type for now, search for zeros later, and reapportion then
  Use csv report?  or excel?
  Based on president, or max of all contests?
  nope: there is no contest that everyone can vote on -
@@ -60,6 +88,9 @@ view /parse/ with get keywords for not sorted, not incremental
  --chronological: track high-water mark, and show error given out-of-order run
  improve feedback somehow: show progress (javascript?)
 
+
+Do more rigorous statistics when proportion is not 100%, given better
+information about audit units around the state.
 
 
 Advise user to use django.middleware.gzip.GZipMiddleware if deploying
@@ -110,26 +141,11 @@ and/or provide gui for parse file input
 Keep track of batches seen, and what is new, and which batch is "previous"
 for use with the 1st in a new run
 
-Find a way to distinguish paper from dre batches and not combine them
- add option ala "don't combine if batch letter 14 is different"
- or general RE logic to compare batch names?
-
 Allow filtering by type or precinct in audit report
 
 Move to bzr-based versions: 0.7-r32 or 0.8.dev-r33 (would want bzr support)
 use the -f option of easy_install for other deps
 move to README.txt?
-
-Deal better with "Not enough ballots for privacy" at end of input for a contest
- complain more loudly, prompt user for OK?
- Save temp db record for next input batch?
-
-Use custom view for more efficiently sorted audit report detail and report.html
-no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
-Separate out Contests by CountyElection in audit report
-Don't assume or check that audit report rows are all in the same sequence
-Put Under, Over at end
-Allow user to sort them by winner or alphabetically
 
 scenarios: test lots of data - speed, ease of fixing problem files
 
@@ -202,6 +218,10 @@ Figure out how to have Contest.margin default to float('nan') without
 Make it easier to provide statistics with appropriate confidence level for race
  print out csv for all contests with blanks
  include sequence number for contest based on order in report?
+
+Add features to record canvassing work: tracking number of ballots
+printed, distributed, counted via each method, provisionals, and other
+aspects of ensuring that the right set of votes were counted.
 
 Packaging:
 ==========

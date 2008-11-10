@@ -98,7 +98,7 @@ class AuditUnit:
 
         if choice in self.votecounts:
             raise ValueError("There are already votes for %s in %s" % (choice, self))
-        self.votecounts[choice] = int(votes)
+        self.votecounts[choice] = int(votes.replace(",", ""))
 
     def contest_ballots(self):
         "Return total number of ballots for this contest, including over, under"

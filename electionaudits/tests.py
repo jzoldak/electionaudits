@@ -17,6 +17,8 @@ class SimpleTest(TestCase):
             import difflib
             s1=string1.split('\n')
             s2=string2.split('\n')
+            #hd = difflib.HtmlDiff()
+            #os.write(savenew, "Diff:\n" + hd.make_file(s1, s2))
             self.failUnlessEqual(string1, string2,
                                  testname + " content differs:\n" +
                                  '\n'.join(difflib.unified_diff(s1, s2) ))
