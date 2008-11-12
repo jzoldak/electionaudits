@@ -162,6 +162,10 @@ def parse_csv(file, options):
 
         choice = r['candidate_name']
 
+        choice = choice.strip()
+        while choice.find("  ") != -1:
+            choice = choice.replace("  ", " ")
+
         if batch != au_AB.batches  or  contest != au_AB.contest:
             logging.debug("now batch '%s' contest '%s' at line %d" % (batch, contest, reader.reader.line_num))
             util.pushAuditUnit(au_AB, min_ballots = options.min_ballots)
@@ -212,7 +216,8 @@ def parse_xml_crystal(file, options):
     # This is a table of fixes for what Boulder needed in the 2008 general
     replacements = [
         (", Vote For 1", ""),
-        ("THE EARNINGS FROM THE INVESTMENT", "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B"),
+        ("THE EARNINGS FROM THE INVESTMENT", "ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J BALLOT ISSUE NO. 3B"),
+        ("BALLOT ITEM REMOVED ", ""),
         ]
 
     values = {}
@@ -224,12 +229,21 @@ def parse_xml_crystal(file, options):
             logging.debug(ET.tostring(contesttree, pretty_print=True))
 
         contest_name = tree[0].text
+
+        while contest_name.find("  ") != -1:
+            contest_name = contest_name.replace("  ", " ")
+
         for old, new in replacements:
             contest_name = contest_name.replace(old, new)
 
-        # hmm - this won't work in primary, when there are multiple
-        # contests per election, one for each party
+        # NOTE: this may not work in primary, if there are multiple
+        # contests with the same name per election, one for each party
         contest = contest_name.strip()
+
+        if options.contest != None and options.contest != contest:
+            logging.debug("skipping %s" % (contest))
+            continue
+
         au_AB = util.AuditUnit(election, contest, "AB", [batch])
         au_EV = util.AuditUnit(election, contest, "EV", [batch])
         au_ED = util.AuditUnit(election, contest, "ED", [batch])
@@ -291,6 +305,12 @@ def parse_xml_crystal(file, options):
                   '{@AB_Votes}': 'Absentee',
                   '{@EA_Votes}': 'Early' } )
 
+            choice = cv['Name']
+            choice = choice.strip()
+            while choice.find("  ") != -1:
+                choice = choice.replace("  ", " ")
+            cv['Name'] = choice
+
             logging.debug("candidate: %s" % cv['Name'])
 
             au_AB.update(cv['Name'], cv['Absentee'])
@@ -346,6 +366,7 @@ def make_audit_unit(totals, newtotals, options):
     for contest in sorted(newtotals):
         if options.contest != None and options.contest != contest:
             continue
+
         if options.subtract:
             for n, o in zip(newtotals[contest], totals[contest]):
                 diff = n.combine(o, subtract=True)

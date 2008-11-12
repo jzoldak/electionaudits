@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Audit Report for {{ object }} | {{ block.super }}{% endblock %}
+{% block title %}{{ object }}: Audit Report | {{ block.super }}{% endblock %}
 
 {% block content %}
 <ul>
@@ -11,16 +11,18 @@
 <ul>
 <li>Overall margin of victory is {{ object.overall_margin|floatformat:3 }}%</li>
 <li>Margin of victory in this county is {{ object.margin|floatformat:3 }}%</li>
-<li>Number of audit units to audit (PPEBWR, {{ object.confidence }}% confidence): {{ object.stats.ppebwr_precincts|floatformat:0 }}</li>
+<li>Number of audit units to audit (NEGEXP, {{ object.confidence }}% confidence): {{ object.stats.negexp_precincts|floatformat:0 }}</li>
 </ul>
 <p>See <a href="#stats">additional statistical information below...</a></p>
 
 <table border="border" cellpadding="5">
 <thead>
- {% for contestbatch in object.contestbatch_set.all|dictsort:"batch" %}
+ {% for contestbatch in object.contestbatch_set.all %}
   {% if forloop.first %}
    <tr>
    <td>AuditUnit</td>
+   <td>Random</td>
+   <td>Threshhold</td>
    <td>Type</td>
    <td>Batches</td>
    <td>Ballots</td>
@@ -35,6 +37,8 @@
    <td></td>
    <td></td>
    <td></td>
+   <td></td>
+   <td></td>
    {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
       <td>{{ votecount.choice.votes }}</td>
    {% endfor %}
@@ -43,9 +47,11 @@
  {% endfor %}
 </thead>
 <tbody>
- {% for contestbatch in object.contestbatch_set.all|dictsort:"batch" %}
+ {% for contestbatch in object.contestbatch_set.all %}
   <tr>
-   <td>{{ forloop.counter|stringformat:"04d" }}</td>
+   <td>{{ forloop.counter|stringformat:"06d" }}</td>
+   <td>{{ contestbatch.batch.ssr|stringformat:"05f" }}</td>
+   <td>{{ contestbatch.threshhold|stringformat:"05f" }}</td>
    <td>{{ contestbatch.batch.type }}</td>
    <td>{{ contestbatch.batch.name }}</td>
    <td>{{ contestbatch.batch.ballots }}</td>
@@ -60,13 +66,13 @@
 
 <h3><a name="stats">Audit statistics</a></h3>
 <p>
-The "Number of audit units to audit" is based on the PPEBWR method, which is very efficient and requires selecting larger audit units
+The "Number of audit units to audit" is based on the NEGEXP method, which is very efficient and requires selecting larger audit units
 with higher probability than smaller ones.
 The numbers given here are based on a confidence 
-level of 92%.  I.e. they are designed so the
+level of {{ object.confidence }}%.  I.e. they are designed so the
 audit will either 1) find a discrepancy and call for an escalation or
 full hand recount, or 2) reduce the risk of confirming an incorrect
-outcome to 8%, even if the tally system has been manipulated.
+outcome to (100 - {{ object.confidence }})%, even if the tally system has been manipulated.
 A maximum "within-precinct-miscount" of 20% is assumed.
 See <a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
 On Auditing Elections When Precincts Have Different Sizes, by Javed

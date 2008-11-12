@@ -1,8 +1,8 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
-Set sequence of Choices on first save
+Handle subdirectories or glob in incoming for windows.  handle zips also?
 
-Handle subdirectories in incoming.  handle zips also?
+Add threshhold and priority (threshhold/random) to report(), and sort by prio
 
 Use custom view for more efficiently sorted audit report detail and report.html
 no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
@@ -10,6 +10,18 @@ Separate out Contests by CountyElection in audit report
 Don't assume or check that audit report rows are all in the same sequence
 Put Under, Over at end
 Allow user to sort them by winner or alphabetically
+combine/merge based on total ballots
+
+Figure out how to include MBB ballot counts (CVRs) in batch?
+ from pdf: pyPdf or pdftotext: Total Number of Voters : 568 of 170,066 = 0.33%
+  But note that that doesn't provide ballot counts by type!
+  So e.g. if a batch has both ED and EV votes, may need to just apportion
+  all of them to one type for now, search for zeros later, and reapportion then
+ Use csv report?  or excel?
+ Based on president, or max of all contests?
+ nope: there is no contest that everyone can vote on -
+   e.g. a dozen absentee landowners can't vote for president in Boulder County?
+ too bad @ballots_cast != 'Total Number of Voters' from pdf?
 
 In new custom report view add column for selection, highlight selected
 Error for -s with only one batch?
@@ -18,11 +30,17 @@ report.html: Incorporate style="text-align: right;" into css
 Put explanatory notes (e.g. about margins) in FAQ or help html,
 and add link from report, reports, etc
 
+Set sequence of Choices on first save
+
+cache Contest.stats()
+parsers: cache election, batch and contest lookups for better speed
+
+Get --contest working again
+Add custom combining/merging of contestbatches post-parse
+
 Deal better with "Not enough ballots for privacy" at end of input for a contest
  complain more loudly, prompt user for OK?
  Save temp db record for next input batch?
-
-cache election, batch and contest lookups for better speed
 
 Provide help for selecting contests weighted by inverse margin up to 1/.005
 
@@ -42,6 +60,8 @@ Append batchid to type, not batch, for csv input?
 Peel it off of file name for xml?
 
 parsers.py: accept xml precinct reports also
+Parse data from San Diego - easy csv format in Election Night Results Export.zip
+ http://www.sdcounty.ca.gov/voters/Eng/rov_highlights.shtml
 
 Add version number to database, check it, maybe auto-convert.
 Make it easy to run with debug but no other dependencies.
@@ -60,17 +80,6 @@ Need a logo.  e.g.
    colored/highlighted/focussed/whatever - colored magnifying glass?
 
 Get setup.py sdist to create empty "incoming" directory; delete DELETEME.txt
-
-Figure out how to include ballot counts (CVRs) in batch?
- from pdf: pyPdf or pdftotext: Total Number of Voters : 568 of 170,066 = 0.33%
-  But note that that doesn't provide ballot counts by type!
-  So e.g. if a batch has both ED and EV votes, may need to just apportion
-  all of them to one type for now, search for zeros later, and reapportion then
- Use csv report?  or excel?
- Based on president, or max of all contests?
- nope: there is no contest that everyone can vote on -
-   e.g. a dozen absentee landowners can't vote for president in Boulder County?
- too bad @ballots_cast != 'Total Number of Voters' from pdf?
 
 Add pdf file name to batch model
 Add xml file modification date to batch model
@@ -223,6 +232,8 @@ Add features to record canvassing work: tracking number of ballots
 printed, distributed, counted via each method, provisionals, and other
 aspects of ensuring that the right set of votes were counted.
 
+for --contest, don't create other contests in AuditUnit.__init__()
+
 Packaging:
 ==========
 Currently for each new release:
@@ -272,3 +283,9 @@ look at output during easy_install of lxml
 setup.py register sdist bdist_egg upload --sign
 
 describe how to host on google app engine
+
+NOTE
+====
+In primary elections, when there may be multiple contests with the same
+name per election (one for each party) the contest name extracted in
+parsers.py needs to include the party name.

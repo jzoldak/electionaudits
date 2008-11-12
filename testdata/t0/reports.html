@@ -31,13 +31,13 @@ the Margin calculated based on just the ballots reflected in the given report.
 </p>
 <p>Information on two alternative auditing sampling methods is presented:
 SAFE (in which each audit unit has an equal chance of being picked).
-and PPEBWR (which is more efficient and requires selecting larger audit units
+and NEGEXP (which is more efficient and requires selecting larger audit units
 with higher probability than smaller ones).
 The numbers given here are based on the given confidence 
 level.  I.e. they are designed so the
 audit will either 1) find a discrepancy and call for an escalation or
 full hand recount, or 2) reduce the risk of confirming an incorrect
-outcome to 25% (for a confidence level of 75%),
+outcome to e.g. 25% (for a confidence level of 75%),
 even if the tally system has been manipulated.
 A maximum "within-precinct-miscount" of 20% is assumed.
 See <a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
@@ -54,10 +54,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td>Confidence %</td>
  <td>Proportion %</td>
  <td>Units to audit: NEGEXP</td>
- <td>Units to audit: PPEBWR</td>
+
  <td>Units to audit: SAFE</td>
  <td>Ballots to audit: NEGEXP</td>
- <td>Ballots to audit: PPEBWR</td>
+
  <td>Ballots to audit: SAFE</td>
 </tr>
 </thead>
@@ -71,10 +71,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.5</td>
- <td style="text-align: right;">2.6</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">62</td>
- <td style="text-align: right;">65</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -86,10 +86,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.5</td>
- <td style="text-align: right;">2.6</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">62</td>
- <td style="text-align: right;">65</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -101,10 +101,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.8</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">37</td>
- <td style="text-align: right;">45</td>
+
  <td style="text-align: right;">45</td>
 </tr>
         
@@ -116,10 +116,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.9</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">27</td>
- <td style="text-align: right;">30</td>
+
  <td style="text-align: right;">30</td>
 </tr>
         
@@ -131,10 +131,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.7</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">31</td>
- <td style="text-align: right;">45</td>
+
  <td style="text-align: right;">45</td>
 </tr>
         
@@ -146,10 +146,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.5</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">4</td>
- <td style="text-align: right;">9</td>
+
  <td style="text-align: right;">9</td>
 </tr>
         
@@ -161,10 +161,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.0</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">50</td>
- <td style="text-align: right;">50</td>
+
  <td style="text-align: right;">50</td>
 </tr>
         
@@ -176,10 +176,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.9</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">14</td>
- <td style="text-align: right;">16</td>
+
  <td style="text-align: right;">16</td>
 </tr>
         
@@ -191,10 +191,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.7</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">1</td>
- <td style="text-align: right;">2</td>
+
  <td style="text-align: right;">2</td>
 </tr>
         
@@ -206,10 +206,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.9</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">15</td>
- <td style="text-align: right;">17</td>
+
  <td style="text-align: right;">17</td>
 </tr>
         
@@ -221,10 +221,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.0</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">39</td>
- <td style="text-align: right;">39</td>
+
  <td style="text-align: right;">39</td>
 </tr>
         
@@ -236,10 +236,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.5</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">4</td>
- <td style="text-align: right;">9</td>
+
  <td style="text-align: right;">9</td>
 </tr>
         
@@ -251,10 +251,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.8</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">6</td>
- <td style="text-align: right;">8</td>
+
  <td style="text-align: right;">8</td>
 </tr>
         
@@ -266,10 +266,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.1</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">28</td>
- <td style="text-align: right;">25</td>
+
  <td style="text-align: right;">25</td>
 </tr>
         
@@ -281,10 +281,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.7</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">31</td>
- <td style="text-align: right;">47</td>
+
  <td style="text-align: right;">47</td>
 </tr>
         
@@ -296,10 +296,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.6</td>
- <td style="text-align: right;">1.7</td>
+
  <td style="text-align: right;">2.0</td>
  <td style="text-align: right;">40</td>
- <td style="text-align: right;">42</td>
+
  <td style="text-align: right;">50</td>
 </tr>
         
@@ -311,10 +311,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.7</td>
- <td style="text-align: right;">1.7</td>
+
  <td style="text-align: right;">2.0</td>
  <td style="text-align: right;">43</td>
- <td style="text-align: right;">42</td>
+
  <td style="text-align: right;">50</td>
 </tr>
         
@@ -326,10 +326,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.7</td>
- <td style="text-align: right;">1.7</td>
+
  <td style="text-align: right;">2.0</td>
  <td style="text-align: right;">42</td>
- <td style="text-align: right;">42</td>
+
  <td style="text-align: right;">50</td>
 </tr>
         
@@ -341,220 +341,220 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.2</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">29</td>
- <td style="text-align: right;">25</td>
+
  <td style="text-align: right;">25</td>
 </tr>
         
 <tr>
- <td><a href="20">JUSTICE OF THE COLORADO SUPREME COURT  Allison H. Eid</a></td>
+ <td><a href="20">JUSTICE OF THE COLORADO SUPREME COURT Allison H. Eid</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">8.000</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.7</td>
- <td style="text-align: right;">2.8</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">68</td>
- <td style="text-align: right;">71</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="21">JUSTICE OF THE COLORADO SUPREME COURT  Gregory J. Hobbs Jr.</a></td>
+ <td><a href="21">JUSTICE OF THE COLORADO SUPREME COURT Gregory J. Hobbs Jr.</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">5.333</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.9</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">73</td>
- <td style="text-align: right;">74</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="22">COURT OF APPEALS  Steven L. Bernard</a></td>
+ <td><a href="22">COURT OF APPEALS Steven L. Bernard</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">8.000</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.7</td>
- <td style="text-align: right;">2.8</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">68</td>
- <td style="text-align: right;">71</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="23">COURT OF APPEALS  David M. Furman</a></td>
+ <td><a href="23">COURT OF APPEALS David M. Furman</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">2.667</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">3.0</td>
- <td style="text-align: right;">3.0</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">75</td>
- <td style="text-align: right;">75</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="24">COURT OF APPEALS  Robert D. Hawthorne</a></td>
+ <td><a href="24">COURT OF APPEALS Robert D. Hawthorne</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">5.333</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.9</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">73</td>
- <td style="text-align: right;">74</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="25">COURT OF APPEALS  Jerry N. Jones</a></td>
+ <td><a href="25">COURT OF APPEALS Jerry N. Jones</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">20.000</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.8</td>
- <td style="text-align: right;">1.7</td>
+
  <td style="text-align: right;">2.0</td>
  <td style="text-align: right;">45</td>
- <td style="text-align: right;">42</td>
+
  <td style="text-align: right;">50</td>
 </tr>
         
 <tr>
- <td><a href="26">COURT OF APPEALS  Gilbert M. Roman</a></td>
+ <td><a href="26">COURT OF APPEALS Gilbert M. Roman</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">5.333</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.9</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">73</td>
- <td style="text-align: right;">74</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="27">COURT OF APPEALS  Diana L. Terry</a></td>
+ <td><a href="27">COURT OF APPEALS Diana L. Terry</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">9.333</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.6</td>
- <td style="text-align: right;">2.7</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">65</td>
- <td style="text-align: right;">68</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="28">DISTRICT JUDGE 20th JUDICIAL DISTRICT  Roxanne Bailin</a></td>
+ <td><a href="28">DISTRICT JUDGE 20th JUDICIAL DISTRICT Roxanne Bailin</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">12.000</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.4</td>
- <td style="text-align: right;">2.4</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">59</td>
- <td style="text-align: right;">60</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="29">DISTRICT JUDGE 20th JUDICIAL DISTRICT  Maria E. Berkenkotter</a></td>
+ <td><a href="29">DISTRICT JUDGE 20th JUDICIAL DISTRICT Maria E. Berkenkotter</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">14.667</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.1</td>
- <td style="text-align: right;">2.4</td>
+
  <td style="text-align: right;">2.0</td>
  <td style="text-align: right;">54</td>
- <td style="text-align: right;">60</td>
+
  <td style="text-align: right;">50</td>
 </tr>
         
 <tr>
- <td><a href="30">DISTRICT JUDGE 20th JUDICIAL DISTRICT  James C. Klein</a></td>
+ <td><a href="30">DISTRICT JUDGE 20th JUDICIAL DISTRICT James C. Klein</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">5.333</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.9</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">73</td>
- <td style="text-align: right;">74</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="31">DISTRICT JUDGE 20th JUDICIAL DISTRICT  M. Gwyneth Whalen</a></td>
+ <td><a href="31">DISTRICT JUDGE 20th JUDICIAL DISTRICT M. Gwyneth Whalen</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">2.667</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">3.0</td>
- <td style="text-align: right;">3.0</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">75</td>
- <td style="text-align: right;">75</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="32">COUNTY JUDGE - BOULDER  Thomas J.B. Reed</a></td>
+ <td><a href="32">COUNTY JUDGE - BOULDER Thomas J.B. Reed</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">6.667</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.8</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">70</td>
- <td style="text-align: right;">72</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
 <tr>
- <td><a href="33">COUNTY JUDGE - BOULDER  John F. Stavely</a></td>
+ <td><a href="33">COUNTY JUDGE - BOULDER John F. Stavely</a></td>
  <td style="text-align: right;">3</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">5.333</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.9</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">73</td>
- <td style="text-align: right;">74</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -566,10 +566,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.4</td>
- <td style="text-align: right;">2.4</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">59</td>
- <td style="text-align: right;">60</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -581,10 +581,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">3.0</td>
- <td style="text-align: right;">3.0</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">75</td>
- <td style="text-align: right;">75</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -596,10 +596,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.4</td>
- <td style="text-align: right;">2.4</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">59</td>
- <td style="text-align: right;">60</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -611,10 +611,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.1</td>
- <td style="text-align: right;">2.1</td>
+
  <td style="text-align: right;">2.0</td>
  <td style="text-align: right;">51</td>
- <td style="text-align: right;">53</td>
+
  <td style="text-align: right;">50</td>
 </tr>
         
@@ -626,10 +626,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.5</td>
- <td style="text-align: right;">2.6</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">62</td>
- <td style="text-align: right;">65</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -641,10 +641,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.8</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">70</td>
- <td style="text-align: right;">72</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -656,10 +656,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.4</td>
- <td style="text-align: right;">2.4</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">59</td>
- <td style="text-align: right;">60</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -671,10 +671,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
  <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
 </tr>
         
@@ -686,10 +686,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.6</td>
- <td style="text-align: right;">2.7</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">65</td>
- <td style="text-align: right;">68</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -701,10 +701,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.7</td>
- <td style="text-align: right;">2.8</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">68</td>
- <td style="text-align: right;">71</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -716,10 +716,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.8</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">70</td>
- <td style="text-align: right;">72</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -731,10 +731,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.5</td>
- <td style="text-align: right;">2.6</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">62</td>
- <td style="text-align: right;">65</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -746,10 +746,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">3.0</td>
- <td style="text-align: right;">3.0</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">75</td>
- <td style="text-align: right;">75</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -761,10 +761,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">3.0</td>
- <td style="text-align: right;">3.0</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">74</td>
- <td style="text-align: right;">75</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -776,10 +776,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">3.0</td>
- <td style="text-align: right;">3.0</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">75</td>
- <td style="text-align: right;">75</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -791,10 +791,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.8</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">70</td>
- <td style="text-align: right;">72</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -806,10 +806,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.9</td>
- <td style="text-align: right;">2.9</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">73</td>
- <td style="text-align: right;">74</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -821,10 +821,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">3.0</td>
- <td style="text-align: right;">3.0</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">75</td>
- <td style="text-align: right;">75</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -836,10 +836,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.7</td>
- <td style="text-align: right;">1.7</td>
+
  <td style="text-align: right;">2.0</td>
  <td style="text-align: right;">42</td>
- <td style="text-align: right;">42</td>
+
  <td style="text-align: right;">50</td>
 </tr>
         
@@ -851,10 +851,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">2.5</td>
- <td style="text-align: right;">2.6</td>
+
  <td style="text-align: right;">3.0</td>
  <td style="text-align: right;">62</td>
- <td style="text-align: right;">65</td>
+
  <td style="text-align: right;">75</td>
 </tr>
         
@@ -866,10 +866,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.0</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">14</td>
- <td style="text-align: right;">14</td>
+
  <td style="text-align: right;">14</td>
 </tr>
         
@@ -881,10 +881,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.9</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">13</td>
- <td style="text-align: right;">14</td>
+
  <td style="text-align: right;">14</td>
 </tr>
         
@@ -896,10 +896,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.0</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">14</td>
- <td style="text-align: right;">14</td>
+
  <td style="text-align: right;">14</td>
 </tr>
         
@@ -911,10 +911,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.9</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">13</td>
- <td style="text-align: right;">14</td>
+
  <td style="text-align: right;">14</td>
 </tr>
         
@@ -926,10 +926,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
  <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
 </tr>
         
@@ -941,10 +941,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.9</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">13</td>
- <td style="text-align: right;">14</td>
+
  <td style="text-align: right;">14</td>
 </tr>
         
@@ -956,10 +956,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.9</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">12</td>
- <td style="text-align: right;">14</td>
+
  <td style="text-align: right;">14</td>
 </tr>
         
@@ -971,10 +971,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.8</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">16</td>
- <td style="text-align: right;">20</td>
+
  <td style="text-align: right;">20</td>
 </tr>
         
@@ -986,10 +986,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.8</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">15</td>
- <td style="text-align: right;">20</td>
+
  <td style="text-align: right;">20</td>
 </tr>
         
@@ -1001,10 +1001,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
  <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
 </tr>
         
@@ -1016,10 +1016,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
  <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
 </tr>
         
@@ -1031,40 +1031,40 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
  <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
 </tr>
         
 <tr>
- <td><a href="66">ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3A</a></td>
+ <td><a href="66">ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J BALLOT ISSUE NO. 3A</a></td>
  <td style="text-align: right;">1</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">40.000</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.8</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">22</td>
- <td style="text-align: right;">30</td>
+
  <td style="text-align: right;">30</td>
 </tr>
         
 <tr>
- <td><a href="67">ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J  BALLOT ISSUE NO. 3B</a></td>
+ <td><a href="67">ST VRAIN VALLEY SCHOOL DISTRICT NO. RE-1J BALLOT ISSUE NO. 3B</a></td>
  <td style="text-align: right;">1</td>
  <td style="text-align: right;"></td>
  <td style="text-align: right;">6.667</td>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">1.0</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">30</td>
- <td style="text-align: right;">30</td>
+
  <td style="text-align: right;">30</td>
 </tr>
         
@@ -1076,10 +1076,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.9</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">11</td>
- <td style="text-align: right;">12</td>
+
  <td style="text-align: right;">12</td>
 </tr>
         
@@ -1091,10 +1091,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;">0.4</td>
- <td style="text-align: right;">1.0</td>
+
  <td style="text-align: right;">1.0</td>
  <td style="text-align: right;">0</td>
- <td style="text-align: right;">1</td>
+
  <td style="text-align: right;">1</td>
 </tr>
         
@@ -1106,10 +1106,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
  <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
 </tr>
         
@@ -1121,10 +1121,10 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">75</td>
  <td style="text-align: right;">100</td>
  <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
  <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
- <td style="text-align: right;"></td>
+
  <td style="text-align: right;"></td>
 </tr>
         

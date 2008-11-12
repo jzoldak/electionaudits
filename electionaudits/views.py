@@ -7,6 +7,14 @@ from django.contrib.admin.views.decorators import staff_member_required
 from electionaudits.models import *
 import electionaudits.parsers
 
+"""
+display calc for "overall margin"
+{%if proportion is 100%, use margin
+else if missing, say <strong>MISSING</strong>
+else
+ {{ object.overall_margin|floatformat:3 }}%
+"""
+
 def report(request, contest):
     # Look up the contest (and raise a 404 if it can't be found).
     try:

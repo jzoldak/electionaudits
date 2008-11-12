@@ -572,7 +572,9 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     print "    expected number of precincts audited = ",u
     A = sum([pn[i]*v[i] for i in range(n)])
     print "    expected workload = ",A,"votes counted"
-    results.update({'negexp_precincts': u, 'negexp_work': A, 'negexp_confidence': None})
+    results.update({'negexp_precincts': u,
+                    'negexp_work': A,
+                    'negexp_w': wn })
 
     if __name__ == "__main__":
         plotprobs(title,pn)

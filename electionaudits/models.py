@@ -9,6 +9,7 @@ import StringIO
 from django.db import models
 from django.core.cache import cache
 from electionaudits import varsize
+import electionaudits.erandom as erandom
 
 class CountyElection(models.Model):
     "An election, comprising a set of Contests and Batches of votes"
@@ -94,6 +95,12 @@ class Batch(models.Model):
     notes = models.CharField(max_length=200, null=True, blank=True,
                     help_text="Free-form notes" )
 
+    def ssr(self):
+        """Sum of Square Roots (SSR) pseudorandom number calculated from
+        batch id and the random seed for the election"""
+
+        return erandom.ssr(self.id, self.election.random_seed)
+
     def __unicode__(self):
         return "%s:%s" % (self.name, self.type)
 
@@ -109,6 +116,9 @@ class ContestBatch(models.Model):
                     help_text="Whether audit unit has been selected for audit" )
     notes = models.CharField(max_length=200, null=True, blank=True,
                     help_text="Free-form notes" )
+    def threshhold(self):
+        wpm = 0.2
+        return "" # 1.0 - math.exp(-(self.contest_ballots() * 2.0 * wpm) / self.contest.stats()['negexp_w'])
 
     def contest_ballots(self):
         return sum(a.votes for a in self.votecount_set.all())
