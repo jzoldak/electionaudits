@@ -79,6 +79,24 @@ class Contest(models.Model):
         # cbs = [(500,)]*300 + [(200,)]*200 + [(40,)]*100
         return selection_stats(cbs, m/100.0, self.name, alpha=((100-self.confidence)/100.0), proportion=self.proportion)
 
+    def threshhold(self):
+        if (self.overall_margin  or  self.margin):
+            return 1.0 / (self.overall_margin  or  self.margin)
+        else:
+            return ""
+
+    def ssr(self):
+        """Sum of Square Roots (SSR) pseudorandom number calculated from
+        our id and the random seed for the election"""
+
+        return erandom.ssr(self.id, self.election.random_seed)
+
+    def priority(self):
+        if self.ssr() == ""  or  self.threshhold() == "":
+            return ""
+        else:
+            return self.threshhold() / self.ssr()
+
     def __unicode__(self):
         return "%s" % (self.name)
 

@@ -45,6 +45,9 @@ Deal better with "Not enough ballots for privacy" at end of input for a contest
 
 Provide help for selecting contests weighted by inverse margin up to 1/.005
 
+Check out generating this message because of entry in admin after reboot:
+ 403 Forbidden Cross Site Request Forgery detected. Request aborted.
+
 Validation: Should dtd url be in DOCTYPE?  Add character encoding?
 
 Synergy between selections for different contests to count multiple

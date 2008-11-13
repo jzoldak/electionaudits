@@ -1,5 +1,9 @@
 2008-11-13    <neal@bcn.boulder.co.us>
 
+	* electionaudits/models.py (Contest.priority): 
+	Add random selection, threshholds and priorities to /reports/ view
+	and Contest class.
+	
 	* electionaudits/views.py (report): 
 	Use custom view for /audit_report/<contest>/
 	Add threshhold and priority (threshhold/random), and sort by priority

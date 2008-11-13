@@ -31,6 +31,9 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td>Audit Units</td>
  <td>Overall Margin %</td>
  <td>Margin %</td>
+ <td>Threshhold</td>
+ <td>Random</td>
+ <td>Priority</td>
  <td>Confidence %</td>
  <td>Proportion %</td>
  <td>Units to audit: NEGEXP</td>
@@ -52,6 +55,9 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
  <td style="text-align: right;">{{ contest.contestbatch_set.all|length }}</td>
  <td style="text-align: right;">{{ contest.overall_margin|floatformat:3 }}</td>
  <td style="text-align: right;">{{ contest.margin|floatformat:3 }}</td>
+ <td style="text-align: right;">{{ contest.threshhold|floatformat:5 }}</td>
+ <td style="text-align: right;">{{ contest.ssr|floatformat:5 }}</td>
+ <td style="text-align: right;">{{ contest.priority|floatformat:5 }}</td>
  <td style="text-align: right;">{{ contest.confidence }}</td>
  <td style="text-align: right;">{{ contest.proportion|floatformat:0 }}</td>
  <td style="text-align: right;">{{ contest.stats.negexp_precincts|floatformat:1 }}</td>
