@@ -1,5 +1,9 @@
 2008-11-12    <neal@bcn.boulder.co.us>
 
+	* root/templates/base.html: 
+	cleaner mirroring: style.css => /media/style.css
+	 and add trailing slash to urls like /report/1
+	
 	* electionaudits/parsers.py (parse_xml_crystal): 
 	Normalize contest names and candidate names: strip extra white space
 	in case different databases vary them for subtle formatting reasons
