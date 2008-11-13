@@ -1,3 +1,17 @@
+2008-11-13    <neal@bcn.boulder.co.us>
+
+	* electionaudits/views.py (report): 
+	Use custom view for /audit_report/<contest>/
+	Add threshhold and priority (threshhold/random), and sort by priority
+	Return blanks in ssr and priority if seed is not 15 chars long
+	
+	* root/templates/base.html: 
+	display links across one line at the top
+	
+	* electionaudits/tests.py (SimpleTest.test_reports): 
+	resume tests of diffs against report.html
+
+	
 2008-11-12    <neal@bcn.boulder.co.us>
 
 	* root/templates/base.html: 

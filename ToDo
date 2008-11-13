@@ -1,13 +1,14 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
-Handle subdirectories or glob in incoming for windows.  handle zips also?
+Get threshhold stats appropriate for races with less than 100% proportion
+Control audit report with GET params for sorting, masking results etc
 
-Add threshhold and priority (threshhold/random) to report(), and sort by prio
+Handle subdirectories or glob in incoming for windows.  handle zips also?
 
 Use custom view for more efficiently sorted audit report detail and report.html
 no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
 Separate out Contests by CountyElection in audit report
-Don't assume or check that audit report rows are all in the same sequence
+Don't assume, or check, that audit report rows are all in the same sequence
 Put Under, Over at end
 Allow user to sort them by winner or alphabetically
 combine/merge based on total ballots
@@ -43,6 +44,8 @@ Deal better with "Not enough ballots for privacy" at end of input for a contest
  Save temp db record for next input batch?
 
 Provide help for selecting contests weighted by inverse margin up to 1/.005
+
+Validation: Should dtd url be in DOCTYPE?  Add character encoding?
 
 Synergy between selections for different contests to count multiple
 contests on same batch: Use NEGEXP, setting probability for each batch,

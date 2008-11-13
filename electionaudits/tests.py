@@ -40,19 +40,8 @@ class SimpleTest(TestCase):
 
         response = self.client.get('/reports/1/')
         self.failUnlessEqual(response.status_code, 200)
-
-        """
-        comment out until the sort order is always the same.
-
         prev_content = open("../testdata/t0/report.html").read()
-        if response.content != prev_content:
-            import difflib
-            s1=prev_content.split('\n')
-            s2=response.content.split('\n')
-            self.failUnlessEqual(response.content, prev_content,
-                                 "/reports/1 output differs:\n" +
-                                 '\n'.join(difflib.unified_diff(s1, s2) ))
-        """
+        self.failDiffUnlessEqual(prev_content, response.content, "/reports/1/")
 
     def test_stats(self):
         "Try /stats/"

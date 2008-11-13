@@ -1,4 +1,5 @@
 import os
+import operator
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import list_detail
@@ -7,31 +8,43 @@ from django.contrib.admin.views.decorators import staff_member_required
 from electionaudits.models import *
 import electionaudits.parsers
 
-"""
-display calc for "overall margin"
-{%if proportion is 100%, use margin
-else if missing, say <strong>MISSING</strong>
-else
- {{ object.overall_margin|floatformat:3 }}%
-"""
-
 def report(request, contest):
-    # Look up the contest (and raise a 404 if it can't be found).
-    try:
-        contest = Contest.objects.get(name__iexact=contest)
-    except Contest.DoesNotExist:
-        raise Http404
+    """Generate audit report for all ContestBatches and VoteCounts
+    associated  with the contest"""
 
-    #assert False, VoteCount.objects.filter(contest=contest)
+    contest = get_object_or_404(Contest, id=contest)
 
-    # Use the object_list view for the heavy lifting.
-    return list_detail.object_list(
-        request,
-        queryset = VoteCount.objects.filter(contest=contest),
-        template_name = "report.html",
-        template_object_name = "votecounts",
-        extra_context = {"contest" : contest}
-    )
+    stats = contest.stats()
+
+    contest_batches = contest.contestbatch_set.all()
+
+    wpm = 0.2
+
+    audit_units = []
+    for cb in contest_batches:
+        cb.ssr = cb.batch.ssr()
+        cb.threshhold = 1.0 - math.exp(-(cb.contest_ballots() * 2.0 * wpm) / stats['negexp_w'])
+        if cb.ssr != "":
+            cb.priority = cb.threshhold / cb.ssr
+        else:
+            cb.priority = ""
+        audit_units.append(cb)
+
+    if audit_units[0].priority != "":
+        audit_units.sort(reverse=True, key=operator.attrgetter('priority'))
+
+    """
+    display calc for "overall margin"
+    {%if proportion is 100%, use margin
+    else if missing, say <strong>MISSING</strong>
+    else
+    {{ object.overall_margin|floatformat:3 }}%
+    """
+
+    return render_to_response('electionaudits/report.html',
+                              {'contest': contest,
+                               'contest_batches': audit_units,
+                               'stats': stats } )
 
 @staff_member_required
 def parse(request):

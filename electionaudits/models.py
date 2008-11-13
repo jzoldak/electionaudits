@@ -116,9 +116,10 @@ class ContestBatch(models.Model):
                     help_text="Whether audit unit has been selected for audit" )
     notes = models.CharField(max_length=200, null=True, blank=True,
                     help_text="Free-form notes" )
+
     def threshhold(self):
         wpm = 0.2
-        return "" # 1.0 - math.exp(-(self.contest_ballots() * 2.0 * wpm) / self.contest.stats()['negexp_w'])
+        return 1.0 - math.exp(-(self.contest_ballots() * 2.0 * wpm) / self.contest.stats()['negexp_w'])
 
     def contest_ballots(self):
         return sum(a.votes for a in self.votecount_set.all())

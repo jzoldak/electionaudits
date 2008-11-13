@@ -44,6 +44,9 @@ def ssr(precinct, seed):
     vs from paper: xi = 0.93591273640858040364659219
     """
 
+    if not seed  or  len(seed) < 15:
+        return ""
+
     p = "%06d" % precinct
     return math.modf(math.sqrt(int(p[0:2] + seed[ 0: 5])) +
                      math.sqrt(int(p[2:4] + seed[ 5:10])) +

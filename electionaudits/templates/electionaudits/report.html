@@ -1,28 +1,29 @@
 {% extends "base.html" %}
-{% block title %}{{ object }}: Audit Report | {{ block.super }}{% endblock %}
+{% block title %}{{ contest }}: Audit Report | {{ block.super }}{% endblock %}
 
 {% block content %}
 <ul>
 <li><a href="..">Up</a></li>
 </ul>
-    <h2>Audit Report for {{ object }}</h2>
-<p>Number of audit units: {{ object.contestbatch_set.all|length }}</p>
-<p>Proportion of the total number of votes for this contest that were cast within this county: {{ object.proportion|floatformat:1 }}%</p>
+    <h2>Audit Report for {{ contest }}</h2>
+<p>Proportion of the total number of votes for this contest that were cast within this county: {{ contest.proportion|floatformat:1 }}%</p>
 <ul>
-<li>Overall margin of victory is {{ object.overall_margin|floatformat:3 }}%</li>
-<li>Margin of victory in this county is {{ object.margin|floatformat:3 }}%</li>
-<li>Number of audit units to audit (NEGEXP, {{ object.confidence }}% confidence): {{ object.stats.negexp_precincts|floatformat:1 }}</li>
+<li>Overall margin of victory: {{ contest.overall_margin|floatformat:3 }}%</li>
+<li>Margin of victory in this county: {{ contest.margin|floatformat:3 }}%</li>
+<li>Number of audit units in this county: {{ contest.contestbatch_set.all|length }}</li>
+<li>Number of audit units to audit (NEGEXP, {{ contest.confidence }}% confidence): {{ stats.negexp_precincts|floatformat:1 }}</li>
 </ul>
 <p>See <a href="#stats">additional statistical information below...</a></p>
 
 <table border="border" cellpadding="5">
 <thead>
- {% for contestbatch in object.contestbatch_set.all %}
+ {% for contestbatch in contest.contestbatch_set.all %}
   {% if forloop.first %}
    <tr>
-   <td>AuditUnit</td>
-   <td>Random</td>
+   <td>Batch Seq</td>
    <td>Threshhold</td>
+   <td>Random</td>
+   <td>Priority</td>
    <td>Type</td>
    <td>Batches</td>
    <td>Ballots</td>
@@ -39,6 +40,7 @@
    <td></td>
    <td></td>
    <td></td>
+   <td></td>
    {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
       <td>{{ votecount.choice.votes }}</td>
    {% endfor %}
@@ -46,20 +48,25 @@
   {% endif %}
  {% endfor %}
 </thead>
+
 <tbody>
- {% for contestbatch in object.contestbatch_set.all %}
+ {% for contestbatch in contest_batches %}
+  {% with contestbatch.batch as batch %}
   <tr>
-   <td>{{ forloop.counter|stringformat:"06d" }}</td>
-   <td>{{ contestbatch.batch.ssr|stringformat:"05f" }}</td>
+
+   <td>{{ batch.id|stringformat:"06d" }}</td>
    <td>{{ contestbatch.threshhold|stringformat:"05f" }}</td>
-   <td>{{ contestbatch.batch.type }}</td>
-   <td>{{ contestbatch.batch.name }}</td>
-   <td>{{ contestbatch.batch.ballots }}</td>
+   <td>{{ contestbatch.ssr|stringformat:"05f" }}</td>
+   <td>{{ contestbatch.priority|stringformat:"05f" }}</td>
+   <td>{{ batch.type }}</td>
+   <td>{{ batch.name }}</td>
+   <td>{{ batch.ballots }}</td>
    <td>{{ contestbatch.contest_ballots }}</td>
    {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
      <td><b>{{ votecount.votes }}</b></td>
    {% endfor %}
   </tr>
+  {% endwith %}
  {% endfor %}
 </tbody>
 </table>
@@ -69,16 +76,16 @@
 The "Number of audit units to audit" is based on the NEGEXP method, which is very efficient and requires selecting larger audit units
 with higher probability than smaller ones.
 The numbers given here are based on a confidence 
-level of {{ object.confidence }}%.  I.e. they are designed so the
+level of {{ contest.confidence }}%.  I.e. they are designed so the
 audit will either 1) find a discrepancy and call for an escalation or
 full hand recount, or 2) reduce the risk of confirming an incorrect
-outcome to (100 - {{ object.confidence }})%, even if the tally system has been manipulated.
+outcome to (100 - {{ contest.confidence }})%, even if the tally system has been manipulated.
 A maximum "within-precinct-miscount" of 20% is assumed.
 See <a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
 On Auditing Elections When Precincts Have Different Sizes, by Javed
 A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
 
 <pre>
-{{ object.stats.prose }}
+{{ stats.prose }}
 </pre>
 {% endblock %}
