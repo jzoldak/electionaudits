@@ -22,19 +22,21 @@ It helps with several facets of the task of auditing elections:
    based on the margin, number, size, and results of the audit units.
    Support for PPEBWR, SAFE, and NEGEXP is provided, with more on the
    drawing board.
- * Ad-hoc query form lets you quickly enter information about hypothetical
+ * Supports augmenting dice throws with the "Sum of Square Roots" (SSR)
+   Pseudorandom Sampling Method to select which audit units to audit and/or
+   which contests to audit, based on margin size.
+ * Ad-hoc calculator form lets you quickly enter information about hypothetical
    contests and get selection statistics for them also.  This supports
    planning for future audits, e.g. deciding how many batches to report
    on so as to minimize the fraction of the ballots you'll have to audit.
- * Helps candidates target unusual audit units for elective audit [planned]
+ * Provides information to help candidates, parties, or other observers
+   target unusual audit units for elective audit.
  * Convenient platform for publication and archiving of auditable reports
    for the public.
- * Reports "bins" next to audit units to speed random selection with dice.
-   [planned]
 
 The software is "Open source" via the very permissive MIT license.  It
-can be used with no obligation by anyone from elections officials, to
-citizens to election system vendors.
+can be used with no obligation, by anyone from elections officials, to
+citizens to Election Management System vendors.
 
 
 For up-to-date information, see the project home page at
@@ -45,7 +47,8 @@ For up-to-date information, see the project home page at
 Authors
 =======
 Neal McBurnett
-Ronald L. Rivest
+
+Includes a variant of varsize.py from Ronald L. Rivest
 
 Copyright and License ("MIT" aka "X11" license)
 =====================

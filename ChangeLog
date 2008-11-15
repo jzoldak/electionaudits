@@ -1,3 +1,20 @@
+2008-11-15    <neal@bcn.boulder.co.us>
+
+	This is the state of the software as it was used to publish
+	the initial reports and selections on Thursday/Friday.
+	
+	* electionaudits/templates/electionaudits/reports.html: 
+	Add random selection of contests
+	
+	* electionaudits/templates/electionaudits/report.html: 
+	Add /selection/ url as a clone of /reports/ with random input
+	
+	* electionaudits/templates/electionaudits/index.html: 
+	Customize home page for Boulder
+	Change Home page link on base.html, comment out other links
+	
+	Update README, ToDo (as usual....)
+	
 2008-11-13    <neal@bcn.boulder.co.us>
 
 	* electionaudits/models.py (Contest.priority): 

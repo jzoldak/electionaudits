@@ -1,11 +1,13 @@
 {% extends "base.html" %}
-{% block title %}{{ contest }}: Audit Report | {{ block.super }}{% endblock %}
+{% block title %}{{ contest }}: Audit {% if contest.election.random_seed %} Selection {% endif %} Report | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% with contest.election.random_seed as random_seed %}
 <ul>
 <li><a href="..">Up</a></li>
 </ul>
-    <h2>Audit Report for {{ contest }}</h2>
+    <h2>Audit {% if random_seed %} Selection {% endif %} Report for {{ contest }}</h2>
+
 <p>Proportion of the total number of votes for this contest that were cast within this county: {{ contest.proportion|floatformat:1 }}%</p>
 <ul>
 <li>Overall margin of victory: {{ contest.overall_margin|floatformat:3 }}%</li>
@@ -14,7 +16,12 @@
 <li>Number of audit units to audit (NEGEXP, {{ contest.confidence }}% confidence): {{ stats.negexp_precincts|floatformat:1 }}</li>
 </ul>
 <p>See <a href="#stats">additional statistical information below...</a></p>
-
+{% if random_seed %}
+<p>The audit units are reported for selection in priority order, based on the threshholds below, and the "Sum of Square Roots" pseudorandom number generator using the random seed value <strong>{{ random_seed }}</strong> combined with the Batch sequence numbers.
+</p>
+<p>Select the top {{ stats.negexp_precincts|floatformat:0 }} audit units.</p>
+{% endif %}
+{% endwith %}
 <table border="border" cellpadding="5">
 <thead>
  {% for contestbatch in contest.contestbatch_set.all %}

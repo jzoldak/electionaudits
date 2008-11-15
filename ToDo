@@ -1,5 +1,24 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
+New view to produce tally forms for contests: /batch/batch#/contest#/
+ Election name Tally batchid, scan batch id, date, start/finish times, count #
+ Names of people doing the counting: vote counter and recorder.
+ Race title, Choices - YES/NO/Under/Over/Not-On-Ballot
+ sums by row and column
+ # mbbs?
+
+Add a little calculator form to explain SSR, and link to it from each
+random number.
+Do the same for NEGEXP threshholds.  Print the value of "w".
+
+Incorporate more batch info: associated precinct, sub-batches (scan batches) etc
+
+If there is no seed yet for /selection/ reports, note that fact.
+Generate index.html title from election name
+Make some of the text conditional for development vs publication
+
+Add timestamps to pages
+
 Get threshhold stats appropriate for races with less than 100% proportion
 Control audit report with GET params for sorting, masking results etc
 
