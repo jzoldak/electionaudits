@@ -1,5 +1,33 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
+Add statistics to results view
+
+Use dict constructor instead of class Bunch in management command
+views: get values from vars() for render_to_response rather than making
+a custom dict
+Is there a way to show all object attributes in a template, showing docstrings?
+
+Add number of counts also
+
+Let visitors sort in various ways to find outliers, and make recommendations
+ on what should be targeted
+
+Add overall total of contest votes to report.html
+
+If only one contestant, report 100% margin
+Spell threshold right in models....
+
+Add "selected" to contest model
+manually mark selected contests
+Do function to mark selected audit units - 
+  top x batches, sorted like report view(?)
+
+Add "results" field(s) to contestbatch - sum of absolute diffs for each choice?
+New view to display results for selected Audit Units
+ for each selected contest:
+  for each selected batch
+   display results
+
 New view to produce tally forms for contests: /batch/batch#/contest#/
  Election name Tally batchid, scan batch id, date, start/finish times, count #
  Names of people doing the counting: vote counter and recorder.
@@ -7,9 +35,19 @@ New view to produce tally forms for contests: /batch/batch#/contest#/
  sums by row and column
  # mbbs?
 
+Some way to deal with custody of tally sheets and secure comparisions to
+original vote.  E.g. have a system where after folks complete a tally,
+they can come enter their data and compare it to the expected results.
+Really want scan-batch-level results for that.
+
+Instruction sheet for hand counting
+ 
+
+Data entry form for tally results
+
 Add a little calculator form to explain SSR, and link to it from each
 random number.
-Do the same for NEGEXP threshholds.  Print the value of "w".
+Do the same for NEGEXP thresholds.  Print the value of "w".
 
 Incorporate more batch info: associated precinct, sub-batches (scan batches) etc
 
@@ -19,7 +57,7 @@ Make some of the text conditional for development vs publication
 
 Add timestamps to pages
 
-Get threshhold stats appropriate for races with less than 100% proportion
+Get threshold stats appropriate for races with less than 100% proportion
 Control audit report with GET params for sorting, masking results etc
 
 Handle subdirectories or glob in incoming for windows.  handle zips also?

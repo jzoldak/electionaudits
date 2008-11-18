@@ -10,7 +10,7 @@ Features:
 
 It helps with several facets of the task of auditing elections:
 
- * Imports standard election report files
+ * Imports standard election report files into a simple SQL database
  * Protects voter anonymity by combining results for very small precincts or
    batches into larger audit units.
  * Enables audits of central-count systems and mail-in ballots
