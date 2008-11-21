@@ -22,6 +22,14 @@ manually mark selected contests
 Do function to mark selected audit units - 
   top x batches, sorted like report view(?)
 
+try just allocating budget of counting x% of votes to all races,
+(or separately for state and local) and figuring out what best
+confidence level you can get.  Probably still need to limit really
+close races.
+
+Add "audited" field
+Show "targeted", and don't show confidence for targeted races, but yes for margin
+
 Add "results" field(s) to contestbatch - sum of absolute diffs for each choice?
 New view to display results for selected Audit Units
  for each selected contest:
@@ -30,10 +38,16 @@ New view to display results for selected Audit Units
 
 New view to produce tally forms for contests: /batch/batch#/contest#/
  Election name Tally batchid, scan batch id, date, start/finish times, count #
+ Unique id number for tracking sheet?
+ "Office use only" for data entry, maybe discrepancies, etc
  Names of people doing the counting: vote counter and recorder.
  Race title, Choices - YES/NO/Under/Over/Not-On-Ballot
  sums by row and column
  # mbbs?
+ Some way to simplify data entry: bar codes to pop the right entry screen?
+ Scheduling system that pops out new forms for new batches when old ones are
+ returned?
+
 
 Some way to deal with custody of tally sheets and secure comparisions to
 original vote.  E.g. have a system where after folks complete a tally,
@@ -160,6 +174,11 @@ view /parse/ with get keywords for not sorted, not incremental
  --chronological: track high-water mark, and show error given out-of-order run
  improve feedback somehow: show progress (javascript?)
 
+Plot data about the election:
+ scatterplot of margins and contest_ballots sizes for different batches
+
+Allow user to specify WPM (the "s" parameter to stats()) to views,
+and/or to use Stark's method of dealing with WPM.
 
 Do more rigorous statistics when proportion is not 100%, given better
 information about audit units around the state.
