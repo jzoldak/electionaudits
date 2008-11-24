@@ -71,8 +71,11 @@ class Contest(models.Model):
                 'secondvotes': second.votes,
                 'margin': self.margin }
 
-    def stats(self, s=0.20):
+    def stats(self, confidence=None, s=0.20):
         "Generate selection statistics for this Contest."
+
+        if not confidence:
+            confidence = self.confidence
 
         cbs = [(cb.contest_ballots(), str(cb.batch))
                for cb in self.contestbatch_set.all()]
@@ -81,7 +84,7 @@ class Contest(models.Model):
         # Test stats with lots of audit units: Uncomment to use
         #  (Better to turn this on and off via a GET parameter....)
         # cbs = [(500,)]*300 + [(200,)]*200 + [(40,)]*100
-        return selection_stats(cbs, m/100.0, self.name, alpha=((100-self.confidence)/100.0), s=s, proportion=self.proportion)
+        return selection_stats(cbs, m/100.0, self.name, alpha=((100-confidence)/100.0), s=s, proportion=self.proportion)
 
     def threshhold(self):
         if (self.overall_margin  or  self.margin):
