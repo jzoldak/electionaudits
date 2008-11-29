@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ElectionAudits software</title>
+<meta name="generator" content="HTML::TextToHTML v2.46"/>
+</head>
+<body>
+
+<h1>ElectionAudits software</h1>
+
+<p>The ElectionAudits software project provides software and
+documentation in support of
+the <a href="http://electionaudits.org/principles">
+ Principles and Best Practices for Post-Election Audits</a>
+and the other work of <a href="http://electionaudits.org/">
+ ElectionAudits.org</a>,
+ the nation's clearinghouse for election audit information.
+</p>
+
+<p>
+Get more background on the need for auditing, and the rollout of this software
+at <a href="http://neal.mcburnett.org/blog/2008/10/18/electionaudits-software-help-audit-election/">ElectionAudits software - help audit the election!</a></p>
+<p>
+The Boulder County elections division is planning to use it for auditing
+the 2008 general election.  It was developed based on
+<a href="http://mcburnett.org/neal/elections/2008-boulder-primary-audit/">experiences auditing the 2008 Primary</a>.
+</p>
+
+<h2>Features:</h2>
+
+<p>ElectionAudits helps with several facets of the task of auditing elections:</p>
+
+<ul>
+<li>Imports standard election report files</li>
+<li>Protects voter anonymity by combining results for very small precincts or
+batches into larger audit units.</li>
+<li>Enables audits of central-count systems and mail-in ballots
+without requiring that the paper ballots be sorted into piles by precinct.
+Works with election systems which can't produce batch results, by
+importing full election results for each batch and subtracting the result
+for the previous batch from the current batch.</li>
+<li>Facilitates risk-limiting audits by calculating relevant statistics
+based on the margin, number, size, and results of the audit units.
+Support for PPEBWR, SAFE, and NEGEXP is provided, with more on the
+drawing board.</li>
+<li>Ad-hoc query form lets you quickly enter information about hypothetical
+contests and get selection statistics for them also.  This supports
+planning for future audits, e.g. deciding how many batches to report
+on so as to minimize the fraction of the ballots you'll have to audit.</li>
+<li>Helps candidates target unusual audit units for elective audit [planned]</li>
+<li>Convenient platform for publication and archiving of auditable reports
+for the public.</li>
+<li>Reports "bins" next to audit units to speed random selection with dice.
+[planned]</li>
+</ul>
+
+
+<p>
+The initial software is written in Python and uses
+the Django web framework to display results either locally or globally.
+It is open source, still in very active
+"alpha" development.
+
+<h2>News</h2>
+
+<p>Major news is published at <a href="https://edge.launchpad.net/electionaudits/+announcements">News and Announcements</a>, which has Atom and RSS feeds</p>
+
+<p>You can follow development more closely at the project's Launchpad.net site:
+<blockquote>
+<a href="https://launchpad.net/electionaudits">https://launchpad.net/electionaudits</a>
+</blockquote>
+
+<p>That is the place to follow announcements, download releases,
+file bugs, get the latest
+revisions of the source code, make contributions, etc.
+</p>
+The first focus of development was to deal with the "batching" problem for
+central-count systems.  So the software program can parse
+a series of detailed "cumulative"
+election reports from the Hart system, one per batch of ballots.  It
+then subtracts one from another and generates the results for each
+batch in an auditable report.</p>
+
+<p>The <a href="README">README</a> file talks about what you need to
+install and run the software.
+</p>
+<p>Here is a demo site to show what the automatically generated web
+site looks like:
+
+<blockquote>
+<a href="http://neal.mcburnett.org/electionaudits/demo/">ElectionAudits demo site</a>
+</blockquote>
+
+Start with the <a href="http://neal.mcburnett.org/electionaudits/demo/reports/">Audit Reports</a> page.
+
+<p>
+If for some reason that site is down or overloaded (caching and query
+optimization is still needed, but will be pretty easy), you can see
+these older static pages. But note that you can't click on the links
+in each of these sample pages - these are just pulled out of the live
+site.
+</p>
+
+<p>First a list of contests in Boulder:
+</p>
+<blockquote>
+<a href="AuditTools.html">AuditTools.html</a>
+</blockquote>
+<p>And second, an "auditable report" for one of those contests.  There
+are only two batches there so far, since I don't have much test data
+yet, but you get a sense for what it looks like:
+</p>
+<blockquote>
+<a href="AuditTools-report.html">AuditTools-report.html</a>
+</blockquote>
+<p>You should note how much easier it is to deal with than the
+crystalreports xml format that Hart generates, and which this software starts with.  Note that this example is big!
+</p>
+<blockquote>
+<a href="cum_Lat1B_001_mbb_010.xml">cum_Lat1B_001_mbb_010.xml</a>
+</blockquote>
+
+<h2>Related work</h2>
+<ul>
+<li> <a href="http://statistics.berkeley.edu/~stark/Vote/index.htm">
+ Philip B. Stark, Papers and Talks on Voting and Election Auditing</a></li>
+<li><a href="https://vvf.jot.com/WikiHome/PublicDocuments/GraphicPaper/">Percentage-based versus SAFE Vote Tabulation Auditing: A Graphic Comparison: home page</a> - including the SAFE paper, spreadsheets, etc.</li>
+<li><a href="http://www.eecs.berkeley.edu/~arel/dicehash.html">DiceHash -
+Publicly verifiable random number generator</a> from Arel Cordero</li>
+<li> <a href="http://www.josephhall.org/dicebins.php">Dice Binning Calculator for Post-Election Audits</a> from Joseph Lorenzo Hall</li>
+<li><a href="http://electionarchive.org/auditcalculator/eic.cgi">
+    Election Integrity Audit Calculator</a> from National Election Data Archive</li>
+<li><a href="http://pvote.org/">Pvote</a> - open-source prototype software for electronic voting machines, also written in Python</li>
+</ul>
+</body>
+</html>
