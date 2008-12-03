@@ -138,7 +138,7 @@ def parse(args, options):
 @transaction.commit_on_success
 def parse_csv(file, options):
     """Parse a csv file of election data.  The model of this format
-    is the San Mateo precinct spreadsheet in "testdata/test.csv".
+    is the San Mateo precinct spreadsheet in "testdata/test-san-mateo-dp-92-p.csv".
     If the data is to be aggregated for privacy (the default), the data
     should be sorted by batch (precinct).
     """

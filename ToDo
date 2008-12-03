@@ -1,11 +1,41 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
-Add statistics to results view
+test random_seed in report.html, in tests etc
+finish selections.html selections-1.html
+
+Factor out specific stuff for Boulder 2008 election:
+ text in electionaudits/templates/electionaudits/index.html
+ links to procedure/ and overview/ in home page.  Add news/?
+ home page link in base.html - use named url?
+  make it a setting?  BASE HREF?  wget --base?
+  and may need help with /admin or /media links also
+  http://groups.google.com/group/django-users/browse_thread/thread/97e65f6da4009407
+
+Parse subdirectories e.g. in incoming for windows.  handle globs and zips also?
+
+Add tests for /selections/ and /results/, including selection and random seed
+
+use 'auth' template variable to add urls for adding notes, admin links, etc
+get access to 'request' template variable via
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+from django.template import ContextRequest
+return render_to_request('home.html', {}, context_instance=RequestContext(request))
+{% ifequal request.path "/" %}...
+
+Get NEGEXP thresholds right for contests with proportion less than 100%
+
+Need new seed if you count provisionals after doing original choices.
+Need a way to mark which seeds go with which batches.  Use new CountyElection in a pinch?
+
+Find synergy with Humboldt Transparency Project?  E.g. manage
+ballot-by-ballot audits in which multiple people independently
+evaluate given sets of ballots.
 
 Use dict constructor instead of class Bunch in management command
 views: get values from vars() for render_to_response rather than making
 a custom dict
-Is there a way to show all object attributes in a template, showing docstrings?
+Is there a way to access all object attributes in a template, including docstrings?
 
 Add number of counts also
 
@@ -15,11 +45,10 @@ Let visitors sort in various ways to find outliers, and make recommendations
 Add overall total of contest votes to report.html
 
 If only one contestant, report 100% margin
+
 Spell threshold right in models....
 
-Add "selected" to contest model
-manually mark selected contests
-Do function to mark selected audit units - 
+Do function to mark selected audit units - ask for confirmation?
   top x batches, sorted like report view(?)
 
 try just allocating budget of counting x% of votes to all races,
@@ -29,37 +58,32 @@ close races.
 
 Add "audited" field
 Show "targeted", and don't show confidence for targeted races, but yes for margin
+also list margin by votes, as well as percent?
+Add note defining margin for auditing
 
 Add "results" field(s) to contestbatch - sum of absolute diffs for each choice?
-New view to display results for selected Audit Units
- for each selected contest:
-  for each selected batch
-   display results
 
-New view to produce tally forms for contests: /batch/batch#/contest#/
+New view to produce tally forms for selected contests: /batch/batch#/contest#/
  Election name Tally batchid, scan batch id, date, start/finish times, count #
  Unique id number for tracking sheet?
  "Office use only" for data entry, maybe discrepancies, etc
  Names of people doing the counting: vote counter and recorder.
  Race title, Choices - YES/NO/Under/Over/Not-On-Ballot
- sums by row and column
- # mbbs?
+ sums by row and column, grand total that they should check with tally batch summary sheet
  Some way to simplify data entry: bar codes to pop the right entry screen?
  Scheduling system that pops out new forms for new batches when old ones are
  returned?
 
+Data entry form for tally results
 
 Some way to deal with custody of tally sheets and secure comparisions to
 original vote.  E.g. have a system where after folks complete a tally,
 they can come enter their data and compare it to the expected results.
 Really want scan-batch-level results for that.
 
-Instruction sheet for hand counting
- 
+Print instruction sheet for hand counting
 
-Data entry form for tally results
-
-Add a little calculator form to explain SSR, and link to it from each
+Add a little explanation (calculator?) view for SSR, and link to it from each
 random number.
 Do the same for NEGEXP thresholds.  Print the value of "w".
 
@@ -69,12 +93,9 @@ If there is no seed yet for /selection/ reports, note that fact.
 Generate index.html title from election name
 Make some of the text conditional for development vs publication
 
-Add timestamps to pages
+Add timestamps, version info to pages
 
-Get threshold stats appropriate for races with less than 100% proportion
 Control audit report with GET params for sorting, masking results etc
-
-Handle subdirectories or glob in incoming for windows.  handle zips also?
 
 Use custom view for more efficiently sorted audit report detail and report.html
 no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
@@ -89,15 +110,29 @@ Figure out how to include MBB ballot counts (CVRs) in batch?
   But note that that doesn't provide ballot counts by type!
   So e.g. if a batch has both ED and EV votes, may need to just apportion
   all of them to one type for now, search for zeros later, and reapportion then
+
  Use csv report?  or excel?
  Based on president, or max of all contests?
  nope: there is no contest that everyone can vote on -
-   e.g. a dozen absentee landowners can't vote for president in Boulder County?
+   e.g. a dozen absentee landowners can vote on property taxes but can't vote
+   for president in Boulder County
  too bad @ballots_cast != 'Total Number of Voters' from pdf?
+
+ Samples for Hart Tally cumulative pdf files:
+ in the unix shell:
+ for i in j*.pdf; do echo -n $i " " ;  pdftotext -l 1 $i /tmp/ptt; grep 'Total Number of Voters' /tmp/ptt; done > ../ballots-j
+
+ in python:
+ from pylab import array
+ bal = open("../ballots-j", "r").readlines()
+ bala = array([l.replace(",", "").split() for l in bal])
+
 
 In new custom report view add column for selection, highlight selected
 Error for -s with only one batch?
 report.html: Incorporate style="text-align: right;" into css
+Add a BASE HREF item?  add site_media?
+
 
 Put explanatory notes (e.g. about margins) in FAQ or help html,
 and add link from report, reports, etc
@@ -180,12 +215,20 @@ Generate different random numbers for contests than for contest list
 
 Avoid overuse and contention for batches by selecting a new one after
 it has been assigned for 10 or more audit units?  Needs to be fully
-automatic.
+automatic.  Perhaps best to audit different batches for different small races,
+if looking for suppression of ballot counts in some races and using
+ballot style statistics to detect that.  [how would that help?]
+
+Or reuse batches for narrowest elections, and for next narrowest, etc
+with a guarantee of looking at 5% of ballots, or 5% of batches?
+ For Boulder, many wide races could mean just one batch, 65 audits, 0.2%
+  One very tight race and select all races could mean 65 different batches, 11%
 
 Plot data about the election:
  scatterplot of margins and contest_ballots sizes for different batches
 
 Allow user to specify WPM (the "s" parameter to stats()) to views,
+and/or allow for WPM to apply to batch ballot count rather than contest_ballots,
 and/or to use Stark's method of dealing with WPM.
 
 Do more rigorous statistics when proportion is not 100%, given better
@@ -328,14 +371,16 @@ Packaging:
 ==========
 Currently for each new release:
  make sure version number is updated in setup.py
+ run tests
+ check web page validations (as part of test?)
  check bzr diff
- i=Elect...
  bzr ls --versioned | sed 's/^/include /' > MANIFEST.in
+ python setup.py egg_info -b .dev-r64 sdist
  python setup.py sdist
  #maybe manually delete incoming/DELETME.txt
- cd /tmp
- tar zxf /srv/s/electionaudits/trunk/dist/$i.tar.gz
- cd $i/root
+ i=ElectionAudits-0.9  # or whatever it made in dist/ minus extensions
+ tar -C /tmp -zxf /srv/s/electionaudits/trunk/dist/$i.tar.gz
+ cd /tmp/$i/root
  ./manage.py test electionaudits
 
  commit changes in bzr

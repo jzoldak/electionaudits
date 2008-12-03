@@ -1,3 +1,31 @@
+2008-12-01    <neal@bcn.boulder.co.us>
+
+	More customizations and updates for the Boulder 2008 audit, some
+	of which were added in the last few barely-documented revisions.
+
+	* setup.py: version 0.9 - working on rc1
+
+	* electionaudits/models.py (Contest.select_units): 
+	Add "selected" field to Contest
+	Use selected contests, rather than hard-coding selections in results view.
+	Factor out /reports/ code to provide a list of contest_batches for
+	the contest.
+
+	* electionaudits/views.py (results): 
+	Add /results/ view to show main results and statistics.
+	Use selected contests, rather than hard-coding selections
+	
+	(Contest.stats): 
+	Add stats() parameters to override confidence or s (WPM) values.
+
+	* doc/index.html: 
+	Bring project home page under source control
+	
+	* electionaudits/tests.py (SimpleTest.test_csv): Add csv test
+
+	* root/templates/base.html: 
+	Fix html validation error: commented-out </p>
+	
 2008-11-15    <neal@bcn.boulder.co.us>
 
 	This is the state of the software as it was used to publish
@@ -7,7 +35,7 @@
 	Add random selection of contests
 	
 	* electionaudits/templates/electionaudits/report.html: 
-	Add /selection/ url as a clone of /reports/ with random input
+	Add /selections/ url as a clone of /reports/ with random input
 	
 	* electionaudits/templates/electionaudits/index.html: 
 	Customize home page for Boulder

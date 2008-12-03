@@ -187,6 +187,12 @@ share advice.
 Initialization
 ==============
 
+Security note: you should change the SECRET_KEY in the settings.py
+file to a long random string, especially if you ever change the
+default URL or deploy the site on a publicly accessible server.
+Otherwise, authentication will be less secure.
+
+
 When you first install or upgrade the software, you need to
 initialize the database:
 
@@ -278,7 +284,7 @@ Currently supported input formats:
     'election_under_votes'
     'election_over_votes'
 
-  Examples: testdata/t1.csv
+  Examples: testdata/test-san-mateo-dp-92-p.csv
 
 Planned
  * Hart "precinct" reports
@@ -330,12 +336,42 @@ See doc/model_graph.png for a diagram of the various database tables
 and associated fields and relationships.
 
 
+PROCEDURE
+=========
+Here are the steps for using this in an election.
+
+* Parse the elections data
+* To get accurate statistics, set the number of ballots for each batch,
+ either by taking it from contest_batch.contest_ballots() for some
+ contest that is on every ballot, or by getting it from some other source,
+ e.g. by parsing the pdf files. [todo: make this easier]
+* Publish the http://127.0.0.1:8000/reports/
+* Roll dice and enter the random seed for the appropriate election via
+ http://127.0.0.1:8000/admin/electionaudits/countyelection/
+* Sort the  http://127.0.0.1:8000/selections/ table by priority and select
+ the appropriate number of contests of each type via
+ http://127.0.0.1:8000/admin/electionaudits/contest/
+* Select additional targeted audit units manually via
+ http://127.0.0.1:8000/admin/electionaudits/contestbatch/
+* Publish the selected contests via
+ http://127.0.0.1:8000/results/
+* [todo] print tally sheets for each audit unit
+* Hand count the selected audit units
+* [todo] enter the results via a new form
+* [todo] Provisional ballots: Parse new batches, publish the /reports/
+ and select more audit units: either old ones based on the new margins with
+ the old random seed, and ones from the new audit units using a new random seed.
+
+
 Debugging
 =========
 
 You can run the test cases via this command:
 
  manage.py test electionaudits
+
+or a single class of them via, e.g.
+ manage.py test electionaudits.SimpleTest
 
 If you install the django html validator app
 lukeplant_me_uk.django.validator and use debug settings

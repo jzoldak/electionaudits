@@ -1,3 +1,5 @@
+<title>Procedure - Boulder County 2008 General Election Audit</title>
+
 <p> <a href="/~neal/elections/boulder-audit-08-11/">Home</a> </p>
 
 Boulder County Audit Procedure, November 2008
@@ -27,16 +29,16 @@ the selections or counting begins.  These were the steps:
 
  * Gather necessary batch-by-batch data during the original scanning.
  * Feed that data into the ElectionAudits software, which automatically
-  produced and published the [reports](reports/) on this web site, with
+  produced and published the [reports](../reports/) on this web site, with
   full results for each contest for each of the 525 batches of ballots.
  * Roll 15 dice, which ElectionAudits used to determine
-  the [selections](selections/): both contests to be audited, and
+  the [selections](../selections/): both contests to be audited, and
   exactly which batches to audit for each contest.
  * Retrieve the paper ballots and start tallying votes by hand.
  * Study the published data, take input from the public, and
  target additional audit units as appropriate.
  * If there are significant discrepancies, audit additional audit units.
- * Report the [results](results/).
+ * Report the [results](../results/).
 
 The descriptions below may seem complicated in places, but remember
 that the complicated parts are handled automatically by the open source
@@ -82,12 +84,48 @@ the ElectionAudits software.  The 15 digits of the random seed were
 702758241994347 (e.g. the first person's throws were grey: 7, yellow:
 0 and blue: 2).
 
-Next we used the "Sum of Square Roots" pseudorandom number generator
+Next we used the "Sum of Square Roots" (SSR) pseudorandom number generator
 (see the references below) to generate pseudorandom numbers for each
 of the 525 batches.  The number for each batch is based on both the
 batch sequence number and the random seed from the dice.  We also used
 it to generate random numbers for the selection of the contests to be
 audited.
+
+The great thing about SSR is that it is how transparent it is.  It is
+easy for anyone to verify the random numbers that are assigned to each
+batch with nothing more than a calculator.
+
+For example, here is how to use the random seed we rolled to verify
+the random number for the top batch in the [State Representative -
+District 33 race](../selections/13/).  As you see at the top of that
+page, the first batch has a batch sequence number of 000149, and is
+named "p174_mb_152".  The SSR method mixes the random dice throws with
+the sequence number like this.  Take the first two digits of the
+sequence number (00) and the first 5 digits of the random seed (70275)
+to make the number 0070275, and enter that into a calculator.  Hit the
+square root key, and get 265.094322.
+
+Hit the "+" key and then do the same with the next two digts of the
+batch sequence (01) and the next five digits of the seed (82419).  The
+square root of 0182419 is 427.105373, and hitting plus again yields
+692.199696.
+
+Finish by doing the same steps one more time with the remaining
+digits.  Sqrt(4994347) is 2234.803570, and hitting "+" one more time
+(or "=") shows the final sum: 2927.003267.  The fractional part is the
+random number we're looking for: 0.003267, and that is the number
+shown in the "Random" column.  It is a low number, which gives this
+batch a high probability of selection as we'll see below.
+
+Note: since it is derived via a formula, it is not really a random
+number, like the random seed from the dice.  It is a "pseudorandom"
+number, but as discussed in the references, it is unpredictable and
+varied enough for our purposes, and we'll generally use the the term
+"random" as a shorthand.  You can see how much difference the dice rolls
+make by looking at the
+[same race with a different random seed](../selections-example/13/).
+The big batches still tend to show up at the top, as desired, but
+are in a very different order.
 
 Selection proportional to size: NEGEXP
 ======================================
@@ -100,14 +138,29 @@ which can also make the counting and paper handling more efficient.
 
 When using NEGEXP, a threshold is first assigned to each batch.  The
 threshold is larger for larger audit units, based on the "negative
-exponential" of the size, as discussed in the paper.  Using the Sum of
-Square Roots procedure, the random seed is then combined with the
-Batch sequence numbers to generate a random number for each audit
-unit.  That random number is then compared to the threshold. The
+exponential" of the size, as discussed in the paper.  The pseudorandom
+number calculated for the batch is then compared to the threshold. The
 larger the threshold in comparison to the random number, the more
 likely the unit is to be selected. The "Priority" in the tables of
-audit units is the threshold divided by the random number.  The audit
-selections are chosen in decreasing order by priority.
+audit units is the threshold divided by the random number, so the
+priority is larger for larger thresholds (larger batches), or for
+lower random numbers.  The audit selections are then chosen in decreasing
+order by priority.  Incorporating the random number in the priority
+keeps us us from invariably auditing only the largest batches, which
+would make it easy for an adversary to know which batches to avoid.
+
+In the example above, the threshold is 0.026777, and when that is
+divided by the random number for the batch (0.003267) we get the
+priority, 8.196011, which is greater than any of the other audit units.
+
+Note: In our procedure, we used the "expected number of precincts
+audited" that was calculated for the NEGEXP method and took that many
+batches in priority order (rounding the number up to be conservative).
+The normal NEGEXP procedure is to instead simply select all audit
+units for which the threshold is greater than the random number.  That
+would be better, but requires some updates to the software to
+calculate the thresholds appropriately when there are audit units
+outside of the county and the proportion is less than 100%.
 
 Contest Selection
 =================
@@ -178,13 +231,15 @@ generally far higher than the confidence given here.
 On the other hand, some statisticians don't think the 20% WPM
 assumption is warranted, even given that we allowed for audit units to
 be targeted if they did not seem to fit within this assumption.  We
-also applied the WPM to just the "contest ballots", even when those
-contest ballots were infrequent in a given batch.  The canvass
+also calculated the size for weighting the selections based on
+just the "contest ballots", even when those
+contest ballots were infrequent in a given batch.  And we applied the WPM
+ot that same size.  The canvass
 procedures should validate how many valid ballots for a given contest
 went in to each batch.  Otherwise an adversary could set the results
 for a given batch to zero for a contest and thus make it very unlikely
 to be selected.  That level of canvassing was not done for this
-election, so the level of confidence is at times overstated,
+election.  So the level of confidence may be overstated,
 especially for contests that were not on all the ballots in the county.
 For a more rigorous and conservative approach, see
 <a href="http://statistics.berkeley.edu/~stark/Vote/index.htm">
@@ -228,10 +283,41 @@ So it would be risky to hand count the ballots by sorting them in to
 piles and keeping the pairs together.  It would be problematic to have
 to match all the ballot back together.
 
-As a result, we planned to audit via the "announce and tally" method,
-rather than the "sort stack and count" method, even though it is
-generally considered to be less accurate.
+As a result, we audited via the "announce and tally" method, rather
+than the "sort stack and count" method, even though it is generally
+considered to be less accurate.
 
+As usual, the hand counters did not know what the machine tallies were
+when they did their counts.  The counters tallied each audit unit
+twice.  We told the counters to not worry too much about a discrepancy
+of one or two in their counts.  But if their two counts were off by
+more than two, they recounted until they got two similar tallies.
+
+In a few cases, when we checked their tally against the machine tally
+it differed by more than two.  In the case of one batch (with two
+audit units), it turned out that we had not given them three ballots
+that should have been included in their pile of ballots, and that made
+the difference.  In another case, we found that another hand count
+(again without knowing the machine count) came up with a match.  And
+in another case we tracked it down to a mistake with one overcount in
+the manual resolution process during the original machine tally.
+
+The remaining small differences in the machine and manual tallies
+might be due either to the difficulty of the hand count method and the
+instructions to not ensure that counts match, or to other infrequent
+problems with the machine count.  But even so we can have more
+confidence in the results than ever before, especially for the close
+contests that were audited.  Given more time for analysis, and with
+the added experience we now have, and improvements in the software and
+hand tally methods, we will be able to do even better in the future.
+
+Addressing Discrepancies
+========================
+
+If there are significant discrepancies for a given contest, audit
+additional audit units, escalating to a full recount if the outcome
+is significantly in doubt.
+<em>Note: this part of the description of the procedure is not yet finished.</em>
 
 References
 ==========

@@ -36,8 +36,8 @@ class Contest(models.Model):
     overall_margin = models.FloatField(blank=True, null=True,
                     help_text="(Winner - Second) / total including under and over votes, in percent" )
 
-    #selected = models.NullBooleanField(null=True, blank=True,
-    #                help_text="Whether contest has been selected for audit" )
+    selected = models.NullBooleanField(null=True, blank=True,
+                    help_text="Whether contest has been selected for audit" )
 
     def tally(self):
         "Tally up all the choices and calculate margins"
@@ -72,7 +72,12 @@ class Contest(models.Model):
                 'margin': self.margin }
 
     def stats(self, confidence=None, s=0.20):
-        "Generate selection statistics for this Contest."
+        """Generate selection statistics for this Contest.
+        Use given confidence (percentage). The default of None means
+        to use the confidence in the database for this contest.
+        The "s" parameter gives the maximum Within Precinct Miscount to assume, which
+        defaults to the fraction 0.20.
+        """
 
         if not confidence:
             confidence = self.confidence

@@ -41,12 +41,10 @@ def report(request, contest):
 def results(request):
     """Generate results list for all selected audit units"""
 
-    contests_selected=[1,  35, 34, 42, 51, 37, 48,   13, 61, 56, 62, 63, 59 ]
+    contests_selected = Contest.objects.filter(selected=True)
 
     au_selected = []
-    for contest_id in contests_selected:
-        contest = get_object_or_404(Contest, id=contest_id)
-
+    for contest in contests_selected:
         stats = contest.stats()
 
         au_selected += contest.select_units(stats)[0:min(10, int(math.ceil(stats['negexp_precincts'])))]
@@ -65,7 +63,7 @@ def results(request):
     contests_additional = set()
     for cb in au_targeted:
         cb.margin = cb.contest.overall_margin  or  cb.contest.margin
-        if cb.contest.id not in contests_selected:
+        if cb.contest not in contests_selected:
             contests_additional.add(cb.contest.id)
 
     audit_units = au_selected + au_targeted
@@ -74,10 +72,7 @@ def results(request):
 
     s = Empty()
 
-    # FIXME: get ballot counts from pdfs
-    # for now just add one for the number of ballots with no "president" contest
-    # i.e. the absentee land owners voting on property taxes but not president
-    s.ballots = 1 + sum(b.ballots or 0  for b in Batch.objects.all())
+    s.ballots = sum(b.ballots or 0  for b in Batch.objects.all())
     s.contests = len(Contest.objects.all())
     s.batches = len(Batch.objects.all())
     s.audit_units = len(ContestBatch.objects.all())
@@ -102,19 +97,18 @@ def results(request):
     s.batches_selected = len(batchset)
     s.batches_pct = s.batches_selected * 100.0 / s.batches
 
-    s.ballots_selected = sum(b.ballots for b in batchset)
+    s.ballots_selected = sum(b.ballots or 0 for b in batchset)
     s.ballots_selected_pct = s.ballots_selected * 100.0 / s.ballots
 
     s.votes_audited = sum(au.contest_ballots() for au in audit_units)
     s.votes_audited_pct = s.votes_audited * 100.0 / (s.votes)
 
-    s.ballots_handled = sum(au.batch.ballots for au in audit_units)
+    s.ballots_handled = sum(au.batch.ballots or 0 for au in audit_units)
     s.ballots_handled_pct = s.ballots_handled * 100.0 / (s.votes)
     # or divide by # ballots * # contests?
 
     return render_to_response('electionaudits/results.html',
-                              {'contest': contest,
-                               'contest_batches': audit_units,
+                              {'contest_batches': audit_units,
                                's': s } )
 
 @staff_member_required

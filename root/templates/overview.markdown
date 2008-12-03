@@ -1,13 +1,14 @@
+<title>Overview - Boulder County 2008 General Election Audit</title>
 <p> <a href="/~neal/elections/boulder-audit-08-11/">Home</a> </p>
 
-##Boulder does historic "risk-limiting" audits
+##Boulder does innovative "risk-limiting" audits
 
-The Boulder County Elections Division broke new ground in Colorado and
-the nation by doing one of the first audits that adhered to the
+The Boulder County Elections Division broke new ground for Colorado and
+the nation by doing one of the first election audits that adhered to the
 ["Principles and Best Practices for Post-Election Audits"](http://electionaudits.org/principles/).
 
-It was also perhaps the most extensive "risk-limiting" audit to date,
-including 13 contests from the general election.  Risk-limiting audits
+It was also perhaps the most extensive "risk-limiting" audit to date.
+Risk-limiting audits
 are specifically designed to reduce the risk of certifying an
 incorrect outcome in an election.  When the margin of victory in a
 race is wide, that means that there would have to be problems with a
@@ -30,11 +31,20 @@ procedures before the Colorado Election Reform Commission, which is
 currently looking at improving audits in Colorado.
 
 Boulder County augmented the "Random Audit" required by Colorado
-law. The improved methods, pre-approved by the Secretary of State
+law. The improved methods, pre-approved by the Secretary of State,
+
  * compare hand counts of votes within batches against the actual counts
 produced during the live election, and
+
  * audit all types of ballots, including mail-in ballots which
 are mostly overlooked in current Colorado audits.
+
+13 contests were audited, 7 state-wide and 6 local.  All but the race
+for president were chosen at random, but with a preference for those
+with the closest margins.  On three of the very closest local races we
+accepted a lower level of confidence, so that we would be
+able to audit other races.  But we still got higher levels
+of confidence than the previous auditing method would produce.
 
 We audited more ballots in a single contest than ever before in
 Boulder, including 13 batches of votes for the tight Longmont Question
@@ -73,6 +83,6 @@ The audit used a new open source program, [ElectionAudits](http://neal.mcburnett
 the election reports by batch, independently tallied up the batches,
 and aided in the statistical analysis, random selection and publication
 of the results.  Full details on the audit, the software, and the
-methods used can be found at
+procedures used can be found at
 
 > <http://bcn.boulder.co.us/~neal/elections/boulder-audit-08-11/>

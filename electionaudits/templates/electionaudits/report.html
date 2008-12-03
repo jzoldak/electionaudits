@@ -1,19 +1,19 @@
 {% extends "base.html" %}
-{% block title %}{{ contest }}: Audit {% if contest.election.random_seed %} Selection {% endif %} Report | {{ block.super }}{% endblock %}
+{% block title %}{{ contest }}: Audit {% if contest.election.random_seed %}Selection {% endif %}Report | {{ block.super }}{% endblock %}
 
 {% block content %}
 {% with contest.election.random_seed as random_seed %}
 <ul>
 <li><a href="..">Up</a></li>
 </ul>
-    <h2>Audit {% if random_seed %} Selection {% endif %} Report for {{ contest }}</h2>
+    <h2>Audit {% if random_seed %}Selection {% endif %}Report for {{ contest }}</h2>
 
 <p>Proportion of the total number of votes for this contest that were cast within this county: {{ contest.proportion|floatformat:1 }}%</p>
 <ul>
 <li>Overall margin of victory: {{ contest.overall_margin|floatformat:3 }}%</li>
 <li>Margin of victory in this county: {{ contest.margin|floatformat:3 }}%</li>
 <li>Number of audit units in this county: {{ contest.contestbatch_set.all|length }}</li>
-<li>Number of audit units to audit (NEGEXP, {{ contest.confidence }}% confidence): {{ stats.negexp_precincts|floatformat:1 }}</li>
+<li>Number of audit units to audit (NEGEXP, {{ contest.confidence }}% confidence, WPM < {{ stats.wpm|floatformat:0 }}%): {{ stats.negexp_precincts|floatformat:1 }}</li>
 </ul>
 <p>See <a href="#stats">additional statistical information below...</a></p>
 {% if random_seed %}
@@ -87,7 +87,7 @@ level of {{ contest.confidence }}%.  I.e. they are designed so the
 audit will either 1) find a discrepancy and call for an escalation or
 full hand recount, or 2) reduce the risk of confirming an incorrect
 outcome to (100 - {{ contest.confidence }})%, even if the tally system has been manipulated.
-A maximum "within-precinct-miscount" of 20% is assumed.
+A maximum "within-precinct-miscount" of {{ stats.wpm|floatformat:0 }}% is assumed.
 See <a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
 On Auditing Elections When Precincts Have Different Sizes, by Javed
 A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
