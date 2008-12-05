@@ -512,7 +512,7 @@ def paper(source,title,m,alpha=0.08,s=0.20):
     Return a dictionary with the main results.
     """
 
-    results = {}
+    results = {'wpm': s * 100.0}
 
     print
     print "Contest:", title

@@ -1,5 +1,7 @@
 import os
+import math
 import operator
+import logging
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import list_detail
@@ -7,6 +9,11 @@ from django import forms
 from django.contrib.admin.views.decorators import staff_member_required
 from electionaudits.models import *
 import electionaudits.parsers
+
+class Empty:
+    "Emtpy class for holding arbitrary information"
+
+    pass
 
 def report(request, contest):
     """Generate audit report for all ContestBatches and VoteCounts
@@ -16,22 +23,7 @@ def report(request, contest):
 
     stats = contest.stats()
 
-    contest_batches = contest.contestbatch_set.all()
-
-    wpm = 0.2
-
-    audit_units = []
-    for cb in contest_batches:
-        cb.ssr = cb.batch.ssr()
-        cb.threshhold = 1.0 - math.exp(-(cb.contest_ballots() * 2.0 * wpm) / stats['negexp_w'])
-        if cb.ssr != "":
-            cb.priority = cb.threshhold / cb.ssr
-        else:
-            cb.priority = ""
-        audit_units.append(cb)
-
-    if audit_units[0].priority != "":
-        audit_units.sort(reverse=True, key=operator.attrgetter('priority'))
+    audit_units = contest.select_units(stats)
 
     """
     display calc for "overall margin"
@@ -45,6 +37,83 @@ def report(request, contest):
                               {'contest': contest,
                                'contest_batches': audit_units,
                                'stats': stats } )
+
+def results(request):
+    """Generate results list for all selected audit units"""
+
+    contests_selected = Contest.objects.filter(selected=True)
+
+    au_selected = []
+    for contest in contests_selected:
+        stats = contest.stats()
+
+        au_selected += contest.select_units(stats)[0:min(10, int(math.ceil(stats['negexp_precincts'])))]
+
+    # Add in targetted audit units
+    # Note contests that have a bit of auditing, and those that are
+    # audited to less than the rated confidence level.
+
+    au_targeted = list(ContestBatch.objects.filter(selected=True).order_by('contest__id'))
+
+    # Take out any that were already selected - don't double-count
+    for cb in set(au_targeted) & set(au_selected):
+        logging.warn("au_targeted but already selected for audit: %d (%s)" % (cb.id, cb))
+        au_targeted.remove(cb)
+
+    contests_additional = set()
+    for cb in au_targeted:
+        cb.margin = cb.contest.overall_margin  or  cb.contest.margin
+        if cb.contest not in contests_selected:
+            contests_additional.add(cb.contest.id)
+
+    audit_units = au_selected + au_targeted
+
+    batchset = set(au.batch for au in audit_units)
+
+    s = Empty()
+
+    s.ballots = sum(b.ballots or 0  for b in Batch.objects.all())
+    s.contests = len(Contest.objects.all())
+    s.batches = len(Batch.objects.all())
+    s.audit_units = len(ContestBatch.objects.all())
+    s.votes = sum(au.contest_ballots() for au in ContestBatch.objects.all())
+
+    # use "max" to avoid divide-by-zero.  result will generally be zero then.
+    s.votes_per_ballot = 1.0 * s.votes / max(s.ballots, 1.0)
+
+    s.contests_selected = len(contests_selected)
+    s.contest_pct = s.contests_selected * 100.0 / max(s.contests, 1.0)
+
+    s.audit_units_selected = len(au_selected)
+    s.audit_units_selected_pct = s.audit_units_selected * 100.0 / max(s.audit_units, 1.0)
+
+    s.targeted = len(au_targeted)
+    s.targeted_pct = s.targeted * 100.0 / max(s.audit_units, 1.0)
+
+    s.contests_additional = len(contests_additional)
+    s.contest_additional_pct = s.contests_additional * 100.0 / max(s.contests, 1.0)
+
+    s.audit_units_audited = len(audit_units)
+    s.audit_units_audited_pct = s.audit_units_audited * 100.0 / max(s.audit_units, 1.0)
+
+    s.batches_selected = len(batchset)
+    s.batches_pct = s.batches_selected * 100.0 / max(s.batches, 1.0)
+
+    s.ballots_selected = sum(b.ballots or 0 for b in batchset)
+    s.ballots_selected_pct = s.ballots_selected * 100.0 / max(s.ballots, 1.0)
+
+    s.votes_audited = sum(au.contest_ballots() for au in audit_units)
+    s.votes_audited_pct = s.votes_audited * 100.0 / max(s.votes, 1.0)
+
+    s.ballots_handled = sum(au.batch.ballots or 0 for au in audit_units)
+    s.ballots_handled_pct = s.ballots_handled * 100.0 / max(s.votes, 1.0)
+
+    if len(audit_units) > 0:
+        s.random_seed = audit_units[0].contest.election.random_seed
+
+    return render_to_response('electionaudits/results.html',
+                              {'contest_batches': audit_units,
+                               's': s } )
 
 @staff_member_required
 def parse(request):

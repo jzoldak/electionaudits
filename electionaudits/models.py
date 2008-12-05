@@ -6,6 +6,7 @@ import sys
 import math
 import logging
 import StringIO
+import operator
 from django.db import models
 from django.core.cache import cache
 from electionaudits import varsize
@@ -34,6 +35,9 @@ class Contest(models.Model):
                     help_text="Calculated when data is parsed" )
     overall_margin = models.FloatField(blank=True, null=True,
                     help_text="(Winner - Second) / total including under and over votes, in percent" )
+
+    selected = models.NullBooleanField(null=True, blank=True,
+                    help_text="Whether contest has been selected for audit" )
 
     def tally(self):
         "Tally up all the choices and calculate margins"
@@ -67,8 +71,16 @@ class Contest(models.Model):
                 'secondvotes': second.votes,
                 'margin': self.margin }
 
-    def stats(self):
-        "Generate selection statistics for this Contest."
+    def stats(self, confidence=None, s=0.20):
+        """Generate selection statistics for this Contest.
+        Use given confidence (percentage). The default of None means
+        to use the confidence in the database for this contest.
+        The "s" parameter gives the maximum Within Precinct Miscount to assume, which
+        defaults to the fraction 0.20.
+        """
+
+        if not confidence:
+            confidence = self.confidence
 
         cbs = [(cb.contest_ballots(), str(cb.batch))
                for cb in self.contestbatch_set.all()]
@@ -77,7 +89,7 @@ class Contest(models.Model):
         # Test stats with lots of audit units: Uncomment to use
         #  (Better to turn this on and off via a GET parameter....)
         # cbs = [(500,)]*300 + [(200,)]*200 + [(40,)]*100
-        return selection_stats(cbs, m/100.0, self.name, alpha=((100-self.confidence)/100.0), proportion=self.proportion)
+        return selection_stats(cbs, m/100.0, self.name, alpha=((100-confidence)/100.0), s=s, proportion=self.proportion)
 
     def threshhold(self):
         if (self.overall_margin  or  self.margin):
@@ -96,6 +108,32 @@ class Contest(models.Model):
             return ""
         else:
             return self.threshhold() / self.ssr()
+
+    def select_units(self, stats):
+        """Return a list of contest_batches for the contest,
+        augmented with ssr, threshhold and priority, 
+        in selection priority order if possible"""
+
+        contest_batches = self.contestbatch_set.all()
+
+        wpm = 0.2
+
+        audit_units = []
+        for cb in contest_batches:
+            cb.stats = stats
+            cb.margin = self.overall_margin  or  self.margin
+            cb.ssr = cb.batch.ssr()
+            cb.threshhold = 1.0 - math.exp(-(cb.contest_ballots() * 2.0 * wpm) / stats['negexp_w'])
+            if cb.ssr != "":
+                cb.priority = cb.threshhold / cb.ssr
+            else:
+                cb.priority = ""
+            audit_units.append(cb)
+
+            if audit_units[0].priority != "":
+                audit_units.sort(reverse=True, key=operator.attrgetter('priority'))
+
+        return audit_units
 
     def __unicode__(self):
         return "%s" % (self.name)
