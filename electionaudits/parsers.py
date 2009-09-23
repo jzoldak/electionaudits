@@ -19,6 +19,7 @@ setup_environ(settings)
 from django.db import transaction
 import electionaudits.models as models
 import electionaudits.util as util
+import electionaudits.swdb
 
 __author__ = "Neal McBurnett <http://neal.mcburnett.org/>"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
@@ -124,6 +125,8 @@ def parse(args, options):
             totals = newtotals
         elif file.endswith(".csv"):
             parse_csv(file, options)
+        elif file.endswith(".dbf"):
+            parse_swdb(file, options)
         else:
             logging.warning("Ignoring %s - unknown extension" % file)
 
@@ -166,6 +169,7 @@ def parse_csv(file, options):
         while choice.find("  ") != -1:
             choice = choice.replace("  ", " ")
 
+        # If the batch or contest has changed, push out the previous units
         if batch != au_AB.batches  or  contest != au_AB.contest:
             logging.debug("now batch '%s' contest '%s' at line %d" % (batch, contest, reader.reader.line_num))
             util.pushAuditUnit(au_AB, min_ballots = options.min_ballots)
@@ -185,6 +189,13 @@ def parse_csv(file, options):
             au_EV.update('Over', r['early_over_votes'])
             au_ED.update('Under', r['election_under_votes'])
             au_ED.update('Over', r['election_over_votes'])
+
+def parse_swdb(db, options):
+    """Extract relevant data from each contest in a database from the
+    California Statewide Database (SWDB) at http://swdb.berkeley.edu/
+    """
+
+    electionaudits.swdb.parse_swdb(db, options)
 
 def parse_xml_crystal(file, options):
     """Extract relevant data from each contest in a given crystalreports xml
