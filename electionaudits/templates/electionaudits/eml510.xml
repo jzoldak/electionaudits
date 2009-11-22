@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!-- <?xml-stylesheet type="text/xsl" href="ea510_style.xsl"?> -->
+<EML xmlns="urn:oasis:names:tc:evs:schema:eml"
+  xmlns:xnl="urn:oasis:names:tc:ciq:xnl:3"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:oasis:names:tc:evs:schema:eml ../510-count-v6-0.xsd"
+ Id="510"
+ SchemaVersion="6.0">
+  <TransactionId>1</TransactionId>
+  <!-- Todo: Fix style sheet; Properly identify blank and over votes; do referenda right -->
+  <MessageLanguage>en-US</MessageLanguage>
+  <IssueDate>{% now "Y-m-d\TH:i:s" %}</IssueDate>
+  <Count>
+    <EventIdentifier IdNumber="1">
+      <EventName>ElectionAudits Statewide Test Event</EventName>
+    </EventIdentifier>
+    <Election>
+      <ElectionIdentifier IdNumber="{{contest.election.id}}">
+	<ElectionName>{{ contest.election.name }}</ElectionName>
+      </ElectionIdentifier>
+      <Contests>
+        <Contest>
+          <ContestIdentifier IdNumber="{{ contest.id }}">
+            <ContestName>{{ contest }}</ContestName>
+          </ContestIdentifier>
+	  <TotalVotes>
+	    <!-- FIXME: Add CountMetrics for Total # ballots # contest ballots # batches -->
+	    <CountMetric Id="PR" Type="Precincts Reporting">{{ contest.contestbatch_set.all|length }}</CountMetric>
+	    {% for contestbatch in contest.contestbatch_set.all %}
+	    {% if forloop.first %}
+	    {% for votecount in contestbatch.votecount_set.all %}
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="{{ votecount.choice.id }}">
+                  <CandidateName>{{ votecount.choice }}</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>{{ votecount.choice }}</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails> <!-- what is this? -->
+              </Candidate>
+              <ValidVotes>{{ votecount.choice.votes }}</ValidVotes>
+            </Selection>
+	    {% endfor %}
+	    {% endif %}
+	    {% endfor %}
+	  </TotalVotes>
+	  {% for contestbatch in contest_batches %}
+	  {% with contestbatch.batch as batch %}
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier IdNumber="{{ batch.id|stringformat:"06d" }}">{{ batch.name }}</ReportingUnitIdentifier>
+            <!--  How to identify alphanumeric type like "AB" for absentee?  <CountMetric Id="BT" Type="Batch Type">{{ batch.type }}</CountMetric> -->
+	    <CountMetric Id="BL" Type="Ballots">{{ batch.ballots }}</CountMetric>
+            <CountMetric Id="CB" Type="Contest Ballots">{{ contestbatch.contest_ballots }}</CountMetric>
+	    {% for votecount in contestbatch.votecount_set.all %}
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="{{ votecount.choice.id }}">
+                  <CandidateName>{{ votecount.choice }}</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>{{ votecount.choice }}</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>{{ votecount.votes }}</ValidVotes>
+            </Selection>
+	    {% endfor %}
+          </ReportingUnitVotes>
+	{% endwith %}
+	{% endfor %}
+
+        </Contest>
+      </Contests>
+    </Election>
+  </Count>
+</EML>
