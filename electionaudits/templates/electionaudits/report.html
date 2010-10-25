@@ -27,16 +27,16 @@
  {% for contestbatch in contest.contestbatch_set.all %}
   {% if forloop.first %}
    <tr>
-   <td>Batch Seq</td>
-   <td>Threshold</td>
-   <td>Random</td>
-   <td>Priority</td>
-   <td>Type</td>
-   <td>Batches</td>
-   <td>Ballots</td>
-   <td>Contest Ballots</td>
+   <th>Batch Seq</th>
+   <th>Threshold</th>
+   <th>Random</th>
+   <th>Priority</th>
+   <th>Type</th>
+   <th>Batches</th>
+   <th>Ballots</th>
+   <th>Contest Ballots</th>
    {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
-      <td style="writing-mode: tb-rl;">{{ votecount.choice }}</td>
+      <th style="writing-mode: tb-rl;">{{ votecount.choice }}</th>
    {% endfor %}
    </tr>
    <tr>

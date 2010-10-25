@@ -41,6 +41,7 @@ import sys
 sys.path.append('/home0/neal/py-tj/dbfpy/dbfpy-2.2.4')
 from dbfpy.dbf import Dbf
 
+import logging
 import electionaudits.util as util
 from django.db import transaction
 
@@ -83,8 +84,29 @@ def parse_swdb(file, options):
 
     au = util.AuditUnit(options.election)
 
-    for r in reader:
-        batch = r["SVPREC"]
+    #for r in reader:
+    reader_iter = iter(reader)
+
+    rec = 0
+
+    while True:
+        try:
+            r = reader[rec]
+        except (IndexError, StopIteration):
+            break
+        except:
+            import traceback
+            traceback.print_exc(1)
+            logging.error("Dbf error: %s\nrecord %d" % (r, rec))
+            rec = rec + 1
+            continue
+
+        rec = rec + 1
+
+        #batch = r["SRPREC"]
+        batch = r["SRPREC_KEY"]
+        #batch = r["SVPREC"]
+        #batch = r["SVPREC_KEY"]
         if batch.startswith('SOV') or batch.endswith('TOT'):
             continue
 
@@ -104,7 +126,7 @@ def parse_swdb(file, options):
         #sddist = r['SDDIST']
 
         for code in reader.fieldNames:
-            if code.endswith(('PREC', 'VOTE', 'REG', 'DIST')):
+            if code.endswith(('PREC', 'VOTE', 'REG', 'DIST', 'SVPREC_KEY')):
                 continue
 
             code_full = code
@@ -120,11 +142,14 @@ def parse_swdb(file, options):
             else:
                 contest = code[:3]
 
+            if options.contest != None and options.contest != contest:
+                continue
+
             # until we fully figure out how to get the district numbers...
             # contest = contests[code]
 
             try:
-                au = util.AuditUnit(options.election, contest, type, batch)
+                au = util.AuditUnit(options.election, contest, type, [batch])
                 au.update(code_full[len(contest):], str(r[code]))
                 util.pushAuditUnit(au, min_ballots = options.min_ballots)
             except:

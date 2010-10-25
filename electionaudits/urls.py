@@ -27,6 +27,9 @@ votecount_detail_dict = {
 # electionaudits custom views
 
 urlpatterns = patterns('electionaudits.views',
+    (r'^eml510/\w*/ea510_style.xsl',    'eaxsl'),
+    (r'^eml510/\w*/ea510rows.xsl',      'eaxslr'),
+    (r'^eml510/(?P<contest>\w*)/$',     'eml510'),
     (r'^reports/(?P<contest>\w*)/$',    'report'),
     (r'^selections/(?P<contest>\w*)/$', 'report'),
     (r'^results/$',                     'results'),

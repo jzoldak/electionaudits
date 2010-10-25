@@ -178,6 +178,7 @@ class ContestBatch(models.Model):
         return 1.0 - math.exp(-(self.contest_ballots() * 2.0 * wpm) / self.contest.stats()['negexp_w'])
 
     def contest_ballots(self):
+        "Sum of recorded votes and under/over votes.  C.v. batch.ballots"
         return sum(a.votes for a in self.votecount_set.all())
 
     def __unicode__(self):
@@ -230,12 +231,13 @@ def selection_stats(units, margin=0.01, name="test", alpha=0.08, s=0.20, proport
     name = name for this contest
     alpha = significance level desired = 1 - confidence
     s = maximum within-precinct miscount as a fraction from 0.0 to 1.0
+    proportion = This county's proportion of the overall number of votes in this contest
 
     Capture a dictionary of statistics and printed results.
     Cache the results for speed.
     """
 
-    cachekey = "%s:%r:%f:%f" % (name, margin, alpha, s)
+    cachekey = "%s:%r:%f:%f:%f" % (name, margin, alpha, s, proportion)
     saved = cache.get(cachekey)
     logging.debug("selection_stats: %d cached. contest %s" % (len(cache._expire_info), name))
 

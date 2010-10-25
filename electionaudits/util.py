@@ -75,6 +75,7 @@ class AuditUnit:
     in a set of Batches which can be published for auditing.  A combination
     of one or more ContestBatch classes, as a python data structure.
     batches is a list of batch names.
+    ballots is an optional count of ballots.
     votecounts is a dictionary of candidates and votes.
     """
 
@@ -82,11 +83,12 @@ class AuditUnit:
     # The key is (au.election, au.contest, au.type)
     pipeline = {}
 
-    def __init__(self, election=None, contest=None, type=None, batches=[], **votecounts):
+    def __init__(self, election=None, contest=None, type=None, batches=[], ballots=None, **votecounts):
         self.election = election
         self.contest = contest
         self.type = type
         self.batches = batches		# a list of batch names
+        self.ballots = ballots and int(ballots)
         self.votecounts = votecounts
 
         if election and contest:
@@ -114,7 +116,7 @@ class AuditUnit:
         logging.debug("saving %s" % self)
 
         election, created = models.CountyElection.objects.get_or_create(name=self.election)
-        batch, created = models.Batch.objects.get_or_create(name=' '.join(self.batches), election=election, type=self.type )
+        batch, created = models.Batch.objects.get_or_create(name=' '.join(self.batches), election=election, type=self.type, ballots=self.ballots )
         contest, created = models.Contest.objects.get_or_create(name=self.contest, election=election)
 
         # After contest etc is registered, we bail if no actual vote counts
@@ -125,7 +127,13 @@ class AuditUnit:
         contest_batch, created = models.ContestBatch.objects.get_or_create(contest=contest, batch=batch)
         for (choice, votes) in self.votecounts.items():
             choice, created = models.Choice.objects.get_or_create(name=choice, contest=contest)
-            models.VoteCount.objects.create(choice=choice, votes=votes, contest_batch=contest_batch)
+            try:
+                models.VoteCount.objects.create(choice=choice, votes=votes, contest_batch=contest_batch)
+            except:
+                import traceback
+                traceback.print_exc(1)
+                logging.error("DB error: %s" % (self))
+                
 
     def __cmp__(self, other):
         "Numerically compare number of contest_ballots in AuditUnit"
@@ -172,9 +180,15 @@ class AuditUnit:
                 raise ValueError("Negative vote count in %s: %s is %d" % (other, key, v2))
             vcs[key] = vcs.get(key, 0) + v2
 
+        newballots = None
+
         if subtract:
             newbatches = self.batches	# don't care about previous
+            if self.ballots:
+                newballots = self.ballots - other.ballots
         else:
             newbatches = self.batches + other.batches
+            if self.ballots:
+                newballots = self.ballots + other.ballots
             
-        return AuditUnit(self.election, self.contest, self.type, newbatches, **vcs )
+        return AuditUnit(self.election, self.contest, self.type, newbatches, newballots, **vcs )

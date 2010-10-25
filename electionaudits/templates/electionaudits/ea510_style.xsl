@@ -42,7 +42,7 @@ xmlns:xnl="urn:oasis:names:tc:ciq:xnl:3">
      <xsl:for-each select="eml:TotalVotes">
 
       <tr bgcolor="#ccffcc">
-        <th align="left" width="50%">STATEWIDE</th>
+        <th align="left" width="50%">Totals</th>
         <th align="left" width="30%"></th>
         <th align="right" width="20%"></th>
       </tr>
@@ -225,7 +225,7 @@ xmlns:xnl="urn:oasis:names:tc:ciq:xnl:3">
 
   <p align="center">
    <a href="https://launchpad.net/electionaudits">
-   ElectionAudits Home Page (generator of this EML)</a>
+   ElectionAudits Home Page (generator of this EML report)</a>
   </p>
   </body>
   </html>

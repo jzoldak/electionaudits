@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="ea510_style.xsl"?>
+<?xml-stylesheet type="text/xsl" href="ea510rows.xsl"?>
 <EML xmlns="urn:oasis:names:tc:evs:schema:eml"
   xmlns:xnl="urn:oasis:names:tc:ciq:xnl:3"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,7 +7,7 @@
  Id="510"
  SchemaVersion="6.0">
   <TransactionId>1</TransactionId>
-  <!-- Todo: Fix style sheet; Properly identify blank and over votes; do referenda right -->
+  <!-- Todo: Fix style sheet; Properly identify blank and over votes; do ProposalItem right; what schemaLocation url to use? -->
   <MessageLanguage>en-US</MessageLanguage>
   <IssueDate>{% now "Y-m-d\TH:i:s" %}</IssueDate>
   <Count>

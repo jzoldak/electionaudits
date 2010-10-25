@@ -19,8 +19,8 @@ class TestCaseDiff(TestCase):
             (savenew, name) = tempfile.mkstemp(suffix=".html")
             os.write(savenew, string2)
             os.close(savenew)
-            print "New %s output saved in %s" % (testname, name)
-            print "diff %s %s" % (name, file1)
+            print "\nNew %s output saved in %s" % (testname, name)
+            print "diff %s %s\n" % (file1, name)
 
             import difflib
             s1=string1.split('\n')
@@ -33,7 +33,7 @@ class TestCaseDiff(TestCase):
 
 class TestT0(TestCaseDiff):
     def test_reports(self):
-        "Try /reports/  /reports/1/ and /results/ with testdata/t0"
+        "Load testdata/t0/* and verify /reports/ /reports/1/ /selections/ /selections/4/ /results/ and /results/ after selections."
 
         response = self.client.get('/reports/')
         self.failUnlessEqual(response.status_code, 200)
@@ -66,13 +66,13 @@ class TestT0(TestCaseDiff):
         self.failUnlessEqual(response.status_code, 200)
         self.failDiffUnlessEqual("../testdata/t0/results0.html", response.content, "/results/")
 
-        for contest_id in [4]:
+        for contest_id in [4]: # REPRESENTATIVE TO THE 111TH UNITED STATES CONGRESS - DISTRICT 4
             contest = models.Contest.objects.get(id=contest_id)
             contest.selected=True
             contest.save()
 
-        for auditunit in [109]:
-            au = models.ContestBatch.objects.get(id=auditunit)
+        for contest_id in [7]:  # STATE SENATE - DISTRICT 17 - should be only one contestbatch for that
+            au = models.ContestBatch.objects.get(contest=contest_id)
             au.selected=True
             au.save()
 

@@ -15,6 +15,30 @@ class Empty:
 
     pass
 
+def eaxsl(request):
+    """Generate indicated XSL stylesheet"""
+
+    return render_to_response('electionaudits/ea510_style.xsl',
+                              mimetype='text/xml' )
+
+def eaxslr(request):
+    """Generate indicated XSL stylesheet"""
+
+    return render_to_response('electionaudits/ea510rows.xsl',
+                              mimetype='text/xml' )
+
+def eml510(request, contest):
+    """Generate EML 510 document for all ContestBatches
+    associated  with the contest"""
+
+    contest = get_object_or_404(Contest, id=contest)
+    contest_batches = contest.contestbatch_set.all()
+
+    return render_to_response('electionaudits/eml510.xml',
+                              {'contest': contest,
+                               'contest_batches': contest_batches },
+                              mimetype='text/xml' )
+
 def report(request, contest):
     """Generate audit report for all ContestBatches and VoteCounts
     associated  with the contest"""
@@ -47,7 +71,7 @@ def results(request):
     for contest in contests_selected:
         stats = contest.stats()
 
-        au_selected += contest.select_units(stats)[0:min(10, int(math.ceil(stats['negexp_precincts'])))]
+        au_selected += contest.select_units(stats)[0:min(40, int(math.ceil(stats['negexp_precincts'])))]
 
     # Add in targetted audit units
     # Note contests that have a bit of auditing, and those that are

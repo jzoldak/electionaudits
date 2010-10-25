@@ -1,3 +1,20 @@
+2010-10-25   <neal@bcn.boulder.co.us>
+
+	* Add preliminary support for exporting vote count data in Election Markup Language (EML) 510 format
+	* Add support for importing Hart and Sequoia CSV files
+	* Work on importing from California's StateWide DataBase (http://swdb.berkeley.edu/)
+	* Support for ballot counts in AuditUnit object
+	* Fix bug - invalid cached statistics used if proportion changed
+	* Update ToDo and README
+	* Provide untested install.bat file for installing under windows
+	* Add copyrights to LICENSE
+	* Highlight selected contests in yellow
+	* Use "th" tag for headings in audit reports
+	* TestT0: more robust selection of contest and contestbatch to test
+	* Comment out some columns in reports
+	* Note that for code changes committed, most recent is 2009-11-23, except for some testing code and comments
+	* Drop unused -v (--verbose) option in parser.py: conflicts with --verbosity in Django 1.1 (r9110)
+
 2008-12-04    <neal@bcn.boulder.co.us>
 
 	* setup.py: version 0.9

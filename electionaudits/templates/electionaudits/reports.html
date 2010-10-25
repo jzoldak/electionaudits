@@ -3,7 +3,7 @@
 {% block content %}
     <h2>Contest List</h2>
 
-<p>Number of contests: {{ object_list|length }}</p>
+<p>Number of contests: {{ object_list|length }}.  Contests selected for auditing are highlighted in yellow.</p>
 <p>The auditing selection statistics are based
 on the Overall Margin percentage if it has been entered to reflect results from
 other counties.  Otherwise the margin used for the statistics comes from
@@ -28,31 +28,31 @@ A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
 <table border="border" cellpadding="5">
 <thead>
 <tr>
- <td>Contest Name</td>
- <td>Audit Units</td>
- <td>Overall Margin %</td>
- <td>Margin %</td>
- <td>Contest Seq</td>
- <td>Threshold</td>
- <td>Random</td>
- <td>Priority</td>
- <td>Confidence %</td>
- <td>Proportion %</td>
- <td>Units to audit: NEGEXP</td>
+ <th>Contest Name</th>
+ <th>Audit Units</th>
+ <th>Overall Margin %</th>
+ <th>Margin %</th>
+ <th>Contest Seq</th>
+ <th>Threshold</th>
+ <th>Random</th>
+ <th>Priority</th>
+ <th>Confidence %</th>
+ <th>Proportion %</th>
+ <th>Units to audit: NEGEXP</th>
 {% comment %}
- <td>Units to audit: PPEBWR</td>
+ <th>Units to audit: PPEBWR</th>
 {% endcomment %}
- <td>Units to audit: SAFE</td>
- <td>Ballots to audit: NEGEXP</td>
+ <th>Units to audit: SAFE</th>
+ <th>Ballots to audit: NEGEXP</th>
 {% comment %}
- <td>Ballots to audit: PPEBWR</td>
+ <th>Ballots to audit: PPEBWR</th>
 {% endcomment %}
- <td>Ballots to audit: SAFE</td>
+ <th>Ballots to audit: SAFE</th>
 </tr>
 </thead>
 <tbody>
         {% for contest in object_list %}
-<tr>
+<tr{% if contest.selected %} style="background: yellow;"{% endif %}>
  <td><a href="{{ contest.id }}/">{{ contest.name }}</a></td>
  <td style="text-align: right;">{{ contest.contestbatch_set.all|length }}</td>
  <td style="text-align: right;">{{ contest.overall_margin|floatformat:3 }}</td>

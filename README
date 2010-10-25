@@ -33,6 +33,8 @@ It helps with several facets of the task of auditing elections:
    target unusual audit units for elective audit.
  * Convenient platform for publication and archiving of auditable reports
    for the public.
+ * Exports data in the standard Election Markup Language, including EML 510.
+ * Can be used to convert election data from vendor formats into EML.
 
 The software is "Open source" via the very permissive MIT license.  It
 can be used with no obligation, by anyone from elections officials, to
@@ -50,32 +52,10 @@ Neal McBurnett
 
 Includes a variant of varsize.py from Ronald L. Rivest
 
-Copyright and License ("MIT" aka "X11" license)
+Copyright and License
 =====================
-Copyright 2008 Neal McBurnett  http://neal.mcburnett.org/
-varsize.py: Copyright Ronald L. Rivest
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
+ElectionAudits uses the liberal open source "MIT" (aka "X11") license.
+See the LICENSE file for details.
 
 Support and Participation
 =========================
@@ -101,7 +81,7 @@ Requirements
 ============
 
 ElectionAudits has been tested on Ubuntu Linux and Windows, and should
-run fine on Mac OS X and others.
+run fine on Mac OS X and other Unix-like systems.
 
 It requires these other components:
 
@@ -175,13 +155,19 @@ e.g. http://www.sqlite.org/sqlitedll-3_6_4.zip
 Unzip it and put the .dll file with your other DLLs in
 your default System directory, e.g. C:\WINDOWS\system32
 
+The "install.bat" script has not been tested but may help.
+
 
 Mac OS X
 --------
 
-This should be pretty easy if you search a bit, but we don't have
-specific instructions.  Let us know if you want help, or if you can
-share advice.
+It appears that the easiest way to get the prerequisites for Mac OS X
+is to use either the Macports or Fink packaging systems.  Sqlite3 is
+already available in Mac OS X, so you just need Django and lxml for the
+version of python that you use.  This seems to require installing
+Apple's Xcode development environment.
+
+Let us know if you want help, or if you can share advice.
 
 
 Initialization
@@ -341,15 +327,17 @@ PROCEDURE
 Here, in brief, are the steps for using this in an election, along
 with some "TODO" notes for likely future enhancements to ElectionAudits.
 
-* Parse the elections data
-* To get accurate statistics, set the number of ballots for each batch,
- either by taking it from contest_batch.contest_ballots() for some
+* Publicly commit to a plan for the audit
+* Export elections data from the vote tallying system, and import ("parse") it into ElectionAudits
+* If the export data doesn't include the number of ballots for each batch,
+ to get accurate statistics you currently need to find some other way to get it,
+ e.g. by taking it from contest_batch.contest_ballots() for some
  contest that is on every ballot, or by getting it from some other source,
  e.g. by parsing the pdf files.  This currently needs to be done
  via the python interface, or one-at-a-time from the admin interface.
  [TODO: make this easier]
 * Publish the results (http://127.0.0.1:8000/reports/) publicly.
-* Roll dice and enter the random seed for the appropriate election via
+* Roll 10-sided dice 15 times and enter the random seed for the appropriate election via
  http://127.0.0.1:8000/admin/electionaudits/countyelection/
 * Sort the http://127.0.0.1:8000/selections/ table by priority and select
  the appropriate number of contests of each type via
@@ -358,11 +346,11 @@ with some "TODO" notes for likely future enhancements to ElectionAudits.
  or manual steps]
 * Select additional targeted audit units manually via
  http://127.0.0.1:8000/admin/electionaudits/contestbatch/
-* Publish the selected contests via
+* Publish the contest selection details via
  http://127.0.0.1:8000/results/
-* [TODO] Print tally sheets for each audit unit
+* [TODO] Print custom tally sheets for each audit unit
 * Hand count the selected audit units
-* [TODO] Enter the results via a new form
+* [TODO] Enter the results via a new form, review statistics, and if necessary, select and audit more until enough evidence is gathered 
 * [TODO] Provisional ballots: Parse new batches, publish the /reports/
  and select more audit units: either old ones based on the new margins with
  the old random seed, and ones from the new audit units using a new random seed.
@@ -393,7 +381,8 @@ Thanks to these contributors:
 The auditing experts led by Mark Halvorson and John McCarthy at Verified Voting.
 
 Others who made significant contributions:
- Crystal Christman, Mark Lindeman, Hillary Hall, Aaron D. Gerber, Mary Eberle, Holly Lewis.
+ David Webber, Don Hayden, Crystal Christman, Mark Lindeman, Hillary Hall,
+ Aaron D. Gerber, Mary Eberle, Holly Lewis.
 
 
 FAQ - Frequently Asked Questions

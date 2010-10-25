@@ -1,6 +1,229 @@
 ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
 
-Parse subdirectories e.g. in incoming for windows.  handle globs and zips also?
+Questions
+=========
+Is median right in varsize.print_precinct_stats()?  Why?  Only sorted in Contest.select_units()?
+
+Bugs
+====
+Fix bug: missing final audit unit - problem with flushpipes?
+ worked to parse the last line, followed by a line I didn't care about
+  the latter line caused new contest to be registered, with zero votes
+
+Why no negative alert for  j001_mb_052.xml after p287_mb_735.xml ?
+
+Fix "ballots to audit" for contests that allow multiple votes
+
+Parse different kinds of csv: Hart, San Mateo County, Lindeman csvs - need new option?
+
+
+Kaplan-Markoff
+==============
+Implement kaplan-markoff with ppeb sampling
+ http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1443314
+ /srv/voting/audit/stark-kaplan-markoff-ssrn-id1443314.pdf
+
+Mark Lindeman example:
+ A Kaplan-Markov auditing example using 2008 California data - Mark Lindeman, 1/10/2010 (v. 1.2, 1/13/2010)
+ /home/srv/voting/audit/kaplan-example-1.2.pdf
+  and https://docs.google.com/fileview?id=0B2nDnxGP_08mZjY2NGJlNmMtZTM0Ni00NjExLWFkNjUtNzgwZDhmN2U0NmQx&hl=en
+
+Get error bounds right - in Contest.tally()?
+ Calculate error bounds by batch based on results for loser
+
+ add u-value (maximum possible reduction in margin) and discrepancy for each audit unit to model
+ Or just decrease in margin, by contest?
+ record for every loseer (every margin) or just max?
+
+ generate ppeb audit unit selections, and note possibility of multiple selections - change "selected" to be an integer??
+
+ switch margin to integer, not percent?
+ confidence ==> float?
+
+Add code for discrepancies:
+ Record hand counts - possibly more than one?  perhaps add a type and number to VoteCount? (machine vs hand count; sequence number)
+
+ how to decide how many to select if we're a fraction of the whole?
+
+ later:
+ add election definition stuff like "vote for 1" and refine winners/losers
+ parse "vote for n" rules on who wins
+ handle races with classes of winner, like boulder council: 4 4-year winners, one 2-year winner
+
+Implement macro auditing (stark)
+
+What info is needed to determine error bound in vote-for-2 race?  undervotes??
+
+Testing
+=======
+Make tests more robust.
+E.g. need floating point fuzz? 
+
+Testing bug in   manage.py test electionaudits.TestT0
+ testdata/t0/reports.html St Vrain Negexp ballots: 23 on my machine, 22 on Aaron's windows box
+
+Note that changing how merging and parsing is done can change audit unit numbers, contestbatch ids, urls to contestbatch notes,
+and perhaps even how to select stuff in test cases
+
+E.g. test case changes for revno 66 2010-10-25:
+different batch seq, random and priority for ../testdata/t0/selections-4.html
+-   <td>000006</td>
++   <td>000008</td>
+    <td>0.907125</td>
+-   <td>0.189911</td>
+-   <td>4.776582</td>
++   <td>0.966987</td>
++   <td>0.938094</td>
+
+?
+
+../testdata/t0/results.html diff: 
+ -<li> Votes audited: 80
+ +<li> Votes audited: 55
+
+-   <td><a href="../admin/electionaudits/contestbatch/109/">None</a></td>
++   <td><a href="../admin/electionaudits/contestbatch/102/">None</a></td>
+
+etc.  looks like manual selection of contestbatch 109 might be picking up a different one than before??
+
+prev    file:///srv/s/electionaudits/trunk/testdata/t0/results.html  == STATE SENATE - DISTRICT 17  "p008_lat_ed_001 p014_lat_ed_002 p011_lat_ed_003"
+current http://127.0.0.1:8000/admin/electionaudits/contestbatch/109/ == amend 56, p011_lat_ed_003:ED
+  other is now #102 - why?
+
+Interface, Usability
+====================
+
+Features
+========
+Generate a pivot table of preference tendencies by precincts vs contests
+
+Support multiple databases, or at least multiple elections, managed by one person
+
+Address confusion over why audit units aren't sequential, due to combining of units.  List all unit numbers along with batch ids?
+
+Add a /favicon.ico
+
+Unclassified
+============
+Provide a way to specify which audit units should be combined, and how to renumber them.
+Note: for interoperability and reproducability between different software
+auditing applications, the combining/merging rules need to be the same, to
+the point where they end up with the same sequence numbers for all audit units.
+
+Fix bug "server error" 500 on contest with no audit units, e.g. boulder primary 2010 COUNTY SHERIFF Republican http://127.0.0.1:8000/reports/44/
+
+What character encodings are used in the files from various vendors we're parsing?
+Test internationalization via unicode/utf8 data.
+
+Add a database field ("slug"?) for a unique nickname for a Contest or Choice, and use it
+ in the __str__ method
+Don't re-sort audit_units after adding each one in models/select_units!
+
+Provide a way to read in, serialize, save and restore election metadata
+ which is not covered by the normal data imports.
+ Via Meta class and a settings save/restore
+ function based on fixtures or dumpdata?
+
+ Contest: overall_margin, proportion, confidence, selected, nickname
+ CountyElection: name random_seed, 
+ Batch: ballots, notes
+ Choice: nickname
+
+Provide ways to incorporate late-arriving ballots (provisional,
+UOCAVA, delayed signature verification, etc)
+ Allow additional batches to be read in and used to:
+  1) adjust the margin and highlight any audit units from the original
+   set that now need to be added to the audit
+  2) separate the new batches out and allow them to be independently
+   audited as a separate stage, with a new random seed.
+
+Add selection order sequence number to /selections/<id>/ report
+to make it easier to "Select the top xx audit units."
+
+Add winnerVotes() and loserVotes() methods to contestbatch ?and margin()?
+ or a way to get a list of AuditUnit objects?  or 2d array?
+
+Normalize contest selection thresholds so sum of all thresholds is 100%
+
+views.py results(): implement parameter or more flexible way to limit
+number of audit units per contest
+Include option to do smarter audit using 1% of audit units ala CA,
+ and including every contest
+
+Add election data timestamp field (e.g. for reports ala EML report)
+ e.g. from file timestamp of last data file parsed.
+
+Vote counts view as EML 510: Election Markup Language:
+ how to handle over, under; how to report #ballots, #contest ballots, batch type
+ selected-for-audit, notes, desired confidence, error bound, 
+ include stylesheet and reference at canonical url
+ produce clean, standard HTML output
+ do an xslt for listing candidates across the table
+ support more than 4 countmetrics (or 2 for TotalVotes) in the xslt
+ style the generated HTML with css
+ support parties/AffiliationIdentifiers in eml510
+ why test for validvotes < 1 in xslt?
+Parse election results as EML
+Produce audit results as EML with discrepancies, selection algorithms & seed
+
+Add test contest with zero margin, and check for errors, e.g. in contest selection
+Select all contests with margin less than x for audit
+
+Add test cases for EML, Hart (csv), Sequoia (txt) format and swdb (dbf) format.
+Add --subtract option for Sequoia cumulative reports + parsing for batch ballots
+
+Track and report on audit unit information: storage location, which
+scanner was used, which operator, etc.
+
+Make wpm an option, either per-contest or per-report or something.
+Beware multiple defaults, for "wpm" in models.py and for "s" in stats()
+
+Document parsers.py better - why not just make a new audit unit for each choice?
+ just more efficient?   No need to worry about empty au's pushed first?
+catch and print useful information about parser errors, e.g. /home0/srv/s/electionaudits/debug/nounder.out
+ file name and line number of file being parsed
+ what is being looked for
+ xml context
+ electionaudits version number, revision
+ how to procede, report bugs, etc.
+
+Declare licenses - "Ohloh searches the source code for individual
+license declarations. Ohloh didn't find any such declarations in this
+project's source code."
+maybe via PACKAGEMAP.xml - http://www.google.com/help/codesearch_packagemap.html
+ http://www.google.com/support/webmasters/bin/answer.py?answer=75224&ctx=sibling
+
+http://127.0.0.1:8000/reports/66/
+ Negexp says:
+    w = 8.65617024533
+    largest probability =  0.75
+    smallest probability =  0.75
+    expected number of precincts audited =  0.75
+    expected workload =  22.5 votes counted
+
+Tag election data with universal identifiers for contests, elected officials etc
+ala sunlight labs, for linking to contribution data, etc
+
+Produce a report of contests audited, with # units audited, results,
+ whether audit was full or just incidental, local or regional, etc.
+ Date and time of initial publication of vote counts, random selection,
+ and each hand count.
+
+Add documentation to audit pages, and EML: list of canvass board
+ members, instructions for hand counters, standards for interpreting
+ votes on ballots, relevant laws, etc.
+
+setup.py advice - check this out:
+ If your project contains django templates, set the zip_safe property to False. 
+ http://justinlilly.com/blog/2009/jul/05/6-things-learned-about-setuptools/
+
+Add total # ballots to cache args
+
+Improve build/packaging to include dates and release numbers in README, etc.
+and to automate upload procedure and reserve best practice in what
+to say in each of the many release info fields.
+
+Parse subdirectories e.g. in incoming for windows.  handle zips, and globs also?
 
 Get NEGEXP thresholds right for contests with proportion less than 100%
 and then start using true NEGEXP, rather always selecting top n races,
@@ -8,6 +231,13 @@ where n is the predicted number of audit units.
 
 Need new seed if you count provisionals after doing original choices.
 Need a way to mark which seeds go with which batches.  Use new CountyElection in a pinch?
+Want multiple reporting phases which stay separate
+ => Introduce EML language around Events?  And link batches to events,
+ maybe as well as CountyElection, for reporting?
+Or rename CountyElection to be ElectionPhase or ElectionStratum,
+ add another overarching set of Events related to aggregating
+ vote counts and auditing?
+Look at Sequoia's data model when it comes out?
 
 use 'auth' template variable to add urls for adding notes, admin links, etc
 get access to 'request' template variable via
@@ -29,7 +259,9 @@ Is there a way to access all object attributes in a template, including docstrin
 Add number of counts also
 
 Let visitors sort in various ways to find outliers, and make recommendations
- on what should be targeted
+on what should be targeted
+
+Apply the Second-digit Benford's Law Test for fraud (Mebane et al)
 
 Add overall total of contest votes to report.html
 
@@ -121,12 +353,19 @@ In new custom report view add column for selection, highlight selected
 Error for -s with only one batch?
 report.html: Incorporate style="text-align: right;" into css
 Add a BASE HREF item?  add site_media?
+Get /media/* working (css, xsl) for runserver:
+ Permission denied: /usr/lib/python2.5/site-packages/django/contrib/admin/media/
 Make home page link in base.html more portable - relative, and useful
  for use from templates at different depths in hierarchy
   use named url somehow?
   make it a setting?  BASE HREF?  wget --base?
   and may need help with /admin or /media links also
   http://groups.google.com/group/django-users/browse_thread/thread/97e65f6da4009407
+
+in eml510.xml, replace stylesheet with one from media for better performance:
+<?xml-stylesheet type="text/xsl" href="../../media/xsl/ea510_style.xsl"?>
+
+add digital signature to eml reports
 
 Put explanatory notes (e.g. about margins) in FAQ or help html,
 and add link from report, reports, etc
@@ -149,6 +388,12 @@ Check out generating this message because of entry in admin after reboot:
  403 Forbidden Cross Site Request Forgery detected. Request aborted.
 
 Validation: Should dtd url be in DOCTYPE?  Add character encoding?
+What about eml510 output?
+
+http://www.w3.org/International/tutorials/tutorial-char-enc/#Slide0250
+ if you decide to omit the XML declaration you should choose either
+ UTF-8 or UTF-16 as the encoding for the page.
+
 
 We have synergy between selections for different contests to count multiple
 contests on same batch, using NEGEXP, setting probability for each batch,
@@ -157,6 +402,10 @@ Make that feasible with privacy protection:
  Need to combine batches the same way across contests, or refer to other contestbatches.
  Combine based on overall batch size?  Or based on min of all races??
   And mask small numbers, to be revealed in combination with others later on?
+
+Make sure logic for combining ballots counts in AuditUnit is right for
+both subtract and normal privacy combination, and think thru the latter
+in light of questions about canvass of ballot styles.
 
 Find a way to distinguish paper from dre batches and not combine them
  add option ala "don't combine if batch letter 14 is different"
@@ -184,6 +433,7 @@ Need a logo.  e.g.
   http://whtalk.blogspot.com/2008/07/citizens-audit-completed-in-enfield.html
   a grid of checkboxes, with some of them randomly selected and
    colored/highlighted/focussed/whatever - colored magnifying glass?
+  Green eyeshades?  http://en.wikipedia.org/wiki/Green_eyeshade
 
 Get setup.py sdist to create empty "incoming" directory; delete DELETEME.txt
 
@@ -295,6 +545,8 @@ Produce output in csv format also
 
 Deal with xml namespace issue more elegantly
 
+Work on quality according to http://pypants.org and other evaluators
+
 Improve documentation - put model diagram in media
 Fix parsers optparse options for pydoc
 Get rid of or document unused stuff
@@ -361,10 +613,22 @@ aspects of ensuring that the right set of votes were counted.
 
 for --contest, don't create other contests in AuditUnit.__init__()
 
+Procedure
+=========
+
+Improve clarity of user interface.  Put together a wizard or the like
+to lead auditors thru the PROCEDURE steps from the README
+
+    * Parse incoming data files
+    * Audit reports
+    * Audit selections using the random seeds for the election
+    * Audit results
+
 Packaging:
 ==========
 Currently for each new release:
  make sure version number is updated in setup.py
+ make sure README, web page and other docs are in sync and labeled with version
  run tests
  check web page validations (as part of test?)
  check bzr diff
@@ -375,17 +639,32 @@ Currently for each new release:
  i=ElectionAudits-0.9  # or whatever it made in dist/ minus extensions
  tar -C /tmp -zxf /srv/s/electionaudits/trunk/dist/$i.tar.gz
  cd /tmp/$i/root
- ./manage.py test electionaudits
+ time ./manage.py test electionaudits         # and keep a record
 
+ deploy on demo site
  commit changes in bzr
  scp -p dist/$i.tar.gz bcn:public_html/electionaudits/download/
+ gpg --sign $PWD/dist/$i.tar.gz
+ gpg --sign --armor --detach-sign $PWD/dist/$i.tar.gz
+ echo $PWD/dist/$i.tar.gz
+ echo $PWD/dist/$i.tar.gz.asc
+
+ register new release at https://edge.launchpad.net/electionaudits/trunk
+ generate gpg signature
+ add download files for tar.gz, gpg signature, README
+ ToDo?
+
+ scp /home/neal/eatrunk/doc/index.html bcn:public_html/electionaudits/
+
 
 Do it via the launchpad api:
  http://news.launchpad.net/api/recipe-for-uploading-files-via-the-api
 
 Why does the order of auditunits sometimes change in the test?
 
+Make it easy to deploy via EC2, etc.
 Package up, as an egg?  And submit to http://pypi.python.org/pypi
+Package for Ubuntu?
 
 use unique settings.SECRET_KEY, ala django_extensions: generate_secret_key.py
 set up time zone?
@@ -410,6 +689,9 @@ add setup.py --test and doctest support: wrapping tests in TestSuite
 look at output during easy_install of lxml
 
 setup.py register sdist bdist_egg upload --sign
+
+add trove classifiers to setup.py, e.g. via Jafo's mkpkg.py
+ http://www.tummy.com/journals/entries/jafo_20100302_003614
 
 describe how to host on google app engine
 

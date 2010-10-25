@@ -47,15 +47,11 @@ option_list = (
     make_option("--contest", dest="contest",
                   help="only process CONTEST", metavar="CONTEST"),
 
-    make_option("-e", "--election", default="test",
+    make_option("-e", "--election", default="ElectionAudits Test Election",
                   help="the name for this ELECTION"),
 
     make_option("-b", "--batchid", default="",
                   help="batch identifier to append to precinct name"),
-
-    make_option("-v", "--verbose",
-                  action="store_true", default=False,
-                  help="Verbose output" ),
 
     make_option("-d", "--debug",
                   action="store_true", default=False,
@@ -125,6 +121,10 @@ def parse(args, options):
             totals = newtotals
         elif file.endswith(".csv"):
             parse_csv(file, options)
+        elif file.endswith(".csv"):   # FIXME: change to better test
+            parse_hart_csv(file, options)
+        elif file.endswith(".txt"):
+            parse_sequoia(file, options)
         elif file.endswith(".dbf"):
             parse_swdb(file, options)
         else:
@@ -166,6 +166,7 @@ def parse_csv(file, options):
         choice = r['candidate_name']
 
         choice = choice.strip()
+        # Do a bit of normalization - replace multiple spaces with just one
         while choice.find("  ") != -1:
             choice = choice.replace("  ", " ")
 
@@ -189,6 +190,105 @@ def parse_csv(file, options):
             au_EV.update('Over', r['early_over_votes'])
             au_ED.update('Under', r['election_under_votes'])
             au_ED.update('Over', r['election_over_votes'])
+
+@transaction.commit_on_success
+def parse_hart_csv(file, options):
+    """Parse a csv file of election data.  The model of this format
+    is a Hart precinct spreadsheet from Orange County:
+     testdata/test-orange-hart.csv
+     or http://www.sos.ca.gov/elections/sov/2009-special/precinct-data/data/orange-20090519.csv
+    """
+
+    election = options.election
+
+    reader = csv.DictReader(open(file))
+
+    au_AB = util.AuditUnit()
+    au_EV = util.AuditUnit()
+    au_ED = util.AuditUnit()
+
+    for r in reader:
+        batch = [r['Precinct Name'] + options.batchid]
+        contest = r['Contest Title']
+        if r['Contest Party']:
+            contest += ":" + r['Contest Party']
+
+        if options.contest != None and options.contest != contest:
+            continue
+
+        choice = r['Candidate Name']
+
+        choice = choice.strip()
+        # Do a bit of normalization - replace multiple spaces with just one
+        while choice.find("  ") != -1:
+            choice = choice.replace("  ", " ")
+
+        # If the batch or contest has changed, push out the previous units
+        if batch != au_AB.batches  or  contest != au_AB.contest:
+            AB_ballots = r['Absentee Mail Ballots']
+            EV_ballots = r['Absentee Walk-in Ballots']
+            ED_ballots = r['Election Ballots']
+
+            logging.debug("now batch '%s' contest '%s' at line %d" % (batch, contest, reader.reader.line_num))
+            util.pushAuditUnit(au_AB, min_ballots = options.min_ballots)
+            au_AB = util.AuditUnit(election, contest, 'AB', batch, AB_ballots)
+            util.pushAuditUnit(au_EV, min_ballots = options.min_ballots)
+            au_EV = util.AuditUnit(election, contest, 'EV', batch, EV_ballots)
+            util.pushAuditUnit(au_ED, min_ballots = options.min_ballots)
+            au_ED = util.AuditUnit(election, contest, 'ED', batch, ED_ballots)
+        
+        au_AB.update(choice, r['Absentee Mail Votes'])
+        au_EV.update(choice, r['Absentee Walk-in Votes'])
+        au_ED.update(choice, r['Election Votes'])
+        if r['Candidate Seq Nbr'] == '1':	# duplicated for each candidate
+            au_AB.update('Under', r['Absentee Mail Blank Votes'])
+            au_AB.update('Over', r['Absentee Mail Over Votes'])
+            au_EV.update('Under', r['Absentee Walk-in Blank Votes'])
+            au_EV.update('Over', r['Absentee Walk-in Over Votes'])
+            au_ED.update('Under', r['Election Blank Votes'])
+            au_ED.update('Over', r['Election Over Votes'])
+
+@transaction.commit_on_success
+def parse_sequoia(file, options):
+    """Parse Sequoia precinct results in "text with headers" format:
+    a tab-separated .txt file.
+    The model of this format is the Denver 2008 data sample
+    in "testdata/test-sequoia-precinct.txt".
+    If the data is to be aggregated for privacy (the default), the data
+    should be sorted by batch (precinct).
+    Question - can separate Absentee, Early and In-precinct count be generated?
+    """
+
+    election = options.election
+
+    reader = csv.DictReader(open(file), delimiter="\t")
+
+    au_AB = util.AuditUnit()
+
+    for r in reader:
+        batch = [r['PRECINCT_NAME'] + options.batchid]
+        contest = r['CONTEST_FULL_NAME']
+        #TODO: If this is a primary, see how to get party information
+        #if r['Party_Code']:
+        #    contest += ":" + r['Party_Code']
+
+        if options.contest != None and options.contest != contest:
+            continue
+
+        choice = r['CANDIDATE_FULL_NAME']
+
+        choice = choice.strip()
+
+        # If the batch or contest has changed, push out the previous units
+        if batch != au_AB.batches  or  contest != au_AB.contest:
+            logging.debug("now batch '%s' contest '%s' at line %d" % (batch, contest, reader.reader.line_num))
+            util.pushAuditUnit(au_AB, min_ballots = options.min_ballots)
+            au_AB = util.AuditUnit(election, contest, 'AB', batch)
+        
+        au_AB.update(choice, r['TOTAL'])
+        if r['CANDIDATE_ORDER'] == '1':	# duplicated for each candidate - silly
+            au_AB.update('Under', r['undervote'])
+            au_AB.update('Over', r['overvote'])
 
 def parse_swdb(db, options):
     """Extract relevant data from each contest in a database from the
@@ -282,8 +382,13 @@ def parse_xml_crystal(file, options):
               '{@_Combine_Over}': 'Over',	# Report combined AB/Early here
               '{@AB_Over_Votes}': 'Over' } )
 
-        au_AB.update('Under', absenteer['Under'])
-        au_AB.update('Over', absenteer['Over'])
+        if absenteer == {}:	# E.g. "No Candidate for Race"
+            continue
+        try:
+            au_AB.update('Under', absenteer['Under'])
+            au_AB.update('Over', absenteer['Over'])
+        except KeyError, key:
+            print("Parsing error in file %s\n line: %s\n KeyError Exception for key: '%s'\n contest: %s\n absenteer: %s\n tree:\n%s" % (file, contesttree.sourceline, key, contest, absenteer, ET.tostring(contesttree, pretty_print=True)))
 
         earlyr = extract_values(
             contesttree.xpath('FormattedArea[@Type="Footer"]' ),
