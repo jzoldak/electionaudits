@@ -629,18 +629,19 @@ Packaging:
 Currently for each new release:
  make sure version number is updated in setup.py
  make sure README, web page and other docs are in sync and labeled with version
- run tests
+ run tests, using different django versions, on different platforms, etc
  check web page validations (as part of test?)
  check bzr diff
  bzr ls --versioned | sed 's/^/include /' > MANIFEST.in
- python setup.py egg_info -b .dev-r64 sdist   # for development build
- python setup.py sdist       	      	      # for release build
+ python setup.py egg_info -b .dev-r64 sdist   # for development build - do sdist with particular .dev pre-release version
+ python setup.py sdist       	      	      # or this for published release build with given version
  #maybe manually delete incoming/DELETME.txt
  i=ElectionAudits-0.9  # or whatever it made in dist/ minus extensions
  tar -C /tmp -zxf /srv/s/electionaudits/trunk/dist/$i.tar.gz
  cd /tmp/$i/root
- time ./manage.py test electionaudits         # and keep a record
+ time ./manage.py test electionaudits > /tmp/electionaudits-test.out 2>&1   # and keep a record of timing, output
 
+ deploy in virtual environment from media
  deploy on demo site
  commit changes in bzr
  scp -p dist/$i.tar.gz bcn:public_html/electionaudits/download/
@@ -659,8 +660,6 @@ Currently for each new release:
 
 Do it via the launchpad api:
  http://news.launchpad.net/api/recipe-for-uploading-files-via-the-api
-
-Why does the order of auditunits sometimes change in the test?
 
 Make it easy to deploy via EC2, etc.
 Package up, as an egg?  And submit to http://pypi.python.org/pypi
