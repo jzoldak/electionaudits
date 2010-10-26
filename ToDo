@@ -54,6 +54,15 @@ Implement macro auditing (stark)
 
 What info is needed to determine error bound in vote-for-2 race?  undervotes??
 
+Performance
+===========
+
+Speed up stats (for page loads etc), parsing, etc.
+ Or use a proxy 
+Speed up parsing: cache election, batch and contest lookups for better speed
+cache Contest.stats()
+
+
 Testing
 =======
 Make tests more robust.
@@ -372,9 +381,6 @@ and add link from report, reports, etc
 
 Set sequence of Choices on first save
 
-cache Contest.stats()
-parsers: cache election, batch and contest lookups for better speed
-
 Get --contest working again
 Add custom combining/merging of contestbatches post-parse
 
@@ -632,14 +638,15 @@ Currently for each new release:
  run tests, using different django versions, on different platforms, etc
  check web page validations (as part of test?)
  check bzr diff
- bzr ls --versioned | sed 's/^/include /' > MANIFEST.in
- python setup.py egg_info -b .dev-r64 sdist   # for development build - do sdist with particular .dev pre-release version
+ bzr ls --versioned -R | sed 's/^/include /' > MANIFEST.in
+ python setup.py egg_info -b .dev-r67 sdist   # for development build - do sdist with particular .dev pre-release version
  python setup.py sdist       	      	      # or this for published release build with given version
  #maybe manually delete incoming/DELETME.txt
- i=ElectionAudits-0.9  # or whatever it made in dist/ minus extensions
+ i=ElectionAudits-1.0.dev-r67  # or whatever it made in dist/ minus extensions
  tar -C /tmp -zxf /srv/s/electionaudits/trunk/dist/$i.tar.gz
  cd /tmp/$i/root
- time ./manage.py test electionaudits > /tmp/electionaudits-test.out 2>&1   # and keep a record of timing, output
+ (time ./manage.py test electionaudits) > /tmp/electionaudits-test.out 2>&1   # and keep a record of timing, output
+   1-0.dev-r67 on jl: real    2m17.460s user    2m0.952s sys     0m0.828s
 
  deploy in virtual environment from media
  deploy on demo site
