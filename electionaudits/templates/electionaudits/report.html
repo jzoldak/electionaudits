@@ -22,7 +22,7 @@
 <p>Select the top {{ stats.negexp_precincts|floatformat:0 }} audit units.</p>
 {% endif %}
 {% endwith %}
-<table border="border" cellpadding="5">
+<table border="1" cellpadding="5">
 <thead>
  {% for contestbatch in contest.contestbatch_set.all %}
   {% if forloop.first %}

@@ -19,7 +19,7 @@ setup_environ(settings)
 from django.db import transaction
 import electionaudits.models as models
 import electionaudits.util as util
-import electionaudits.swdb
+#import electionaudits.swdb
 
 __author__ = "Neal McBurnett <http://neal.mcburnett.org/>"
 __copyright__ = "Copyright (c) 2008 Neal McBurnett"
@@ -121,12 +121,14 @@ def parse(args, options):
             totals = newtotals
         elif file.endswith(".csv"):
             parse_csv(file, options)
-        elif file.endswith(".csv"):   # FIXME: change to better test
+        elif file.endswith(".csv"):   # FIXME: change to better test.  For now manually swap code to match type of csv....
             parse_hart_csv(file, options)
+        elif file.endswith(".csv"):
+            parse_swdb_csv(file, options)
         elif file.endswith(".txt"):
             parse_sequoia(file, options)
-        elif file.endswith(".dbf"):
-            parse_swdb(file, options)
+        #elif file.endswith(".dbf"):
+        #    parse_swdb(file, options)
         else:
             logging.warning("Ignoring %s - unknown extension" % file)
 
@@ -290,12 +292,52 @@ def parse_sequoia(file, options):
             au_AB.update('Under', r['undervote'])
             au_AB.update('Over', r['overvote'])
 
+@transaction.commit_on_success
+def parse_swdb_csv(file, options):
+    """TODO! add presumed Undervotes based on sum of votes vs batch.ballots
+    Parse csv dump of swdb data - a comma-separated .csv file.
+    If the data is to be aggregated for privacy (the default), the data
+    should be sorted by batch (precinct).
+    Question - can separate Absentee, Early and In-precinct count be generated?
+    """
+
+    election = options.election
+
+    reader = csv.DictReader(open(file), delimiter=",")
+
+    au = util.AuditUnit()
+
+    for r in reader:
+        batch = [r['SVPREC_KEY'] + options.batchid]
+        contest = "Congress%.2d" % int(r['CDDIST'])
+        ballots = r['TOTVOTE']
+
+        #TODO: If this is a primary, see how to get party information
+        #if r['Party_Code']:
+        #    contest += ":" + r['Party_Code']
+
+        if options.contest != None and options.contest != contest:
+            continue
+
+        for choice in ['CNGDEM', 'CNGGRN', 'CNGREP', 'CNGLIB', 'CNGPAF', 'CNGAIP']:
+            # If the batch or contest has changed, push out the previous units
+            if batch != au.batches  or  contest != au.contest:
+                logging.debug("now batch '%s' contest '%s' at line %d" % (batch, contest, reader.reader.line_num))
+                util.pushAuditUnit(au, min_ballots = options.min_ballots)
+                au = util.AuditUnit(election, contest, 'U', batch, ballots)
+
+            au.update(choice, r[choice])
+
+'''
+Comment out until we figure out good supported way to parse dbf files.
+
 def parse_swdb(db, options):
     """Extract relevant data from each contest in a database from the
     California Statewide Database (SWDB) at http://swdb.berkeley.edu/
     """
 
     electionaudits.swdb.parse_swdb(db, options)
+'''
 
 def parse_xml_crystal(file, options):
     """Extract relevant data from each contest in a given crystalreports xml

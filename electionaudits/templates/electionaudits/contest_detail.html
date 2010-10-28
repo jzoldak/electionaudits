@@ -3,7 +3,7 @@
 {% block content %}
     <h2>Batches for Contest: {{ object.name }}</h2>
 
-<table border="border" cellpadding="5">
+<table border="1" cellpadding="5">
 <tbody>
   {% for contestbatch in object.contestbatch_set.all %}
 <tr>

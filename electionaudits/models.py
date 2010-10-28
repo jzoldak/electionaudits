@@ -23,10 +23,12 @@ class CountyElection(models.Model):
         return "%s" % (self.name)
 
 class Contest(models.Model):
-    "The name of a race, and the associated margin of victory, etc"
+    "The name of a race, the associated margin of victory, and other parameters"
 
     name = models.CharField(max_length=200)
     election = models.ForeignKey(CountyElection)
+    numWinners = models.IntegerField(default = 1,
+                    help_text="Number of winners to be declared" )
     confidence = models.IntegerField(default = 75,
                     help_text="Desired level of confidence in percent, from 0 to 100" )
     proportion = models.FloatField(default = 100.0,
@@ -35,9 +37,54 @@ class Contest(models.Model):
                     help_text="Calculated when data is parsed" )
     overall_margin = models.FloatField(blank=True, null=True,
                     help_text="(Winner - Second) / total including under and over votes, in percent" )
+    U = models.FloatField(blank=True, null=True,
+                    help_text="Total possible miscount / total apparent margin." )
 
     selected = models.NullBooleanField(null=True, blank=True,
                     help_text="Whether contest has been selected for audit" )
+
+    def error_bounds(self):
+        "Calculate margins between the Choices in this contest, and error bounds"
+
+        numWinners = 1		# 
+
+        choices = self.choice_set.all()
+        ranked = sorted([choice for choice in choices if choice.name not in ["Under", "Over"]], key=lambda o: o.votes, reverse=True)
+        winners = ranked[:numWinners]
+        losers = ranked[numWinners:]
+
+        # margins between winners and losers
+
+        margins={}
+        for winner in winners:
+            margins[winner] = {}
+            for loser in losers:
+                margins[winner][loser] = winner.votes - loser.votes
+
+                margin, created = Margin.objects.get_or_create(votes = winner.votes - loser.votes, choice1 = winner, choice2 = loser)
+                margin.save()
+
+        self.U = 0.0
+
+        for au in self.contestbatch_set.all():
+            au.u = 0.0
+            vc = {}
+            for voteCount in VoteCount.objects.filter(contest_batch__id__exact=au.id):
+                 vc[voteCount.choice] = voteCount.votes
+
+            for winner in winners:
+                 for loser in losers:
+                     au.u = max(au.u, float(au.batch.ballots + vc[winner] - vc[loser]) / margins[winner][loser])
+
+            au.save()
+            self.U = self.U + au.u
+
+        self.save()
+
+        return {'winners': winners,
+                'losers': losers,
+                'margins': margins,
+                }
 
     def tally(self):
         "Tally up all the choices and calculate margins"
@@ -168,8 +215,10 @@ class ContestBatch(models.Model):
 
     contest = models.ForeignKey(Contest)
     batch = models.ForeignKey(Batch)
+    u = models.FloatField(blank=True, null=True,
+                    help_text="Maximum miscount / total apparent margin." )
     selected = models.NullBooleanField(null=True, blank=True,
-                    help_text="Whether audit unit has been selected for audit" )
+                    help_text="Whether audit unit has been specifically targeted for audit" )
     notes = models.CharField(max_length=200, null=True, blank=True,
                     help_text="Free-form notes" )
 
@@ -264,3 +313,14 @@ def selection_stats(units, margin=0.01, name="test", alpha=0.08, s=0.20, proport
 
     cache.set(cachekey, stats, 86400)
     return stats
+
+class Margin(models.Model):
+    "Margin in votes between two Choices for a given tabulation"
+
+    votes = models.IntegerField()
+    choice1 = models.ForeignKey(Choice, related_name = 'choice1')
+    choice2 = models.ForeignKey(Choice, related_name = 'choice2')
+
+    def __unicode__(self):
+        return "%s-%s" % (self.choice1.name, self.choice2.name)
+

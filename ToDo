@@ -6,7 +6,7 @@ Is median right in varsize.print_precinct_stats()?  Why?  Only sorted in Contest
 
 Bugs
 ====
-Fix bug: missing final audit unit - problem with flushpipes?
+Fix bug: missing final audit unit - problem with flushpipes for some parsers?
  worked to parse the last line, followed by a line I didn't care about
   the latter line caused new contest to be registered, with zero votes
 
@@ -14,8 +14,11 @@ Why no negative alert for  j001_mb_052.xml after p287_mb_735.xml ?
 
 Fix "ballots to audit" for contests that allow multiple votes
 
-Parse different kinds of csv: Hart, San Mateo County, Lindeman csvs - need new option?
+Parse different kinds of csv: Hart, San Mateo County, swdb csvs - need new option?
+ Or recognize type of file, e.g. from first line?
 
+Look at TestT0 failure on ec2:
+ ValueError: Negative vote count in ElectionAudits Test Election_STATE REPRESENTATIVE - DISTRICT 10_ED_['p014_lat_ed_002']_-1: Dorothy Marshall Republican is -1
 
 Kaplan-Markoff
 ==============
@@ -28,27 +31,38 @@ Mark Lindeman example:
  /home/srv/voting/audit/kaplan-example-1.2.pdf
   and https://docs.google.com/fileview?id=0B2nDnxGP_08mZjY2NGJlNmMtZTM0Ni00NjExLWFkNjUtNzgwZDhmN2U0NmQx&hl=en
 
-Get error bounds right - in Contest.tally()?
- Calculate error bounds by batch based on results for loser
+Get error bounds right - during Contest.tally()?
+ done: Calculate error bounds by batch based on results for loser
 
- add u-value (maximum possible reduction in margin) and discrepancy for each audit unit to model
- Or just decrease in margin, by contest?
- record for every loseer (every margin) or just max?
+  calculate and add overall margin matrix to model - needed for taint calculation
+   new model: margin, with two Choice foreign keys
+  add u-value (maximum possible reduction in margin) to ContestBatch for selection
+  add U to Contest
+  add number of winners to Contest, and re-tally when it changes
 
- generate ppeb audit unit selections, and note possibility of multiple selections - change "selected" to be an integer??
+ change logic to mark ContestBallots for audit at tally time?  but when to un-mark?
+
+ generate ppeb audit unit selections, and note possibility of multiple selections
+  change "selected" to be an integer
+  add "with replacement" option to erandom.weightedsample()
 
  switch margin to integer, not percent?
  confidence ==> float?
 
 Add code for discrepancies:
  Record hand counts - possibly more than one?  perhaps add a type and number to VoteCount? (machine vs hand count; sequence number)
+   or change CountyElection to something more like a "tabulation", with administration unit and type and number?
+   and then a web of linkages between tabulations and contests
+  add some way of noting expedted future tabulations - list a total poll book or ballot count expected in the countyelection/tabulation record??
 
- how to decide how many to select if we're a fraction of the whole?
+ add discrepancy for each audit unit to ContestBatch?  Or just decrease in margin, by contest?  record for every loseer (every margin) or just max?
+  or just calculate them by comparing tabulations?
+
+ how to deal with error bounds, selection if we're a fraction of the whole?
 
  later:
- add election definition stuff like "vote for 1" and refine winners/losers
  parse "vote for n" rules on who wins
- handle races with classes of winner, like boulder council: 4 4-year winners, one 2-year winner
+ handle contests with multiple classes of winner, like boulder council: 4 4-year winners, one 2-year winner
 
 Implement macro auditing (stark)
 
@@ -57,14 +71,19 @@ What info is needed to determine error bound in vote-for-2 race?  undervotes??
 Performance
 ===========
 
+Avoid confusion - for long page loads - get some sort of http response up early (please wait....)
+
 Speed up stats (for page loads etc), parsing, etc.
  Or use a proxy 
 Speed up parsing: cache election, batch and contest lookups for better speed
-cache Contest.stats()
 
+calculate (optionally?) and store needed data from Contest.stats() at parse time
+ or when parms change
 
 Testing
 =======
+Add test cases for EML, Hart (csv), Sequoia (txt) format and swdb (dbf) format
+
 Make tests more robust.
 E.g. need floating point fuzz? 
 
@@ -104,6 +123,10 @@ Interface, Usability
 
 Features
 ========
+Add Mersenne twister as an option - needs option variable in county-election?
+
+Print total number of ballots at end of parsing summary, and contest ballots for each contest
+
 Generate a pivot table of preference tendencies by precincts vs contests
 
 Support multiple databases, or at least multiple elections, managed by one person
@@ -111,6 +134,16 @@ Support multiple databases, or at least multiple elections, managed by one perso
 Address confusion over why audit units aren't sequential, due to combining of units.  List all unit numbers along with batch ids?
 
 Add a /favicon.ico
+
+Establish a transaction log to allow backups of work-in-progress etc.  LOG4J?
+
+Finish direct swdb import support and stub it back in to parsers.ph, as in version r68 from bzr
+ If so, need to fix bugs, document dbfpy.dbf (or alternative) and openanything requirement in README
+ In the meantime, folks can export the swdb data to csv like lindeman did and use parse_swdb_csv()
+
+Documentation
+=============
+
 
 Unclassified
 ============
@@ -178,7 +211,6 @@ Produce audit results as EML with discrepancies, selection algorithms & seed
 Add test contest with zero margin, and check for errors, e.g. in contest selection
 Select all contests with margin less than x for audit
 
-Add test cases for EML, Hart (csv), Sequoia (txt) format and swdb (dbf) format.
 Add --subtract option for Sequoia cumulative reports + parsing for batch ballots
 
 Track and report on audit unit information: storage location, which
@@ -361,9 +393,12 @@ Figure out how to include MBB ballot counts (CVRs) in batch?
 In new custom report view add column for selection, highlight selected
 Error for -s with only one batch?
 report.html: Incorporate style="text-align: right;" into css
+move table formatting to css and improve it:
+ http://www.w3.org/TR/html401/struct/tables.html#adef-border-TABLE
 Add a BASE HREF item?  add site_media?
-Get /media/* working (css, xsl) for runserver:
+Move /media/* to /static/ and get it working for (css, xsl) for runserver:
  Permission denied: /usr/lib/python2.5/site-packages/django/contrib/admin/media/
+ http://docs.djangoproject.com/en/dev/howto/static-files/ - requires DEBUG=True....
 Make home page link in base.html more portable - relative, and useful
  for use from templates at different depths in hierarchy
   use named url somehow?

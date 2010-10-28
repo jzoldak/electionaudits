@@ -1,3 +1,10 @@
+2010-10-26   <neal@bcn.boulder.co.us>
+	* Add strict error bounds calculations.  Contest.U, ContestBatch.u
+	* Add Margin model to store margins between winners and losers
+	* Add number of winners for each contest: Contest.numWinners
+	* Fix table borders in templates - caught by Chrome browser
+	* remove direct swdb import support - dependency on problematic dbfpy.dfb module.
+
 2010-10-25   <neal@bcn.boulder.co.us>
 
 	* Add preliminary support for exporting vote count data in Election Markup Language (EML) 510 format
