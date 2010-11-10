@@ -339,7 +339,7 @@ with some "TODO" notes for likely future enhancements to ElectionAudits.
 * Publish the results (http://127.0.0.1:8000/reports/) publicly.
 * Roll 10-sided dice 15 times and enter the random seed for the appropriate election via
  http://127.0.0.1:8000/admin/electionaudits/countyelection/
-* Sort the http://127.0.0.1:8000/selections/ table by priority and select
+* Sort the table of contests at http://127.0.0.1:8000/selections/ by priority and select
  the appropriate number of contests of each type via
  http://127.0.0.1:8000/admin/electionaudits/contest/
  [TODO: sort it automatically, rather than requiring browser plug-ins

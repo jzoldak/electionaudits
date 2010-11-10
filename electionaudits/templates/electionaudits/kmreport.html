@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ contest }}: Audit Report | {{ block.super }}{% endblock %}
+
+{% block content %}
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
+    <h2>Audit Report for {{ contest }}</h2>
+
+<ul>
+<li>Margin of victory: {{ contest.margin|floatformat:3 }}%</li>
+<li>Total possible miscount / Total apparent margin ("U"): {{ contest.U|floatformat:6 }} </li>
+<li>Number of audit units: {{ contest.contestbatch_set.all|length }}</li>
+</ul>
+<table border="1" cellpadding="5">
+<thead>
+ {% for contestbatch in contest.contestbatch_set.all %}
+  {% if forloop.first %}
+   <tr>
+   <th>Batches</th>
+   <th>Type</th>
+   <th>Ballots</th>
+   <th>Maximum relative miscount: u<sub>p</sub></th>
+   <th>Selection Probability: u<sub>p</sub>/U</th>
+   <th>Cumulative Probability Total</th>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+      <th style="writing-mode: tb-rl;">{{ votecount.choice }}</th>
+   {% endfor %}
+   </tr>
+   <tr>
+   <td>Totals</td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+      <td>{{ votecount.choice.votes }}</td>
+   {% endfor %}
+   </tr>
+  {% endif %}
+ {% endfor %}
+</thead>
+
+<tbody>
+ {% for contestbatch in contest_batches %}
+  {% with contestbatch.batch as batch %}
+  <tr>
+
+   <td>{{ batch.name }}</td>
+   <td>{{ batch.type }}</td>
+   <td>{{ batch.ballots }}</td>
+   <td>{{ contestbatch.u|stringformat:"05f" }}</td>
+   <td>{{ contestbatch.selection_prob|stringformat:"06f" }}</td>
+   <td>{{ contestbatch.cumsum|stringformat:"06f" }}</td>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+     <td><b>{{ votecount.votes }}</b></td>
+   {% endfor %}
+  </tr>
+  {% endwith %}
+ {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

@@ -1,3 +1,22 @@
+2010-11-10  <neal@bcn.boulder.co.us>
+	* Add Kaplan-Markov tabulation data report at /kmreports/<contest>/
+	* Add km_report view and kmreport.html to generate it
+	* Add km_select_units to select audit units for Kaplan-Markov
+	* Add Kaplan-Markov selection report at /kmselections/<contest>/
+	* Add km_selection_report and kmselectionreport.html to generate it
+	* Add parse_boulder_csv to parse Boulder-style audit data and testdata/test-boulder.csv
+	* Add tests: TestBoulderCsv for parse_boulder_csv and TestSWDB_Csv_KM for Kaplan-Markov
+	* Add "margin_offset" to Contest model to allow adjusting for untabulated ballots
+	* Add "replace" and "prng" options to erandom.weightedsample() and speed it up
+	* Add another way to combine audit units for privacy: Batch.merge() and ContestBatch.merge()
+	* Add simple worst-case ContestBatch.taintfactor() calculation method
+	* Automatically recognize different kinds of csv in parser by peeking at header line
+	* Fix parsing bug: use get_or_create in au.save() to avoid error when ballot counts differ
+	   in batch get_or_create: sqlite3.IntegrityError: columns name, election_id, type are not unique
+	* Add timestamps to parser output
+	* Add crude util.input_sub_tallies() function to enter sub-batch tallies and add them up by columns.
+	* Update notes in ToDo
+
 2010-10-26   <neal@bcn.boulder.co.us>
 	* Add strict error bounds calculations.  Contest.U, ContestBatch.u
 	* Add Margin model to store margins between winners and losers

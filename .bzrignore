@@ -13,3 +13,4 @@ setuptools-0.6c9-py2.5.egg
 ElectionAudits.egg-info
 dist
 dev.db.gz
+root/initial_data.json

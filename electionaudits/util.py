@@ -116,7 +116,7 @@ class AuditUnit:
         logging.debug("saving %s" % self)
 
         election, created = models.CountyElection.objects.get_or_create(name=self.election)
-        batch, created = models.Batch.objects.get_or_create(name=' '.join(self.batches), election=election, type=self.type, ballots=self.ballots )
+        batch, created = models.Batch.objects.get_or_create(name=' '.join(self.batches), election=election, type=self.type, defaults={'ballots': self.ballots})
         contest, created = models.Contest.objects.get_or_create(name=self.contest, election=election)
 
         # After contest etc is registered, we bail if no actual vote counts
@@ -192,3 +192,27 @@ class AuditUnit:
                 newballots = self.ballots + other.ballots
             
         return AuditUnit(self.election, self.contest, self.type, newbatches, newballots, **vcs )
+
+def input_sub_tallies():
+    """Enter, transpose and total sub-batches.
+    Convenient way to enter tallies as they come on sub-batch tally forms,
+    and total them up by column.  Run from the python shell, and
+    terminate entry with a blank line.
+    >>> input_sub_tallies
+    11 12 13
+    21 22 23
+
+    ['11 12 13', '21 22 23']
+    [32, 34, 36]
+    """
+
+    lines = []
+    while True:
+        line = raw_input()
+        if line == '':
+            break
+        lines.append(line)
+
+    print lines
+
+    print map(lambda x: reduce(lambda x, y: int(x) + int(y), x), zip(*[line.split() for line in lines]))

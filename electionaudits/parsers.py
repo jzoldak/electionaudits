@@ -113,37 +113,56 @@ def parse(args, options):
 
     totals = {}
 
+    logging.info("%s Start processing files" % (datetime.now().strftime("%H:%M:%S")))
+
     for file in files:
-        logging.info("Processing %s " % file)
+        logging.info("%s Processing %s" % (datetime.now().strftime("%H:%M:%S"), file))
         if file.endswith(".xml"):
             newtotals = parse_xml_crystal(file, options)
             make_audit_unit(totals, newtotals, options)
             totals = newtotals
         elif file.endswith(".csv"):
-            parse_csv(file, options)
-        elif file.endswith(".csv"):   # FIXME: change to better test.  For now manually swap code to match type of csv....
-            parse_hart_csv(file, options)
-        elif file.endswith(".csv"):
-            parse_swdb_csv(file, options)
+            # Identify the type of csv file by looking for diagnostic header names on the first line
+            csvfile = open(file, "rb")
+            header = csvfile.readline()
+            csvfile.seek(0)
+            if header.count('MBB Name') > 0:
+                parse_boulder_csv(file, options)
+            elif header.count('Precinct_name') > 0:
+                parse_csv(file, options)
+            elif header.count('Precinct Name') > 0:
+                parse_hart_csv(file, options)
+            elif header.count('SVPREC_KEY') > 0:
+                parse_swdb_csv(file, options)
+            else:
+                logging.warning("Ignoring %s - unknown type of csv file" % file)
+                continue
         elif file.endswith(".txt"):
             parse_sequoia(file, options)
         #elif file.endswith(".dbf"):
         #    parse_swdb(file, options)
         else:
             logging.warning("Ignoring %s - unknown extension" % file)
+            continue
 
     util.flushPipes()
 
-    # Update tallies on all contests, just in case
+    # Update tallies on all contests, just in case.   FIXME: if -c is used, and no other parms are changed, just do those
     for contest in models.Contest.objects.all():
+        logging.debug("%s Tally %s" % (datetime.now().strftime("%H:%M:%S"), contest))
         stats = contest.tally()
+        error_bounds = contest.error_bounds()
 
         print("%(contest)-34.34s: %(total)8d %(winnervotes)8d %(winner)-8.8s %(secondvotes)8d %(second)-8.8s  %(margin)6.2f%%" % stats)
 
+    logging.info("%s Exit" % (datetime.now().strftime("%H:%M:%S")))
+
 @transaction.commit_on_success
 def parse_csv(file, options):
-    """Parse a csv file of election data.  The model of this format
-    is the San Mateo precinct spreadsheet in "testdata/test-san-mateo-dp-92-p.csv".
+    """Parse a csv file of election data.
+    It has one line per candidate per contest per precinct.
+    The model of this format is the San Mateo precinct
+    spreadsheet in "testdata/test-san-mateo-dp-92-p.csv".
     If the data is to be aggregated for privacy (the default), the data
     should be sorted by batch (precinct).
     """
@@ -254,10 +273,14 @@ def parse_hart_csv(file, options):
 def parse_sequoia(file, options):
     """Parse Sequoia precinct results in "text with headers" format:
     a tab-separated .txt file.
+    It has one line per candidate per contest per precinct.
     The model of this format is the Denver 2008 data sample
     in "testdata/test-sequoia-precinct.txt".
     If the data is to be aggregated for privacy (the default), the data
     should be sorted by batch (precinct).
+    The first line has the column headers:
+PRECINCT_NAME	CANDIDATE_FULL_NAME	contest_party_id	candidate_party_id	CONTEST_TYPE	contest_id	CONTEST_ORDER	CANDIDATE_ORDER	CONTEST_FULL_NAME	TOTAL	PRECINCT_ID	precinct_order	contest_vote_for	PROCESSED_DONE	PROCESSED_STARTED	CONTEST_TOTAL	IS_WRITEIN	undervote	overvote
+
     Question - can separate Absentee, Early and In-precinct count be generated?
     """
 
@@ -293,9 +316,61 @@ def parse_sequoia(file, options):
             au_AB.update('Over', r['overvote'])
 
 @transaction.commit_on_success
+def parse_boulder_csv(file, options):
+    """Parse Boulder Audit CSV file.
+    It has one line per contest per batch.
+    A sample is in testdata/test-boulder-csv.txt
+    The first line is a header line like this, including columns for each choice.
+    The last valid choice for a contest is always 'Under Votes':
+"MBB Name","Contest Name","Contest Ballots","YES","NO","Cast Votes","Over Votes","Under Votes",,,,,,,,
+
+    """
+
+    election = options.election
+
+    reader = csv.DictReader(open(file), delimiter=",")
+
+    au = util.AuditUnit()
+
+    for r in reader:
+        batch = [r['MBB Name'] + options.batchid]
+        contest = r['Contest Name']
+        ballots = r['Contest Ballots']
+
+        #TODO: If this is a primary, see how to get party information
+
+        if options.contest != None and options.contest != contest:
+            continue
+
+        for choice in reader.fieldnames[3:]:
+            # Skip the "Cast Votes" column, in among the subtotals
+            if choice == "Cast Votes":
+                continue
+
+            # Use standard names for votes that are Under or Over
+            db_choice = choice
+            if db_choice == "Under Votes":
+                db_choice = "Under"
+            if db_choice == "Over Votes":
+                db_choice = "Over"
+
+            # If the batch or contest has changed, push out the previous units
+            if batch != au.batches  or  contest != au.contest:
+                logging.debug("now batch '%s' contest '%s' at line %d" % (batch, contest, reader.reader.line_num))
+                util.pushAuditUnit(au, min_ballots = options.min_ballots)
+                au = util.AuditUnit(election, contest, 'U', batch, ballots)	# FIXME: try to extract type from batch name
+
+            au.update(db_choice, r[choice])
+
+            if choice == 'Under Votes':
+                break
+
+    util.pushAuditUnit(au, min_ballots = options.min_ballots)
+
+
+@transaction.commit_on_success
 def parse_swdb_csv(file, options):
-    """TODO! add presumed Undervotes based on sum of votes vs batch.ballots
-    Parse csv dump of swdb data - a comma-separated .csv file.
+    """Parse csv dump of California Statewide Database (SWDB) - a comma-separated .csv file.
     If the data is to be aggregated for privacy (the default), the data
     should be sorted by batch (precinct).
     Question - can separate Absentee, Early and In-precinct count be generated?
@@ -327,6 +402,13 @@ def parse_swdb_csv(file, options):
                 au = util.AuditUnit(election, contest, 'U', batch, ballots)
 
             au.update(choice, r[choice])
+
+        # Undervotes and Overvotes are not included in the input, but their sum is
+        # implicit in the number of ballots minus the votes for candidates.
+        # So make contest_ballots() work by assuming that all the unaccounted for ballots are undervoted.
+        au.update("Under", str(int(ballots) - au.contest_ballots()))
+
+    util.pushAuditUnit(au, min_ballots = options.min_ballots)
 
 '''
 Comment out until we figure out good supported way to parse dbf files.

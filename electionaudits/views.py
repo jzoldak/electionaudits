@@ -40,7 +40,7 @@ def eml510(request, contest):
                               mimetype='text/xml' )
 
 def report(request, contest):
-    """Generate audit report for all ContestBatches and VoteCounts
+    """Generate NEGEXP audit report for all ContestBatches and VoteCounts
     associated  with the contest"""
 
     contest = get_object_or_404(Contest, id=contest)
@@ -61,6 +61,34 @@ def report(request, contest):
                               {'contest': contest,
                                'contest_batches': audit_units,
                                'stats': stats } )
+
+def km_report(request, contest):
+    """Generate Kaplan-Markov audit report for all ContestBatches and VoteCounts
+    associated  with the contest"""
+
+    contest = get_object_or_404(Contest, id=contest)
+
+    contest_batches = contest.contestbatch_set.all()  # FIXME: support sorting based on query parm: .order_by('-u')
+    sum = 0.0
+    for contest_batch in contest_batches:
+        contest_batch.selection_prob = contest_batch.u / contest.U
+        sum = sum + contest_batch.selection_prob
+        contest_batch.cumsum = sum
+
+    return render_to_response('electionaudits/kmreport.html',
+                              {'contest': contest,
+                               'contest_batches': contest_batches } )
+
+def km_selection_report(request, contest):
+    """Generate Kaplan-Markov audit report for selected ContestBatches"""
+
+    contest = get_object_or_404(Contest, id=contest)
+
+    selections = contest.km_select_units()
+
+    return render_to_response('electionaudits/kmselectionreport.html',
+                              {'contest': contest,
+                               'selections': selections } )
 
 def results(request):
     """Generate results list for all selected audit units"""

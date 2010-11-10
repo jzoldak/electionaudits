@@ -15,19 +15,27 @@ def cumsum(items, sigma=0.0):
         sigma += item
         yield sigma
 
-def weightedsample(seq, weights, n=1):
-    "select n items from seq, weighted by weights, without replacement"
+def weightedsample(seq, weights, n=1, replace=False, prng=random.random):
+    """Select n items from seq, weighted by the corresponding entries in weights,
+    with or without replacement.
+    By default, use the python random.random() function, but an alternate can be provided.  E.g.
+    >>> erandom.weightedsample(['a','b','c'], [1,2,3], 3, True, itertools.cycle([.9,.9,.8]).next)
+    """
 
     result = []
+    cum_weights = list(cumsum(weights))
+    tot = cum_weights[-1]
+
     for _ in xrange(n):
-        cum_weights = list(cumsum(weights))
         tot = cum_weights[-1]
 
-        i = bisect.bisect(cum_weights, random.uniform(0, tot))
+        i = bisect.bisect(cum_weights, prng() * tot)
         result.append(seq[i])
-        del seq[i:i+1]
-        del weights[i:i+1]
-        
+        if not replace:
+            del seq[i:i+1]
+            del weights[i:i+1]
+            cum_weights = list(cumsum(weights))
+
     return result
 
 def ssr(precinct, seed):

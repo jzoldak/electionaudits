@@ -6,16 +6,21 @@ Is median right in varsize.print_precinct_stats()?  Why?  Only sorted in Contest
 
 Bugs
 ====
-Fix bug: missing final audit unit - problem with flushpipes for some parsers?
+
+Fix possible bug in some csv parsers: missing final audit unit - problem with flushpipes
  worked to parse the last line, followed by a line I didn't care about
   the latter line caused new contest to be registered, with zero votes
+ /srv/voting/californiadb/g08_svprec_trim_nonzero-tail.csv
+  == (head -1 /srv/voting/californiadb/*csv ; tail -1 ../testdata/test-swdb-cd3.csv ; tail -1 /srv/voting/californiadb/*.csv) 
+
+Delete old Margin entries before recalculating new ones
+
+incorporate margin_offset in tally margin calculations
+deal properly with strict error_bounds and margins in multi-county contests
 
 Why no negative alert for  j001_mb_052.xml after p287_mb_735.xml ?
 
 Fix "ballots to audit" for contests that allow multiple votes
-
-Parse different kinds of csv: Hart, San Mateo County, swdb csvs - need new option?
- Or recognize type of file, e.g. from first line?
 
 Look at TestT0 failure on ec2:
  ValueError: Negative vote count in ElectionAudits Test Election_STATE REPRESENTATIVE - DISTRICT 10_ED_['p014_lat_ed_002']_-1: Dorothy Marshall Republican is -1
@@ -31,29 +36,68 @@ Mark Lindeman example:
  /home/srv/voting/audit/kaplan-example-1.2.pdf
   and https://docs.google.com/fileview?id=0B2nDnxGP_08mZjY2NGJlNmMtZTM0Ni00NjExLWFkNjUtNzgwZDhmN2U0NmQx&hl=en
 
-Get error bounds right - during Contest.tally()?
- done: Calculate error bounds by batch based on results for loser
+ need to add contest to Margin model
+    possible to delete all margins for a contest prior to recalculation, and fix situations with invalid Choices
+    easier to iterate over them for a contest
+    and I suppose two candidates could be in multiple races together
 
-  calculate and add overall margin matrix to model - needed for taint calculation
-   new model: margin, with two Choice foreign keys
-  add u-value (maximum possible reduction in margin) to ContestBatch for selection
-  add U to Contest
-  add number of winners to Contest, and re-tally when it changes
+For use from vote tabulation templates, and from taint calculations:
+ save winners and losers in database during tallies?
+   what about ties??  no entry?
+   using a new Winners (and perhaps Losers) model with Contest and Choice foreign keys?
+   or highest vote-getter in Contest model (except for ties....)
+   And remember to delete all entries for a contest at beginning of tally or error_bounds....
+   or somehow save a sorted list of the Choices?
 
- change logic to mark ContestBallots for audit at tally time?  but when to un-mark?
+ add option to set late_ballots for each contest, during parsing before error_bounds is called
+ turn km_select_units into generator that yields as many items as are asked for??  risk of unexpected results from threads??
+ change logic to mark ContestBallots for audit at tally time, if random selection has been done?
+  but when to un-mark or re-mark?
 
- generate ppeb audit unit selections, and note possibility of multiple selections
-  change "selected" to be an integer
+ report ideas from tables in mark's paper:
+  tabulation: county code, precinct, total votes, choice A, choice B, u sub p, prob: u sub p / U, cumulative sum
+  results: precinct, ballots cast, choices A B C D, times drawn, audit A, audit B, audit C, audit D, e_B, e_C, e_D, taint = max{e}/u sub p, KM factor, net KM factor
+
+ table for initial unofficial tabulation:
+ cumtot, u, batches, ballots, choice a..n
+   or sequence #, u, cumtot,   if u & cumtot go at end, hard to find, access, but less initial confusing clutter
+ for selection:
+  pick number, random, precinct, ballots, possibly choice a..n, discrepancies, taint, km, net km, cumulative km
+   or seq# u, 
+ for results, add counts, discrepancies, taint, cumulative km
+
+ NOTE duplicated batches in kmselection report.
+ provide overall margin
+ drop or comment out NEGEXP stats
+ add audit method indication to Contest and use one report() view?
+  or allow for both at once, and add km_report() view, from km/ url or km option on urls
+ add some sort of custom code or plug-in method to facilitate setting batch size - execute python script option?
+  e.g. from django-extensions: runscript - Runs a script in django context.
+  or just use "shell" command or put together a separate command-line option
+ LOOK at using contest_ballots in error_bounds calculation, not batch.ballots
+  FIRST need to fix some tests and parsers that don't add under/over votes??
+ FIXME: select_units_eb if U is None
+
+ how/where to specify k-m confidence alongside aslam, without trashing stats
+
+ improve generation of ppeb audit unit selections, and note possibility of multiple selections
+  change "selected" to be an integer!
+  return how many? need a "select more" capability??
   add "with replacement" option to erandom.weightedsample()
 
  switch margin to integer, not percent?
  confidence ==> float?
 
 Add code for discrepancies:
- Record hand counts - possibly more than one?  perhaps add a type and number to VoteCount? (machine vs hand count; sequence number)
-   or change CountyElection to something more like a "tabulation", with administration unit and type and number?
-   and then a web of linkages between tabulations and contests
-  add some way of noting expedted future tabulations - list a total poll book or ballot count expected in the countyelection/tabulation record??
+ Record hand counts, perhaps for individual sub-batches of main batch, one per sub-batch (scan batch) tally sheet
+   possibly more than one hand count.
+   subclass ContestBatch?
+   perhaps add a type and number to contestbatch? (machine vs hand count; sequence number)
+    or add a "Tabulation" model with administration unit and type and number?
+   and then a web of linkages between tabulations and contestBatches
+
+  restrict to "primary tally" contestbatches for most work: to tally contest, merging, 
+  record primary tally in countyelection
 
  add discrepancy for each audit unit to ContestBatch?  Or just decrease in margin, by contest?  record for every loseer (every margin) or just max?
   or just calculate them by comparing tabulations?
@@ -80,15 +124,24 @@ Speed up parsing: cache election, batch and contest lookups for better speed
 calculate (optionally?) and store needed data from Contest.stats() at parse time
  or when parms change
 
+Note: Minimize transactions: SQLite will only do a few dozen transactions per second. Transaction speed is limited by the rotational speed of your disk drive. A transaction normally requires two complete rotations of the disk platter, which on a 7200RPM disk drive limits you to about 60 transactions per second.
+ http://www.rkblog.rk.edu.pl/w/p/sqlite-performance-and-django/
+
 Testing
 =======
 Add test cases for EML, Hart (csv), Sequoia (txt) format and swdb (dbf) format
+
+Speed up TestCsv - use smaller file.  About 2 minutes on puny machine....
+
+Log tests more, e.g. timestamps and test name at beginning of each test, save all output in file labeled with version, Django version, machine, etc.
 
 Make tests more robust.
 E.g. need floating point fuzz? 
 
 Testing bug in   manage.py test electionaudits.TestT0
  testdata/t0/reports.html St Vrain Negexp ballots: 23 on my machine, 22 on Aaron's windows box
+
+Note/Beware reliance on packages in local $PYTHONPATH when using runserver etc.
 
 Note that changing how merging and parsing is done can change audit unit numbers, contestbatch ids, urls to contestbatch notes,
 and perhaps even how to select stuff in test cases
@@ -121,11 +174,41 @@ current http://127.0.0.1:8000/admin/electionaudits/contestbatch/109/ == amend 56
 Interface, Usability
 ====================
 
+Only show "Contests selected for auditing are highlighted in yellow." if there are some, or perhaps if random is there.
+  Add highlights to kmreport/c/ files?  probably better to avoid touching those?
+
+Put election names on home page
+Add a more user-friendly check at parse time for -i parsing to detect out-of-order, e.g. via total_ballots somehow?
+
 Features
 ========
-Add Mersenne twister as an option - needs option variable in county-election?
+
+Add contest views with Kaplan-Markov data, linking to /kmreports/ and /kmselections/
+
+kmreport: present audit units sorted: order_by -u
+
+Add a logger for significant events, like files parsed, database changes(??), which writes to a file
+Track and provide access to last DB modification or user action somehow.
+
+Show more statistics: u value of median selection - i.e. for random number of 0.5; median u value; median size;
 
 Print total number of ballots at end of parsing summary, and contest ballots for each contest
+
+Add version number to database, check it, maybe auto-convert.
+
+In boulder csv parsing, extract Type from name of batch if possible
+
+Add a simple command to just show information about the current database.  even via shell.
+
+Add GUI interface to run Batch.merge() and ContestBatch.merge() functions to combine audit units and batches.
+
+Add Mersenne twister as an option in the user interface - needs option variable in county-election?
+ and need to figure out standard and good way to seed it from 15-digit number
+ and clarify which version of mersenne twister for voting, python - 19937 or 19937-64 (64-bit)
+ and document sample output from known seed.
+
+Add type of contest information (notes?): county-wide, subset of county; superset of county; sub-superset like estes valley
+
 
 Generate a pivot table of preference tendencies by precincts vs contests
 
@@ -144,6 +227,20 @@ Finish direct swdb import support and stub it back in to parsers.ph, as in versi
 Documentation
 =============
 
+Refactoring
+===========
+
+Combine tally() and error_bounds
+
+get floating division via "from __future__ import division"   http://www.python.org/dev/peps/pep-0238/
+  look for "* 1.0" and use finddiv.py to find what to fix
+
+Use xrange() rather than range()
+
+Perhaps require python 2.6 and use named tuples for clarity?
+ Named tuples are especially useful for assigning field names to result tuples returned by the csv or sqlite3 modules:
+
+When we get to Python 2.7, use Counter object (dict subclass) for votes??  convenient subtract(), most_common() etc...
 
 Unclassified
 ============
@@ -459,7 +556,6 @@ parsers.py: accept xml precinct reports also
 Parse data from San Diego - easy csv format in Election Night Results Export.zip
  http://www.sdcounty.ca.gov/voters/Eng/rov_highlights.shtml
 
-Add version number to database, check it, maybe auto-convert.
 Make it easy to run with debug but no other dependencies.
  And perhaps no sql logging?
 Report 500 errors better, e.g. http://www.djangosnippets.org/snippets/638/
@@ -668,20 +764,23 @@ to lead auditors thru the PROCEDURE steps from the README
 Packaging:
 ==========
 Currently for each new release:
+ look for any remaining FIXME's that are important for this release
  make sure version number is updated in setup.py
  make sure README, web page and other docs are in sync and labeled with version
  run tests, using different django versions, on different platforms, etc
  check web page validations (as part of test?)
  check bzr diff
  bzr ls --versioned -R | sed 's/^/include /' > MANIFEST.in
- python setup.py egg_info -b .dev-r67 sdist   # for development build - do sdist with particular .dev pre-release version
+ python setup.py egg_info -b .dev-r70 sdist   # for development build - do sdist with particular .dev pre-release version
  python setup.py sdist       	      	      # or this for published release build with given version
  #maybe manually delete incoming/DELETME.txt
- i=ElectionAudits-1.0.dev-r67  # or whatever it made in dist/ minus extensions
+ i=ElectionAudits-1.0.dev-r70  # or whatever it made in dist/ minus extensions
+ savetest=$PWD/dist/test-$i.out
  tar -C /tmp -zxf /srv/s/electionaudits/trunk/dist/$i.tar.gz
  cd /tmp/$i/root
- (time ./manage.py test electionaudits) > /tmp/electionaudits-test.out 2>&1   # and keep a record of timing, output
-   1-0.dev-r67 on jl: real    2m17.460s user    2m0.952s sys     0m0.828s
+ (time ./manage.py test electionaudits) > $savetest 2>&1   # and keep a record of timing, output
+   1-0.dev-r67 on jl: real  2m17.460s   user  2m 0.952s   sys 0m 0.828s
+   1-0.dev-r70 on jl: real  5m 5.477s   user  0m27.282s   sys 4m10.752s
 
  deploy in virtual environment from media
  deploy on demo site

@@ -7,7 +7,9 @@ import math
 import logging
 import StringIO
 import operator
+import itertools
 from django.db import models
+from django.db import transaction
 from django.core.cache import cache
 from electionaudits import varsize
 import electionaudits.erandom as erandom
@@ -30,7 +32,9 @@ class Contest(models.Model):
     numWinners = models.IntegerField(default = 1,
                     help_text="Number of winners to be declared" )
     confidence = models.IntegerField(default = 75,
-                    help_text="Desired level of confidence in percent, from 0 to 100" )
+                    help_text="Desired level of confidence in percent, from 0 to 100, assuming WPM of 20%" )
+    #confidence_eb = models.IntegerField(default = 50,
+    #                help_text="Desired level of confidence in percent, from 0 to 100, incorporating rigorous error bounds" )
     proportion = models.FloatField(default = 100.0,
                     help_text="This county's proportion of the overall number of votes in this contest" )
     margin = models.FloatField(blank=True, null=True,
@@ -39,29 +43,39 @@ class Contest(models.Model):
                     help_text="(Winner - Second) / total including under and over votes, in percent" )
     U = models.FloatField(blank=True, null=True,
                     help_text="Total possible miscount / total apparent margin." )
+    margin_offset = models.IntegerField(default = 0,
+                    help_text="Reduce overall margins by this amount, e.g. for ballots yet to be counted." )
 
     selected = models.NullBooleanField(null=True, blank=True,
                     help_text="Whether contest has been selected for audit" )
 
+    @transaction.commit_on_success
     def error_bounds(self):
-        "Calculate margins between the Choices in this contest, and error bounds"
-
-        numWinners = 1		# 
+        """Calculate winners, losers, overall Margin between each pair of them in this contest,
+        and error bound 'u' for each audit unit.
+        """
 
         choices = self.choice_set.all()
         ranked = sorted([choice for choice in choices if choice.name not in ["Under", "Over"]], key=lambda o: o.votes, reverse=True)
-        winners = ranked[:numWinners]
-        losers = ranked[numWinners:]
+        winners = ranked[:self.numWinners]
+        losers = ranked[self.numWinners:]
+
+        if len(winners) == 0 or winners[0].votes == 0:
+            logging.warning("Contest %s has no votes" % self)
+            return
 
         # margins between winners and losers
 
         margins={}
+        # FIXME: delete existing Margin database entries for this contest
         for winner in winners:
             margins[winner] = {}
             for loser in losers:
-                margins[winner][loser] = winner.votes - loser.votes
+                margins[winner][loser] = max(0, winner.votes - loser.votes - self.margin_offset)
 
-                margin, created = Margin.objects.get_or_create(votes = winner.votes - loser.votes, choice1 = winner, choice2 = loser)
+                # FIXME: Look for, deal with ties....
+
+                margin, created = Margin.objects.get_or_create(votes = margins[winner][loser], choice1 = winner, choice2 = loser)
                 margin.save()
 
         self.U = 0.0
@@ -74,20 +88,26 @@ class Contest(models.Model):
 
             for winner in winners:
                  for loser in losers:
-                     au.u = max(au.u, float(au.batch.ballots + vc[winner] - vc[loser]) / margins[winner][loser])
+                     if margins[winner][loser] <= 0:
+                         logging.warning("Margin is %d for %s vs %s" % (margins[winner][loser], winner, loser))
+                         continue
+                     au.u = max(au.u, float(au.contest_ballots() + vc[winner] - vc[loser]) / margins[winner][loser])
 
             au.save()
             self.U = self.U + au.u
 
         self.save()
 
-        return {'winners': winners,
+        return {'U': self.U,
+                'winners': winners,
                 'losers': losers,
                 'margins': margins,
                 }
 
     def tally(self):
         "Tally up all the choices and calculate margins"
+
+        # First just calculate the winner and second place
 
         total = 0
         winner = Choice(name="None", votes=0, contest=self)
@@ -156,6 +176,35 @@ class Contest(models.Model):
         else:
             return self.threshhold() / self.ssr()
 
+    def km_select_units(self, factor=2.0, prng=None):
+        """Return a list of selected contest_batches for the contest, based on error bounds and seed
+        Return "factor" times as many as the current confidence level requires to show what may be needed if there are discrepancies.
+        prng (Pseudo-Random Number Generator) is a function.  It defaults to Rivest's Sum of Square Roots, but
+        can be specified as a function that returns numbers in the range [0, 1)
+        """
+
+        contest_batches = self.contestbatch_set.all()
+        weights = [cb.u for cb in contest_batches]
+
+        confidence = self.confidence
+        if confidence == 90:	# FIXME: make this more general - use log ratio like this?
+            confidence = 50
+
+        alpha = ((100-confidence)/100.0)
+        n = int(math.ceil(math.log(alpha) / math.log(1.0 - (1.0 / self.U))) * factor)	#  FIXME: deal with U = None
+
+        if not prng:
+            # The default pseudo-random number generator is to call ssr (Rivest's Sum of Square Roots algorithm)
+            # with an incrementing first argument, and the current election seed: ssr(1, seed); ssr(2, seed), etc.
+            prng = itertools.imap(erandom.ssr, itertools.count(1), itertools.repeat(self.election.random_seed)).next
+
+        # FIXME: avoid tricks to retain random values here and make this and weightedsample() into
+        # some sort of generator that returns items that are nicely bundled with associated random values
+        random_values = [prng() for i in range(n)]
+        prng_replay = iter(random_values).next
+
+        return zip(erandom.weightedsample(contest_batches, weights, n, replace=True, prng=prng_replay), random_values)
+
     def select_units(self, stats):
         """Return a list of contest_batches for the contest,
         augmented with ssr, threshhold and priority, 
@@ -198,6 +247,27 @@ class Batch(models.Model):
     notes = models.CharField(max_length=200, null=True, blank=True,
                     help_text="Free-form notes" )
 
+    @transaction.commit_on_success
+    def merge(self, other):
+        "merge this Batch with another Batch, along with associated ContestBatches and VoteCounts"
+
+        if self.election != other.election:
+            logging.error("Error: %s is election %d but %s is election %d" % (self, self.election, other, other.election))
+
+        if self.type != other.type:
+            logging.error("Error: %s is type %d but %s is type %d" % (self, self.type, other, other.type))
+
+        for other_cb in other.contestbatch_set.all():
+            my_cb, created = ContestBatch.objects.get_or_create(contest = other_cb.contest, batch = self)
+            my_cb.merge(other_cb)
+
+        self.name += "+" + other.name
+        self.ballots += other.ballots
+        self.notes = (self.notes or "") + "; " + (other.notes or "")
+
+        self.save()
+        other.delete()
+
     def ssr(self):
         """Sum of Square Roots (SSR) pseudorandom number calculated from
         batch id and the random seed for the election"""
@@ -229,6 +299,35 @@ class ContestBatch(models.Model):
     def contest_ballots(self):
         "Sum of recorded votes and under/over votes.  C.v. batch.ballots"
         return sum(a.votes for a in self.votecount_set.all())
+
+    @transaction.commit_on_success
+    def merge(self, other):
+        "merge this ContestBatch with another ContestBatch, along with associated VoteCounts"
+
+        logging.debug("merging: %s and %s" % (self, other))
+
+        for other_vc in other.votecount_set.all():
+            my_vc, created = VoteCount.objects.get_or_create(contest_batch = self, choice = other_vc.choice, defaults={'votes': 0})
+            logging.debug("merging: %s and %s" % (my_vc, other_vc))
+            my_vc.votes += other_vc.votes
+            my_vc.save()
+            other_vc.delete()
+
+        self.notes = (self.notes or "") + "; " + (other.notes or "") + "; M: " + str(self)
+        self.save()
+        other.delete()
+
+    def taintfactor(self, discrepancy):
+        "Taint for a given discrepancy - assume it is for closest margin"
+
+        # First figure out the minumum margin of all pairs of winners and losers for this contest
+        min_margin = sys.maxint
+        for choice in self.contest.choice_set.all():
+            min_margin = min([min_margin] + [margin.votes for margin in Margin.objects.filter(choice1__exact = choice.id)])
+
+        maxrelerror = discrepancy * 1.0 / min_margin
+        taint = maxrelerror / self.u
+        return (1.0 - (1.0 / self.contest.U)) / (1.0 - taint)
 
     def __unicode__(self):
         return "%s:%s" % (self.contest, self.batch)
@@ -324,3 +423,5 @@ class Margin(models.Model):
     def __unicode__(self):
         return "%s-%s" % (self.choice1.name, self.choice2.name)
 
+    class Meta:
+        unique_together = ("choice1", "choice2")

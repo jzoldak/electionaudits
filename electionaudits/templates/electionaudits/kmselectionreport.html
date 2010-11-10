@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ contest }}: Audit Report | {{ block.super }}{% endblock %}
+
+{% block content %}
+{% with contest.election.random_seed as random_seed %}
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
+    <h2>Audit Selection Report for {{ contest }}</h2>
+
+<ul>
+<li>Margin of victory: {{ contest.margin|floatformat:3 }}%</li>
+<li>Total possible miscount / Total apparent margin ("U"): {{ contest.U|floatformat:6 }} </li>
+<li>Number of audit units: {{ contest.contestbatch_set.all|length }}</li>
+</ul>
+
+{% if random_seed %}
+<p>The audit units reported below were selected using the random seed value <strong>{{ random_seed }}</strong> combined with the Sequence numbers according to the "Sum of Square Roots" pseudorandom number generator.
+</p>
+<p>The first half of this list will be audited first, and if there are not many discrepancies with the hand count, that is all that will be needed.  Otherwise, additional units moving down the list will be audited, until the Kaplan-Markov calculation reaches the pre-specified confidence level. </p>
+{% endif %}
+{% endwith %}
+
+<table border="1" cellpadding="5">
+<thead>
+ {% for contestbatch, random in selections %}
+  {% if forloop.first %}
+   <tr>
+   <th>Sequence</th>
+   <th>Random</th>
+   <th>Batches</th>
+   <th>Type</th>
+   <th>Ballots</th>
+   <th>Maximum relative miscount: u<sub>p</sub></th>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+      <th style="writing-mode: tb-rl;">{{ votecount.choice }}</th>
+   {% endfor %}
+   </tr>
+   <tr>
+   <td>Totals</td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+      <td>{{ votecount.choice.votes }}</td>
+   {% endfor %}
+   </tr>
+  {% endif %}
+ {% endfor %}
+</thead>
+
+<tbody>
+ {% for contestbatch, random in selections %}
+  {% with contestbatch.batch as batch %}
+  <tr>
+
+   <td>{{ forloop.counter|stringformat:"06d" }}
+   <td>{{ random|stringformat:"06f" }}</td>
+   <td>{{ batch.name }}</td>
+   <td>{{ batch.type }}</td>
+   <td>{{ batch.ballots }}</td>
+   <td>{{ contestbatch.u|stringformat:"05f" }}</td>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+     <td><b>{{ votecount.votes }}</b></td>
+   {% endfor %}
+  </tr>
+  {% endwith %}
+ {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}
