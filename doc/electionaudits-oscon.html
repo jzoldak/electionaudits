@@ -1,0 +1,82 @@
+<p>ElectionAudits talk for OSCON - 2009-07-22
+by <a href="http://neal.mcburnett.org/">Neal McBurnett</a></p>
+
+<h1>ElectionAudits: a Django App for Advanced Election Auditing</h1>
+
+<ul>
+<li>Boulder County used open source code to audit its 2008 election!</li>
+<li><p>Share the story, share the code, and get you all involved where you live.</p></li>
+<li><p>Why audit?</p></li>
+<li>Elections to celebrate: South Africa 1994, paper ballots, hand counted</li>
+<li>Obvious disasters: Iran 2009 - clearly fraudulent <a href="http://www.chathamhouse.org.uk/publications/papers/view/-/id/755/">Preliminary Analysis of the Voting Figures in Iran's 2009 Presidential Election</a></li>
+<li>US problems with elections: black box voting systems</li>
+<li>Not just a problem with touch screen devices (DRE)</li>
+<li>Humboldt County 2008: 197 ballots deleted by Diebold/Premier without a trace.</li>
+<li>Certified</li>
+<li><p>Discovered later by Humboldt County Election Transparency Project audit</p></li>
+<li><p>Goal: software independence, via auditable paper records, good audits</p></li>
+<li>Open Source voting systems: Great!</li>
+<li>Good audits and chain of custody: Necessary</li>
+</ul>
+
+<p>fascinating algorithms behind modern election auditing,
+  negexp, ssr, 
+  Rivest's Sum of Square Roots method</p>
+
+<h1>How - what is an audit anyway?</h1>
+
+<ul>
+<li>Audit Election: Compare sample of detailed results with hand counts</li>
+<li>Auditing hand-counted election:
+<em>* Count piles of ballots by hand and write subtotals down
+*</em> add them up
+** check arithmetic and compare to number of ballots</li>
+<li>Optical scanners arrived: era of trusting computers too much</li>
+<li>Audit DREs without voter verified paper trail?  Can't do it....  Pushback.</li>
+<li>Audit optical scan systems, e.g.<a href="http://bcn.boulder.co.us/~neal/elections/boulder-audit-08-11/reports/4/">Markey vs Musgrave</a></li>
+<li>Closing loopholes and gaps; Getting more efficient,  Improved confidence in election outcomes
+<!-- in Boulder than anywhere but a few California counties which also had good audits
+. and Minnessota and ?? --></li>
+<li>Map of how audits vary by state: (from ea web site)</li>
+<li>Fixed percentage vs Risk-limiting audits</li>
+<li><a href="http://bcn.boulder.co.us/~neal/elections/boulder-audit-08-11/selections/4/">Selections for Markey vs Musgrave</a></li>
+<li><a href="http://electionaudits.org/principles/">Principles and Best practices</a></li>
+<li>Results</li>
+</ul>
+
+<h1>Django and Python</h1>
+
+<ul>
+<li>Rivest's varsize.py</li>
+<li>ElectionAudits - MIT license</li>
+<li>Hosted at Launchpad, Bzr</li>
+<li>Debug_toolbar for great debugging over the web</li>
+</ul>
+
+<h1>Help wanted with:</h1>
+
+<ul>
+<li>Web presentation: css, layout</li>
+<li>Logo</li>
+<li>XML expertise, e.g. for reading and writing (and improving) Election Markup Language</li>
+<li>Database design</li>
+<li>Django/python insights</li>
+<li>Implement features</li>
+<li>Windows testing, installation, eggs and Django, etc</li>
+<li>Help getting auditing laws passed.  c.v. Colorado - Election Reform Commission</li>
+<li><p>Biggest challenge: getting useful data out of election systems</p></li>
+<li><p>At 1:45: <em>Open Source and Democracy - Creating transparent, trustworthy voting systems</em></p></li>
+<li>Code is Law - Write our own procedures (after randomness cluelessness)</li>
+</ul>
+
+<h1>Links:</h1>
+
+<ul>
+<li><a href="https://edge.launchpad.net/electionaudits">ElectionAudits on Launchpad</a></li>
+<li><a href="http://bcn.boulder.co.us/~neal/elections/boulder-audit-08-11/">Boulder Audit, 2008</a></li>
+<li>(https://edge.launchpad.net/electionaudits)</li>
+<li><a href="http://neal.mcburnett.org/blog/2008/10/18/electionaudits-software-help-audit-election/">Help Audit Elections</a></li>
+<li><a href="http://arstechnica.com/news.ars/post/20081221-open-source-auditing-tool-boosts-election-integrity.html">Open source auditing tool boosts election integrity</a> -  ArsTechnica</li>
+</ul>
+
+<p>This talk: <a href="http://bcn.boulder.co.us/~neal/electionaudits/electionaudits-oscon.html">http://bcn.boulder.co.us/~neal/electionaudits/electionaudits-oscon.html</a></p>

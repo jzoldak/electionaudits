@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Vote Count List</h2>
+<table border="1" cellpadding="5">
+<tbody>
+        {% for votecount in votecounts_list %}
+<tr>
+ <td><a href="{{ votecount.id }}">{{ votecount.votes }}</a></td>
+ <td>{{ votecount.choice }}</td>
+ <td>{{ votecount.batch }}</td>
+</tr>
+        {% endfor %}
+</tbody>
+</table>
+{% endblock %}

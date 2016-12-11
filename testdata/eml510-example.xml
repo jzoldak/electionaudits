@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ea510_style.xsl"?>
+<EML xmlns="urn:oasis:names:tc:evs:schema:eml"
+  xmlns:xnl="urn:oasis:names:tc:ciq:xnl:3"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:oasis:names:tc:evs:schema:eml ../510-count-v6-0.xsd"
+ Id="510"
+ SchemaVersion="6.0">
+  <TransactionId>1</TransactionId>
+  <!-- Todo: Do referenda right, via ReferendumOptionIdentifier; Fix style sheet for under/over via Abstentions and RejectedVotes -->
+  <MessageLanguage>en-US</MessageLanguage>
+  <IssueDate>2009-11-22T15:58:47</IssueDate>
+  <Count>
+    <EventIdentifier IdNumber="1">
+      <EventName>1A - RAINY DAY&quot; BUDGET STABILIZATION FUND.&quot;</EventName>
+    </EventIdentifier>
+    <Election>
+      <ElectionIdentifier IdNumber="1">
+	<ElectionName>ElectionAudits Test Election</ElectionName>
+      </ElectionIdentifier>
+      <Contests>
+        <Contest>
+          <ContestIdentifier IdNumber="1">
+            <ContestName>1A - RAINY DAY&quot; BUDGET STABILIZATION FUND.&quot;</ContestName>
+          </ContestIdentifier>
+	  <TotalVotes>
+	    <!-- FIXME: Add CountMetrics for Total # ballots # contest ballots # batches -->
+	    <CountMetric Id="PR" Type="Precincts Reporting">6</CountMetric>
+	    
+	    
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="1">
+                  <CandidateName>YES</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>YES</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails> <!-- what is this? -->
+              </Candidate>
+              <ValidVotes>301</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="2">
+                  <CandidateName>NO</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>NO</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails> <!-- what is this? -->
+              </Candidate>
+              <ValidVotes>615</ValidVotes>
+            </Selection>
+	    
+	    <Abstentions>8</Abstentions>
+	    <RejectedVotes ReasonCode="overvote">1</RejectedVotes>
+	    
+	  </TotalVotes>
+	  
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier IdNumber="000001">0002601</ReportingUnitIdentifier>
+            <!--  How to identify alphanumeric type like "AB" for absentee?  <CountMetric Id="BT" Type="Batch Type">AB</CountMetric> -->
+	    <CountMetric Id="BL" Type="Ballots">154</CountMetric>
+            <CountMetric Id="CB" Type="Contest Ballots">154</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="1">
+                  <CandidateName>YES</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>YES</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>53</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="2">
+                  <CandidateName>NO</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>NO</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>101</ValidVotes>
+            </Selection>
+	    
+	    <Abstentions>0</Abstentions>
+	    <RejectedVotes ReasonCode="overvote">0</RejectedVotes>
+
+          </ReportingUnitVotes>
+	
+	
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier IdNumber="000002">0002601</ReportingUnitIdentifier>
+            <!--  How to identify alphanumeric type like "AB" for absentee?  <CountMetric Id="BT" Type="Batch Type">ED</CountMetric> -->
+	    <CountMetric Id="BL" Type="Ballots">45</CountMetric>
+            <CountMetric Id="CB" Type="Contest Ballots">45</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="1">
+                  <CandidateName>YES</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>YES</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>13</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="2">
+                  <CandidateName>NO</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>NO</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>31</ValidVotes>
+            </Selection>
+	    
+	    <Abstentions>1</Abstentions>
+	    <RejectedVotes ReasonCode="overvote">0</RejectedVotes>
+
+          </ReportingUnitVotes>
+	
+	
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier IdNumber="000003">0002602</ReportingUnitIdentifier>
+            <!--  How to identify alphanumeric type like "AB" for absentee?  <CountMetric Id="BT" Type="Batch Type">AB</CountMetric> -->
+	    <CountMetric Id="BL" Type="Ballots">332</CountMetric>
+            <CountMetric Id="CB" Type="Contest Ballots">332</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="1">
+                  <CandidateName>YES</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>YES</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>140</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="2">
+                  <CandidateName>NO</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>NO</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>188</ValidVotes>
+            </Selection>
+	    
+	    <Abstentions>4</Abstentions>
+	    <RejectedVotes ReasonCode="overvote">0</RejectedVotes>
+
+          </ReportingUnitVotes>
+	
+	
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier IdNumber="000004">0002602</ReportingUnitIdentifier>
+            <!--  How to identify alphanumeric type like "AB" for absentee?  <CountMetric Id="BT" Type="Batch Type">ED</CountMetric> -->
+	    <CountMetric Id="BL" Type="Ballots">123</CountMetric>
+            <CountMetric Id="CB" Type="Contest Ballots">123</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="1">
+                  <CandidateName>YES</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>YES</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>30</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="2">
+                  <CandidateName>NO</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>NO</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>92</ValidVotes>
+            </Selection>
+	    
+	    <Abstentions>1</Abstentions>
+	    <RejectedVotes ReasonCode="overvote">0</RejectedVotes>
+
+          </ReportingUnitVotes>
+	
+	
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier IdNumber="000005">0002603 0002903 0002907</ReportingUnitIdentifier>
+            <!--  How to identify alphanumeric type like "AB" for absentee?  <CountMetric Id="BT" Type="Batch Type">ED</CountMetric> -->
+	    <CountMetric Id="BL" Type="Ballots">108</CountMetric>
+            <CountMetric Id="CB" Type="Contest Ballots">108</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="1">
+                  <CandidateName>YES</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>YES</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>18</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="2">
+                  <CandidateName>NO</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>NO</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>89</ValidVotes>
+            </Selection>
+	    
+	    <Abstentions>1</Abstentions>
+	    <RejectedVotes ReasonCode="overvote">0</RejectedVotes>
+
+          </ReportingUnitVotes>
+	
+	
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier IdNumber="000007">0002603</ReportingUnitIdentifier>
+            <!--  How to identify alphanumeric type like "AB" for absentee?  <CountMetric Id="BT" Type="Batch Type">AB</CountMetric> -->
+	    <CountMetric Id="BL" Type="Ballots">163</CountMetric>
+            <CountMetric Id="CB" Type="Contest Ballots">163</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="1">
+                  <CandidateName>YES</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>YES</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>47</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier IdNumber="2">
+                  <CandidateName>NO</CandidateName>
+                </CandidateIdentifier>
+                <CandidateFullName>
+                  <xnl:NameElement>NO</xnl:NameElement>
+                </CandidateFullName>
+                <StatusDetails><StatusItem date="2009-10-22"/></StatusDetails>
+              </Candidate>
+              <ValidVotes>114</ValidVotes>
+            </Selection>
+	    
+	    <Abstentions>1</Abstentions>
+	    <RejectedVotes ReasonCode="overvote">1</RejectedVotes>
+
+          </ReportingUnitVotes>
+	
+	
+
+        </Contest>
+      </Contests>
+    </Election>
+  </Count>
+</EML>

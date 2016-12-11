@@ -1,0 +1,486 @@
+2010-11-10  <neal@bcn.boulder.co.us>
+	* Change sign of Contest.margin_offset to be more intuitive ("add this to the margin")
+	* Add interactive visualizations to /kmresults/*/ and /contests/*/
+	* Include notes on discrepancies in /kmresults/*/, linked to and from the table
+	* Set charset=UTF-8 in base.html pragma directive
+	* Fix validation error: missing </td> in kmresult.html
+	* Add nice admin GUI to edit VoteCounts via ContestBatchAdmin & VoteCountInline
+	* Add Tabulation, but don't use it yet....
+
+2010-11-10  <neal@bcn.boulder.co.us>
+	* Add Kaplan-Markov tabulation data report at /kmreports/<contest>/
+	* Add km_report view and kmreport.html to generate it
+	* Add km_select_units to select audit units for Kaplan-Markov
+	* Add Kaplan-Markov selection report at /kmselections/<contest>/
+	* Add km_selection_report and kmselectionreport.html to generate it
+	* Add parse_boulder_csv to parse Boulder-style audit data and testdata/test-boulder.csv
+	* Add tests: TestBoulderCsv for parse_boulder_csv and TestSWDB_Csv_KM for Kaplan-Markov
+	* Add "margin_offset" to Contest model to allow adjusting for untabulated ballots
+	* Add "replace" and "prng" options to erandom.weightedsample() and speed it up
+	* Add another way to combine audit units for privacy: Batch.merge() and ContestBatch.merge()
+	* Add simple worst-case ContestBatch.taintfactor() calculation method
+	* Automatically recognize different kinds of csv in parser by peeking at header line
+	* Fix parsing bug: use get_or_create in au.save() to avoid error when ballot counts differ
+	   in batch get_or_create: sqlite3.IntegrityError: columns name, election_id, type are not unique
+	* Add timestamps to parser output
+	* Add crude util.input_sub_tallies() function to enter sub-batch tallies and add them up by columns.
+	* Update notes in ToDo
+
+2010-10-26   <neal@bcn.boulder.co.us>
+	* Add strict error bounds calculations.  Contest.U, ContestBatch.u
+	* Add Margin model to store margins between winners and losers
+	* Add number of winners for each contest: Contest.numWinners
+	* Fix table borders in templates - caught by Chrome browser
+	* remove direct swdb import support - dependency on problematic dbfpy.dfb module.
+
+2010-10-25   <neal@bcn.boulder.co.us>
+
+	* Add preliminary support for exporting vote count data in Election Markup Language (EML) 510 format
+	* Add support for importing Hart and Sequoia CSV files
+	* Work on importing from California's StateWide DataBase (http://swdb.berkeley.edu/)
+	* Support for ballot counts in AuditUnit object
+	* Fix bug - invalid cached statistics used if proportion changed
+	* Update ToDo and README
+	* Provide untested install.bat file for installing under windows
+	* Add copyrights to LICENSE
+	* Highlight selected contests in yellow
+	* Use "th" tag for headings in audit reports
+	* TestT0: more robust selection of contest and contestbatch to test
+	* Comment out some columns in reports
+	* Note that for code changes committed, most recent is 2009-11-23, except for some testing code and comments
+	* Drop unused -v (--verbose) option in parser.py: conflicts with --verbosity in Django 1.1 (r9110)
+
+2008-12-04    <neal@bcn.boulder.co.us>
+
+	* setup.py: version 0.9
+
+	* electionaudits/models.py (Contest.select_units): 
+	Add "selected" field to Contest
+	Use selected contests, rather than hard-coding selections in results view.
+	Factor out /reports/ code to provide a list of contest_batches for
+	the contest.
+
+	* electionaudits/views.py (results): 
+	Add /results/ view to show main results and statistics.
+	Use selected contests, rather than hard-coding selections
+	
+	(Contest.stats): 
+	Add stats() parameters to override confidence or s (WPM) values.
+
+	* doc/index.html: 
+	Bring project home page under source control
+	
+	* electionaudits/tests.py (TestCsv.test_csv):
+	Add csv test
+	Add tests for /selections/ and /results/, including selection and
+	random seed
+
+	* root/templates/base.html: 
+	Fix html validation error: commented-out </p>
+	
+2008-11-15    <neal@bcn.boulder.co.us>
+
+	This is the state of the software as it was used to publish
+	the initial reports and selections on Thursday/Friday.
+	
+	* electionaudits/templates/electionaudits/reports.html: 
+	Add random selection of contests
+	
+	* electionaudits/templates/electionaudits/report.html: 
+	Add /selections/ url as a clone of /reports/ with random input
+	
+	* electionaudits/templates/electionaudits/index.html: 
+	Customize home page for Boulder
+	Change Home page link on base.html, comment out other links
+	
+	Update README, ToDo (as usual....)
+	
+2008-11-13    <neal@bcn.boulder.co.us>
+
+	* electionaudits/models.py (Contest.priority): 
+	Add random selection, threshholds and priorities to /reports/ view
+	and Contest class.
+	
+	* electionaudits/views.py (report): 
+	Use custom view for /audit_report/<contest>/
+	Add threshhold and priority (threshhold/random), and sort by priority
+	Return blanks in ssr and priority if seed is not 15 chars long
+	
+	* root/templates/base.html: 
+	display links across one line at the top
+	
+	* electionaudits/tests.py (SimpleTest.test_reports): 
+	resume tests of diffs against report.html
+
+	
+2008-11-12    <neal@bcn.boulder.co.us>
+
+	* root/templates/base.html: 
+	cleaner mirroring: style.css => /media/style.css
+	 and add trailing slash to urls like /report/1
+	
+	* electionaudits/parsers.py (parse_xml_crystal): 
+	Normalize contest names and candidate names: strip extra white space
+	in case different databases vary them for subtle formatting reasons
+	
+	* electionaudits/erandom.py (ssr): 
+	Add ssr (Sum of Square Roots) random number generator (Rivest)
+
+	* electionaudits/models.py (Batch.ssr): 
+	Add NEGEXP threshhold for ContestBatch to compare to ssr (commented out)
+	
+	* electionaudits/templates/electionaudits/report.html: 
+	Put contest name first in <title>
+	Don't sort by batch object - makes order unstable
+	
+	* electionaudits/templates/electionaudits/reports.html: 
+	Comment out references to PPEBWR stats
+	
+2008-11-10    <neal@bcn.boulder.co.us>
+
+	* electionaudits/util.py (AuditUnit.update): 
+	Allow commas in vote counts, e.g. 1,345
+	
+	* electionaudits/models.py (ContestBatch): 
+	Add "proportion" to Contest for scaling selection numbers
+	Add random_seed, for use of verifiably seeded RNGs like Rivest's SSR
+	Add "selected" to ContestBatch
+	Add "notes" to ContestBatch and Batch
+
+2008-11-05    <neal@bcn.boulder.co.us>
+
+	* electionaudits/models.py (Contest): 
+	Add confidence and overall_margin to Contest and use them
+	in calculating and displaying statistics.
+
+	* electionaudits/admin.py (CountyElectionAdmin): 
+	Allow all contest margins, confidence levels to be audited inline by
+	linking them to the appropriate CountyElection and using ContestInline
+
+	* electionaudits/util.py (AuditUnit.__init__): 
+	Create election and contest database records when first mentioned,
+	so they are created and listed in sequence.
+
+	* electionaudits/templates/electionaudits/report.html: 
+	Clarify statistics more
+	Improve README
+	
+2008-11-03    <neal@bcn.boulder.co.us>
+
+	* electionaudits/tests.py (SimpleTest.test_reports): 
+	Add some unit tests: run via `manage.py test electionaudits`
+
+	* setup.py: 
+	Generate sdist from original trunk rather than a different bzr branch,
+	to avoid bzr munging of mod times.
+	See https://bugs.edge.launchpad.net/bzr/+bug/245170
+	Drop use of find_packages, which was bringing in unneeded files
+
+	* README (FAQ): 
+	Begin an FAQ
+	
+2008-11-02    <neal@bcn.boulder.co.us>
+
+	* electionaudits/varsize.py (plotprobs): 
+	Fix hidden dependency: Only import pylab when necessary
+	drop unused import matplotlib.numerix
+
+	* electionaudits/views.py (stats): 
+	make default batch size distribution more like boulder county 2008
+
+	* root/settings.py: 
+	Configure CsrfMiddleware to avoid CSRF attacks with POSTs
+
+2008-11-01    <neal@bcn.boulder.co.us>
+
+	* README (C): 
+	Improve installation and use instructions in README
+	Version 0.9.dev-r47
+
+2008-10-30    <neal@bcn.boulder.co.us>
+
+	* electionaudits/views.py (parse): 
+	New /parse/ form to parse incoming directory with -s -c
+	
+	* electionaudits/templates/electionaudits/stats.html: 
+	Call Ad-Hoc Contest Statistics a "Calculator" and fix title
+	
+2008-10-30    <neal@bcn.boulder.co.us>
+	
+	* README (C): 
+	Document new -c and directory options in README
+
+2008-10-29    <neal@bcn.boulder.co.us>
+
+	* electionaudits/parsers.py (parse): 
+	if a directory arg is given to parse, parse each file in the directory
+	implement --chronological option and change -c to be that, not --contest
+	
+2008-10-23    <neal@bcn.boulder.co.us>
+
+	* README (Features): 
+	Release Version 0.8
+	Highlight the features of ElectionAudits
+	Update ToDo
+	
+2008-10-22    <neal@bcn.boulder.co.us>
+
+	* electionaudits/views.py (StatsForm): 
+	New ad-hoc /stats/ form: statistics for a given margin, confidence
+
+	* electionaudits/varsize.py (rule_of_thumb): 
+	Call rule_of_thumb from paper() for consistency
+	Bug: needed "s" parameter to bmin() call for SAFE
+	
+	* electionaudits/parsers.py (parse_csv): 
+	introduce --batchid option for distinguishing data from different files
+
+	* electionaudits/models.py (Contest.selection_stats): 
+	Cache selection_stats varsize results for speed
+	Include prose form of stats in audit report
+	
+2008-10-21    <neal@bcn.boulder.co.us>
+
+	* electionaudits/varsize.py (bmin): 
+	Handle infinities with margin of 0 votes and problems with large margins
+	Eliminate scipy requirement for electionaudits: only import where needed
+	
+	* electionaudits/parsers.py (parse_csv): 
+	use -e option as election name for csv also
+
+2008-10-20    <neal@bcn.boulder.co.us>
+
+	* electionaudits/parsers.py (main): 
+	Rename makeauditunits to electionaudits/parsers.py
+	Make it easier to use, via a new manage.py "parse" command:
+	   electionaudits/management/commands/parse.py
+	Rename audittools directory to "root"
+
+	* electionaudits/util.py (pushAuditUnit): 
+	change min_ballots from 5 to 25
+
+	* electionaudits/models.py (Contest.selection_stats): 
+	Make varsize statistics for Contest available via selection_stats()
+	First cut - not saving results - really inefficient....
+	
+	* electionaudits/varsize.py (read_precincts): 
+	Make it easier to use varsize logic from electionaudits
+	Accept a list (iterable) of precincts as the input source as well as a
+	filename.
+	Return the most interesting results from paper() in a dict.
+	Add parameters (with existing defaults) to paper(): alpha and s
+	Don't generate plot or print full precinct list unless called
+	as main program.
+	Print various quantities to 4 decimal places.
+	Add shorthand for specifying precinct sizes on the command-line
+	
+2008-10-20    <neal@bcn.boulder.co.us>
+
+	* electionaudits/varsize.py:
+	Don't run anything when simply loading as a module, and call main() when run as command
+	Resolve main() error: "global name 'V' is not defined"
+	Resolve main() error: "print_precinct_stats() takes exactly 2 argument (0 given)"
+	Add default for "s" argument to negexp_probs_for_confidence
+
+2008-10-17    <neal@bcn.boulder.co.us>
+
+	* electionaudits/varsize.py: 
+	add varsize.py for auditing stats - original version from Ron Rivest
+	http://people.csail.mit.edu/rivest/pps/varsize.py  with MIT license
+
+	* README (Acknowledgements): 
+	Add acknowledgements
+	
+2008-10-15    <neal@bcn.boulder.co.us>
+	rename electionaudit module to electionaudits
+	improve README
+	
+2008-10-15    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (main): 
+	fix DJANGO_SETTINGS_MODULE bug	
+	
+2008-10-15    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (main): 
+	print summary results of tally at end
+
+2008-10-14    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (parse_xml_crystal): 
+	convert parse_xml_crystal etc to use AuditUnits
+	Add "--election" option to name the election.
+	(parse_csv): 
+	add EarlyVotes
+
+	* electionaudit/models.py (Batch): 
+	Change election day abbreviation to "ED", not "EL" (similar to Early)
+	Avoid duplicate VoteCount, Batch, ContestBatch via Meta unique_together
+
+2008-10-14    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (parse_xml_crystal): 
+	finally, create EL and EV database records, now that I can test those
+	if xml file is "cumulative.xml", use parent directory name
+	
+2008-10-13    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (main): 
+	define settings module without environment var DJANGO_SETTINGS_MODULE
+	
+2008-10-10    <neal@bcn.boulder.co.us>
+
+	add setup.py and ez_setup.py
+	* electionaudit/templates/electionaudit/report.html: 
+	don't use writing-mode: tb-rl on vote totals
+	* audittools/settings.py: 
+	comment out 'lukeplant_me_uk.django.validator' and 'django_extensions'
+	Improve documentation
+	
+2008-10-09    <neal@bcn.boulder.co.us>
+
+	* electionaudit/templates/electionaudit/report.html: 
+	sort columns alphabetically to deal with variable order, mismatches
+	
+2008-10-08    <neal@bcn.boulder.co.us>
+
+	* audittools/templates/base.html: 
+	only show /validator/ if in debug mode
+	
+2008-10-08    <neal@bcn.boulder.co.us>
+
+	Version 0.7.0
+	Change from GPLv3 to MIT license for wider uptake, less complication
+
+	* makeauditunits.py (parse_csv): 
+	Finish & refactor code to combine ballots for privacy for csv
+	remove models.AuditUnit: util.AuditUnit does what we really want
+	finally remove models.Batch.cumulative - we combine when we read in
+	* electionaudit/urls.py: 
+	fix how settings are imported to use generic method so validator works
+	 with ./manage.py runserver_plus --settings settings_debug
+	* electionaudit/templates/electionaudit/reports.html: 
+	fix some bad html
+	
+2008-10-08    <neal@bcn.boulder.co.us>
+
+	* electionaudit/templates/electionaudit/index.html: 
+	Add introduction to home page
+	
+2008-10-07    <neal@bcn.boulder.co.us>
+
+	* electionaudit/util.py (Pipe.push): 
+	Write util module with AuditUnit class to combine them for privacy
+	Add pushAuditUnit and class Push, ready to refactor makeauditunits
+	
+2008-10-06    <neal@bcn.boulder.co.us>
+
+	* audittools/templates/404.html: 
+	add 404.html and 500.html
+	Describe csv in README
+	Better titles in templates
+	
+2008-10-05    <neal@bcn.boulder.co.us>
+
+	* electionaudit/urls.py: 
+	fix settings import in urls.py
+
+	* makeauditunits.py (parse_csv): 
+	name csv election after filename
+
+	* electionaudit/templates/electionaudit/reports.html: 
+	add headers and audit unit counts to contest list
+	
+2008-10-05    <neal@bcn.boulder.co.us>
+
+	* Version 0.6.0
+	* electionaudit/models.py (Choice): 
+	(Contest.tally): 
+	add tally funtion to calculate margins
+	add contest field to Choice model
+	speed up via a single transaction for parsing each file:
+	 from 2:53 to 0:44 for testp.xml
+	
+	* makeauditunits.py (parse_csv): 
+	new function to parse csv files like that from San Mateo county
+	
+2008-10-04    <neal@bcn.boulder.co.us>
+
+	* electionaudit/templates/electionaudit/index.html: 
+	New home page via simple generic view by default (LP: #278330)
+	* electionaudit/templates/electionaudit/contest_detail.html: 
+	Get /contests/*/ to list the relevant batches, FWIW
+
+2008-10-03    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py: 
+	fixed documentation: must set $DJANGO_SETTINGS_MODULE "(LP: #277341)
+
+	* audittools/settings.py: 
+	set full path for sqlite3 db so makeauditunits works in any dir
+
+2008-10-01    <neal@bcn.boulder.co.us>
+
+	* Version 0.5.0
+	* Improve README; Add GPL v3 COPYING file, doc/model_graph.png
+	* ToDo: split out from makeauditunits.py
+	
+	* electionaudit/models.py (ContestBatch): 
+	add contest_ballots method, and add count to report
+
+2008-09-29    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (do_contests): 
+	Version"0.4.0"
+	Introduce ContestBatch record and report of AuditUnits in a Contest
+	
+2008-09-27    <neal@bcn.boulder.co.us>
+
+	* electionaudit/views.py (report): 
+	added report view, template, 
+	added custom admin to display auditunits in a table
+	trimmed batch name
+	add htmlvalidator
+	fix template errors
+	add flatpages and home page
+	
+	
+2008-09-25    <neal@bcn.boulder.co.us>
+
+	* electionaudit/models.py (Choice.__str__): 
+	add django models and get them working with django generic admin
+
+2008-09-22    <neal@bcn.boulder.co.us>
+	* makeauditunits.py: 
+	Do single-row output for --subtract
+	Partly move to printf() vs print
+	Move files to testdata, test again
+	Add more abbreviations
+	Fix replace_dict to be ordered list: replacements
+	Move data info to testnotes
+	
+2008-09-22    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py: 
+	Add --contest option
+	add --subtract to report differences for incrementals
+	sort reports
+
+2008-09-22    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py: 
+	Separate "Early" from "Absentee", report both
+
+2008-09-20    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (make_audit_unit): 
+	divide into early and election results, without yet using Result class
+	Version 0.3.0
+	
+2008-09-14    <neal@bcn.boulder.co.us>
+
+	* makeauditunits.py (make_audit_unit):
+	start profiling	
+	general cleaning, todo additions
+	fix parties to just get one
+	work on better printing

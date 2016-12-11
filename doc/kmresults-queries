@@ -1,0 +1,219 @@
+Home | Browse all data | Parse incoming data files | Admin
+
+Up
+Audit Selections and Results for COUNTY COMMISSIONER - DISTRICT 3 Vote For 1
+
+Margin of victory: 29.092%
+Total possible miscount / Total apparent margin ("U"): 4.437589
+Number of audit units: 492
+The audit units reported below were selected using the random seed value 286630844411402 combined with the Sequence numbers according to the "Sum of Square Roots" pseudorandom number generator.
+
+The first half of this list will be audited first, and if there are not many discrepancies with the hand count, that is all that will be needed. Otherwise, additional units moving down the list will be audited, until the Kaplan-Markov calculation reaches the pre-specified confidence level.
+
+000001	0.962128	p371_ed_430	U	286	0.008768	136	113	14	0	23
+000002	0.977478	p379_mb_258	U	294	0.011833	174	51	26	0	43
+000003	0.226795	p076_mb_233	U	298	0.012599	212	66	7	0	13
+000004	0.599014	p231_mb_144	U	592	0.022417	362	164	33	0	33
+000005	0.316512	p114_mb_502	U	300	0.010982	178	91	17	0	14
+000006	0.114737	p029_mb_153	U	299	0.010301	167	103	17	0	12
+Hide »
+Versions 
+Django 1.1.1
+Time 
+CPU: 2476.15ms (2576.99ms)
+Settings
+HTTP Headers
+Request Vars
+SQL 
+46 queries in 21.05ms
+Templates
+Signals
+Logging 
+0 messages
+Close
+SQL Queries
+Time (ms)	Action	Stacktrace	Query
+5.56	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_contest"."id", "electionaudits_contest"."name", "electionaudits_contest"."election_id", "electionaudits_contest"."numWinners", "electionaudits_contest"."confidence", "electionaudits_contest"."proportion", "electionaudits_contest"."min_margin", "electionaudits_contest"."overall_margin", "electionaudits_contest"."U", "electionaudits_contest"."margin_offset", "electionaudits_contest"."selected" FROM "electionaudits_contest" WHERE "electionaudits_contest"."id" = 1
+0.41	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_countyelection"."id", "electionaudits_countyelection"."name", "electionaudits_countyelection"."random_seed" FROM "electionaudits_countyelection" WHERE "electionaudits_countyelection"."id" = 1
+1.13	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_contestbatch"."id", "electionaudits_contestbatch"."contest_id", "electionaudits_contestbatch"."batch_id", "electionaudits_contestbatch"."u", "electionaudits_contestbatch"."selected", "electionaudits_contestbatch"."notes", "electionaudits_contest"."id", "electionaudits_contest"."name", "electionaudits_contest"."election_id", "electionaudits_contest"."numWinners", "electionaudits_contest"."confidence", "electionaudits_contest"."proportion", "electionaudits_contest"."min_margin", "electionaudits_contest"."overall_margin", "electionaudits_contest"."U", "electionaudits_contest"."margin_offset", "electionaudits_contest"."selected", "electionaudits_countyelection"."id", "electionaudits_countyelection"."name", "electionaudits_countyelection"."random_seed", "electionaudits_batch"."id", "electionaudits_batch"."name", "electionaudits_batch"."election_id", "electionaudits_batch"."type", "electionaudits_batch"."ballots", "electionaudits_batch"."random", "electionaudits_batch"."notes", T5."id", T5."name", T5."random_seed" FROM "electionaudits_contestbatch" INNER JOIN "electionaudits_contest" ON ("electionaudits_contestbatch"."contest_id" = "electionaudits_contest"."id") INNER JOIN "electionaudits_countyelection" ON ("electionaudits_contest"."election_id" = "electionaudits_countyelection"."id") INNER JOIN "electionaudits_batch" ON ("electionaudits_contestbatch"."batch_id" = "electionaudits_batch"."id") INNER JOIN "electionaudits_countyelection" T5 ON ("electionaudits_batch"."election_id" = T5."id") WHERE "electionaudits_contestbatch"."contest_id" = 1
+0.56	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_handcontestbatch"."id", "electionaudits_handcontestbatch"."contest_id", "electionaudits_handcontestbatch"."batch_id" FROM "electionaudits_handcontestbatch" WHERE ("electionaudits_handcontestbatch"."batch_id" = 483 AND "electionaudits_handcontestbatch"."contest_id" = 1 ) ORDER BY "electionaudits_handcontestbatch"."id" DESC
+0.25	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_handcontestbatch"."id", "electionaudits_handcontestbatch"."contest_id", "electionaudits_handcontestbatch"."batch_id" FROM "electionaudits_handcontestbatch" WHERE ("electionaudits_handcontestbatch"."batch_id" = 489 AND "electionaudits_handcontestbatch"."contest_id" = 1 ) ORDER BY "electionaudits_handcontestbatch"."id" DESC
+0.25	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_handcontestbatch"."id", "electionaudits_handcontestbatch"."contest_id", "electionaudits_handcontestbatch"."batch_id" FROM "electionaudits_handcontestbatch" WHERE ("electionaudits_handcontestbatch"."batch_id" = 189 AND "electionaudits_handcontestbatch"."contest_id" = 1 ) ORDER BY "electionaudits_handcontestbatch"."id" DESC
+0.33	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_handcontestbatch"."id", "electionaudits_handcontestbatch"."contest_id", "electionaudits_handcontestbatch"."batch_id" FROM "electionaudits_handcontestbatch" WHERE ("electionaudits_handcontestbatch"."batch_id" = 344 AND "electionaudits_handcontestbatch"."contest_id" = 1 ) ORDER BY "electionaudits_handcontestbatch"."id" DESC
+0.25	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_handcontestbatch"."id", "electionaudits_handcontestbatch"."contest_id", "electionaudits_handcontestbatch"."batch_id" FROM "electionaudits_handcontestbatch" WHERE ("electionaudits_handcontestbatch"."batch_id" = 227 AND "electionaudits_handcontestbatch"."contest_id" = 1 ) ORDER BY "electionaudits_handcontestbatch"."id" DESC
+0.25	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_handcontestbatch"."id", "electionaudits_handcontestbatch"."contest_id", "electionaudits_handcontestbatch"."batch_id" FROM "electionaudits_handcontestbatch" WHERE ("electionaudits_handcontestbatch"."batch_id" = 142 AND "electionaudits_handcontestbatch"."contest_id" = 1 ) ORDER BY "electionaudits_handcontestbatch"."id" DESC
+0.48	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_contestbatch"."id", "electionaudits_contestbatch"."contest_id", "electionaudits_contestbatch"."batch_id", "electionaudits_contestbatch"."u", "electionaudits_contestbatch"."selected", "electionaudits_contestbatch"."notes" FROM "electionaudits_contestbatch" WHERE "electionaudits_contestbatch"."contest_id" = 1
+0.63	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_votecount"."id", "electionaudits_votecount"."votes", "electionaudits_votecount"."choice_id", "electionaudits_votecount"."contest_batch_id" FROM "electionaudits_votecount" WHERE "electionaudits_votecount"."contest_batch_id" = 483
+0.38	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 1
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 2
+0.32	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 3
+0.27	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 4
+0.39	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 5
+0.32	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_votecount"."id", "electionaudits_votecount"."votes", "electionaudits_votecount"."choice_id", "electionaudits_votecount"."contest_batch_id" FROM "electionaudits_votecount" WHERE "electionaudits_votecount"."contest_batch_id" = 489
+0.42	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 1
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 2
+0.93	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 3
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 4
+0.25	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 5
+0.28	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_votecount"."id", "electionaudits_votecount"."votes", "electionaudits_votecount"."choice_id", "electionaudits_votecount"."contest_batch_id" FROM "electionaudits_votecount" WHERE "electionaudits_votecount"."contest_batch_id" = 189
+0.30	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 1
+0.31	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 2
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 3
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 4
+0.27	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 5
+0.29	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_votecount"."id", "electionaudits_votecount"."votes", "electionaudits_votecount"."choice_id", "electionaudits_votecount"."contest_batch_id" FROM "electionaudits_votecount" WHERE "electionaudits_votecount"."contest_batch_id" = 344
+0.32	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 1
+0.25	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 2
+0.28	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 3
+0.32	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 4
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 5
+0.39	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_votecount"."id", "electionaudits_votecount"."votes", "electionaudits_votecount"."choice_id", "electionaudits_votecount"."contest_batch_id" FROM "electionaudits_votecount" WHERE "electionaudits_votecount"."contest_batch_id" = 227
+0.25	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 1
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 2
+0.35	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 3
+0.35	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 4
+0.30	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 5
+0.39	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_votecount"."id", "electionaudits_votecount"."votes", "electionaudits_votecount"."choice_id", "electionaudits_votecount"."contest_batch_id" FROM "electionaudits_votecount" WHERE "electionaudits_votecount"."contest_batch_id" = 142
+0.33	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 1
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 2
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 3
+0.32	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 4
+0.24	SELECT
+EXPLAIN
+Toggle Stacktrace
+SELECT "electionaudits_choice"."id", "electionaudits_choice"."name", "electionaudits_choice"."votes", "electionaudits_choice"."contest_id" FROM "electionaudits_choice" WHERE "electionaudits_choice"."id" = 5

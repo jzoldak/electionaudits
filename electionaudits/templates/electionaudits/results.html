@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Audit Results Report | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
+    <h2>Audit Results Report</h2>
+
+<h3>Selected Audit Units</h3>
+
+{% if s.random_seed %}
+<p>A total of {{ contest_batches|length }} audit units were selected for the audit.
+Some audit units were randomly selected, as part of a contest
+that was randomly selected for a risk-limiting audit.  Other audit units
+were manually targeted as being of interest for a particular reason.
+The manually targeted units are listed after all the randomly selected ones.
+</p>
+<p>The randomly selected units were chosen according to a plan that
+incorporated the auditing statistics described
+on the Contest pages (linked to from each audit unit).  It selected
+the appropriate number of units for each selected contest randomly,
+but with their chance of selection proportional to their size (the number of
+"contest ballots" - ballots on which the contest appeared).  That was
+done as follows.
+First, election officials came up with the following 15 rolls of 10-sided dice:
+<strong>{{ s.random_seed }}</strong>.
+The random selection was then based on the "<i>Sum of Square Roots</i>"
+pseudorandom number generator, using the dice throws for the random seed value.
+That means that you can check each and every step that led from the 
+statistics and dice throws to the final selections with a simple calculator.
+</p>
+{% else %}
+<p>Note: the random seed has not yet been entered, so audit unit selections are
+not yet available.</p>
+{% endif %}
+
+<h3>Statistics</h3>
+<p>Totals</p>
+<ul>
+<li>Total number of ballots: {{ s.ballots }}</li>
+<li>Total number of contests: {{ s.contests }}</li>
+<li>Total number of batches: {{ s.batches }}</li>
+<li>Total number of audit units (one for each contest on each tallied batch): {{ s.audit_units }}</li>
+<li>Total number of votes (each contest on each ballot): {{ s.votes }}
+ ({{ s.votes_per_ballot|floatformat:1 }} per ballot, on average)</li>
+</ul>
+<p>Selections and Targeting</p>
+<ul>
+<li> Contests randomly selected: {{ s.contests_selected }}
+ ({{ s.contest_pct|floatformat:1 }}%)</li>
+<li> Audit units randomly selected: {{ s.audit_units_selected }}
+ ({{ s.audit_units_selected_pct|floatformat:3 }}%)</li>
+<li> Audit units manually targeted: {{ s.targeted }}
+ ({{ s.targeted_pct|floatformat:3 }}%)</li>
+<li> Additional contests examined on targeted audit units: {{ s.contests_additional }}
+ ({{ s.contest_additional_pct|floatformat:1 }}%)</li>
+</ul>
+<p>Auditing</p>
+<ul>
+<li> Audit units audited: {{ s.audit_units_audited }}
+ ({{ s.audit_units_audited_pct|floatformat:3 }}%)</li>
+<li> Batches audited: {{ s.batches_selected }}
+ ({{ s.batches_pct|floatformat:2 }}%)</li>
+<li> Ballots audited: {{ s.ballots_selected }}
+ ({{ s.ballots_selected_pct|floatformat:2 }}%)</li>
+<li> Votes audited: {{ s.votes_audited }}
+ ({{ s.votes_audited_pct|floatformat:3 }}%)</li>
+<li> Ballots reviewed for votes: {{ s.ballots_handled }}
+ ({{ s.ballots_handled_pct|floatformat:3 }}%)</li>
+</ul>
+
+<h3>Detailed results</h3>
+<p>For each audit unit in the detailed results below, the counts for each choice are listed - first the reported count, then the hand count.</p>
+
+<table border="1" cellpadding="5">
+<thead>
+  <tr>
+   <th>Contest</th>
+   <th>Margin</th>
+   <th>Confidence %</th>
+   <th>Units to audit: NEGEXP</th>
+   <th>Type</th>
+   <th>Batches</th>
+   <th>Ballots</th>
+   <th>Contest Ballots</th>
+{% if 1 %}
+   <th>Notes</th>
+{% endif %}
+   <th>Choice, reported, manual</th>
+  </tr>
+</thead>
+
+<tbody>
+ {% for contestbatch in contest_batches %}
+  {% with contestbatch.batch as batch %}
+  <tr>
+   <td><a href="../selections/{{ contestbatch.contest.id}}/">{{ contestbatch.contest }}</a></td>
+   <td>{{ contestbatch.min_margin|floatformat:3 }}</td>
+   <td>{% if contestbatch.stats %} {{ contestbatch.contest.confidence }} {% endif %} </td>
+   <td style="text-align: right;">{{ contestbatch.stats.negexp_precincts|floatformat:1 }}</td>
+   <td>{{ batch.type }}</td>
+   <td>{{ batch.name }}</td>
+   <td>{{ batch.ballots }}</td>
+   <td>{{ contestbatch.contest_ballots }}</td>
+{% if 1 %}
+   <td><a href="../admin/electionaudits/contestbatch/{{contestbatch.id}}/">{{ contestbatch.notes }}</a></td>
+{% endif %}
+{% if 1 %}
+   {% for votecount in contestbatch.votecount_set.all|dictsortreversed:"votes" %}
+     <td>{{ votecount.choice.name }}</td>
+     <td><b>{{ votecount.votes }}</b></td>
+     <td><b>{{ votecount.votes }}</b></td>
+   {% endfor %}
+{% endif %}
+  </tr>
+  {% endwith %}
+ {% endfor %}
+</tbody>
+</table>
+{% endblock %}

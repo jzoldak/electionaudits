@@ -1,0 +1,145 @@
+PRECINCT_NAME	CANDIDATE_FULL_NAME	contest_party_id	candidate_party_id	CONTEST_TYPE	contest_id	CONTEST_ORDER	CANDIDATE_ORDER	CONTEST_FULL_NAME	TOTAL	PRECINCT_ID	precinct_order	contest_vote_for	PROCESSED_DONE	PROCESSED_STARTED	CONTEST_TOTAL	IS_WRITEIN	undervote	overvote
+1320116101	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	127	46	1	1	0	1	510	0	4	13
+1320116101	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	366	46	1	1	0	1	510	0	4	13
+1320116101	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	3	46	1	1	0	1	510	0	4	13
+1320116101	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	3	46	1	1	0	1	510	0	4	13
+1320116101	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	2	46	1	1	0	1	510	0	4	13
+1320116101	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	46	1	1	0	1	0	0	4	13
+1320116101	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	46	1	1	0	1	0	0	4	13
+1320116101	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	0	46	1	1	0	1	0	0	4	13
+1320116101	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	46	1	1	0	1	0	0	4	13
+1320116101	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	2	46	1	1	0	1	510	0	4	13
+1320116101	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	0	46	1	1	0	1	0	0	4	13
+1320116101	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	46	1	1	0	1	0	0	4	13
+1320116101	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	1	46	1	1	0	1	510	0	4	13
+1320116101	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	0	46	1	1	0	1	0	0	4	13
+1320116101	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	6	46	1	1	0	1	510	0	4	13
+1320116101	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	46	1	1	0	1	0	0	4	13
+1320116102	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	134	47	2	1	0	1	393	0	3	10
+1320116102	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	251	47	2	1	0	1	393	0	3	10
+1320116102	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	2	47	2	1	0	1	393	0	3	10
+1320116102	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	5	47	2	1	0	1	393	0	3	10
+1320116102	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	1	47	2	1	0	1	393	0	3	10
+1320116102	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116102	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	47	2	1	0	1	0	0	3	10
+1320116103	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	146	48	3	1	0	1	595	0	2	12
+1320116103	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	439	48	3	1	0	1	595	0	2	12
+1320116103	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	1	48	3	1	0	1	595	0	2	12
+1320116103	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	3	48	3	1	0	1	595	0	2	12
+1320116103	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116103	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	1	48	3	1	0	1	595	0	2	12
+1320116103	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	5	48	3	1	0	1	595	0	2	12
+1320116103	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	48	3	1	0	1	0	0	2	12
+1320116104	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	87	49	4	1	0	1	366	0	5	8
+1320116104	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	271	49	4	1	0	1	366	0	5	8
+1320116104	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116104	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	2	49	4	1	0	1	366	0	5	8
+1320116104	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116104	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116104	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116104	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	1	49	4	1	0	1	366	0	5	8
+1320116104	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116104	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	2	49	4	1	0	1	366	0	5	8
+1320116104	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116104	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116104	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	1	49	4	1	0	1	366	0	5	8
+1320116104	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116104	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	2	49	4	1	0	1	366	0	5	8
+1320116104	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	49	4	1	0	1	0	0	5	8
+1320116105	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	150	50	5	1	0	1	586	0	5	39
+1320116105	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	425	50	5	1	0	1	586	0	5	39
+1320116105	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	2	50	5	1	0	1	586	0	5	39
+1320116105	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	1	50	5	1	0	1	586	0	5	39
+1320116105	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	5	50	5	1	0	1	586	0	5	39
+1320116105	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116105	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	3	50	5	1	0	1	586	0	5	39
+1320116105	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	50	5	1	0	1	0	0	5	39
+1320116106	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	89	51	6	1	0	1	251	0	1	10
+1320116106	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	156	51	6	1	0	1	251	0	1	10
+1320116106	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	2	51	6	1	0	1	251	0	1	10
+1320116106	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116106	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	4	51	6	1	0	1	251	0	1	10
+1320116106	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	51	6	1	0	1	0	0	1	10
+1320116107	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	119	52	7	1	0	1	479	0	3	13
+1320116107	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	353	52	7	1	0	1	479	0	3	13
+1320116107	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	1	52	7	1	0	1	479	0	3	13
+1320116107	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	1	52	7	1	0	1	479	0	3	13
+1320116107	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	1	52	7	1	0	1	479	0	3	13
+1320116107	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116107	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	4	52	7	1	0	1	479	0	3	13
+1320116107	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	52	7	1	0	1	0	0	3	13
+1320116108	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	196	53	8	1	0	1	522	0	3	8
+1320116108	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	316	53	8	1	0	1	522	0	3	8
+1320116108	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	2	53	8	1	0	1	522	0	3	8
+1320116108	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	1	53	8	1	0	1	522	0	3	8
+1320116108	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	2	53	8	1	0	1	522	0	3	8
+1320116108	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116108	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116108	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116108	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116108	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	1	53	8	1	0	1	522	0	3	8
+1320116108	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116108	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116108	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116108	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116108	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	4	53	8	1	0	1	522	0	3	8
+1320116108	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	53	8	1	0	1	0	0	3	8
+1320116109	REP - McCain and Palin		3	0	4	2	1	Presidential Electors	143	54	9	1	0	1	515	0	4	13
+1320116109	DEM - Obama and Biden		2	0	4	2	2	Presidential Electors	362	54	9	1	0	1	515	0	4	13
+1320116109	CON - Baldwin and Castle		21	0	4	2	3	Presidential Electors	3	54	9	1	0	1	515	0	4	13
+1320116109	LIB - Barr and  Root		6	0	4	2	4	Presidential Electors	1	54	9	1	0	1	515	0	4	13
+1320116109	GRN - McKinney and Clemente		14	0	4	2	5	Presidential Electors	0	54	9	1	0	1	0	0	4	13
+1320116109	HEA - Allen and Stath		22	0	4	2	6	Presidential Electors	0	54	9	1	0	1	0	0	4	13
+1320116109	COP - Amondson and Pletten		11	0	4	2	7	Presidential Electors	0	54	9	1	0	1	0	0	4	13
+1320116109	SW - Harris and Kennedy		17	0	4	2	8	Presidential Electors	0	54	9	1	0	1	0	0	4	13
+1320116109	BOS - Jay and Sallis Jr.		23	0	4	2	9	Presidential Electors	0	54	9	1	0	1	0	0	4	13
+1320116109	AMI - Keyes and Rohrbough		24	0	4	2	10	Presidential Electors	2	54	9	1	0	1	515	0	4	13
+1320116109	SAL - La Riva and Moses		25	0	4	2	11	Presidential Electors	1	54	9	1	0	1	515	0	4	13
+1320116109	USP - Lyttle and Bassford		8	0	4	2	12	Presidential Electors	0	54	9	1	0	1	0	0	4	13
+1320116109	UNA - McEnulty and Mangan		12	0	4	2	13	Presidential Electors	0	54	9	1	0	1	0	0	4	13
+1320116109	SOC - Moore and Alexander		15	0	4	2	14	Presidential Electors	0	54	9	1	0	1	0	0	4	13
+1320116109	UNA - Nader and Gonzalez		12	0	4	2	15	Presidential Electors	3	54	9	1	0	1	515	0	4	13
+1320116109	OBJ - Stevens and Link		26	0	4	2	16	Presidential Electors	0	54	9	1	0	1	0	0	4	13

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- FIXME: Put this in a new header block or whatever -->
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+      // Load the Visualization API and the Scatter Chart package.
+      google.load('visualization', '1', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Margin');
+        data.addColumn('number', 'U');
+        data.addRows([
+          {% for contest in object_list %}
+           [ Math.log({{ contest.min_margin }}), Math.log({{ contest.U }}) ], {% endfor %}
+        ]);
+        var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+        chart.draw(data, {width: 700, height: 500,
+                          title: 'Contests',
+                          hAxis: {title: 'Margin', logScale: true},
+                          vAxis: {title: 'U', logScale: true},
+                          legend: 'none'
+                         });
+      }
+    </script>
+
+    <!--Div that will hold the chart-->
+    <div id="chart_div"></div>
+
+    <h2>Contest List</h2>
+<table () border="1" cellpadding="5">
+<tbody>
+        {% for contest in object_list %}
+<tr>
+ <td><a href="{{ contest.id }}">{{ contest.name }}</a></td>
+ <td>{{ contest.min_margin }}</td>
+</tr>
+        {% endfor %}
+</tbody>
+</table>
+{% endblock %}

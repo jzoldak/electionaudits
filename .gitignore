@@ -1,0 +1,10 @@
+*~
+.bzr
+*.egg
+*.db*
+ElectionAudits.egg-info
+djangologging
+dist
+root/initial_data.json
+ez_setup.py
+lukeplant_me_uk

@@ -1,0 +1,2649 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" href="/media/style.css" />
+    <title>Congress03: Audit Results | ElectionAudits</title>
+</head>
+
+<body>
+    <div id="sidebar">
+        
+	<p>
+            <a href="/">Home</a>
+            | <a href="/databrowse/">Browse all data</a> |
+	    <a href="/parse/">Parse incoming data files</a> |
+            <a href="/admin/">Admin</a>
+	    
+	</p>
+        
+    </div>
+
+    <div id="content">
+        
+<!-- FIXME: Put the scripts in a new header block or whatever -->
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+      // Load the Visualization API and the corechart package.
+      google.load('visualization', '1', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Audit unit name');
+        data.addColumn('number', 'KM');
+        data.addRows([
+          
+            [ '0606736740', 0.951148307279 ],  
+            [ '060678057156', 0.90468310244 ],  
+            [ '0606782030', 0.860487801509 ],  
+            [ '0606758200', 0.81845151584 ],  
+            [ '0606755800', 0.778468773881 ],  
+            [ '060678057620', 0.740166769973 ],  
+            [ '060678034804', 0.803164478866 ],  
+            [ '060678061130', 0.76392853454 ],  
+            [ '0606721310', 0.72660933251 ],  
+            [ '0609549700A', 0.69111323667 ],  
+            [ '0606787344', 0.657351185197 ],  
+            [ '060678029102', 0.627822097117 ],  
+            [ '060678024324', 0.597151924945 ],  
+            [ '0606734106', 0.5679800426 ],  
+            [ '0606724312', 0.626670577061 ],  
+            [ '060678057206', 0.596056658593 ],  
+            [ '060678053126', 0.566938281863 ],  
+            [ '06005AV130', 0.541382237868 ],  
+            [ '0606726108', 0.514934799139 ],  
+            [ '060678031204', 0.48977936256 ],  
+            [ '0606733224', 0.465987371542 ],  
+            [ '060678031132', 0.443223099655 ],  
+            [ '0609549700A', 0.421570900984 ],  
+            [ '0606728102', 0.400976448869 ],  
+            [ '0606789318', 0.3813880706 ],  
+            [ '060678052200', 0.362756617768 ],  
+            [ '060678023118', 0.345035342944 ],  
+            [ '0606728312', 0.328179782393 ],  
+            [ '06005CP01', 0.312147644506 ],  
+            [ '0606757750', 0.296898703693 ],  
+            [ '06009520', 0.282450811178 ],  
+            [ '06009350', 0.268587169285 ],  
+            [ '060678025810', 0.255466231422 ],  
+            [ '06009350', 0.242927084044 ],  
+            [ '0606726420', 0.23751386592 ],  
+            [ '0609594939', 0.225910911525 ],  
+            [ '060678022102', 0.214874781093 ],  
+            [ '06009535', 0.204377784314 ],  
+            [ '06009520', 0.194432209532 ],  
+            [ '06005CP01', 0.184933866977 ],  
+            [ '060678023126', 0.176256328721 ],  
+            [ '060678061100', 0.16764590871 ],  
+            [ '0606731404', 0.159456122292 ],  
+            [ '060678023624', 0.151666420803 ],  
+            [ '06009430', 0.144257259418 ],  
+            [ '0606726108', 0.137210048108 ],  
+            [ '06005CP16', 0.130507105 ],  
+            [ '0606722716', 0.124131612008 ],  
+            [ '060678089318', 0.118067572642 ],  
+            [ '060678025430', 0.11251449418 ],  
+            [ '0606737312', 0.107197806765 ],  
+            [ '0606722120', 0.101961012449 ],  
+            [ '06009340', 0.0969800443993 ],  
+        ]);
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        google.visualization.events.addListener(chart, 'select', function() {
+          var row = chart.getSelection()[0].row;
+          alert('You selected row ' + data.getValue(row, 0));
+        });
+
+        chart.draw(data, {width: 700, height: 500,
+                          title: 'Remaining risk as audit progresses',
+                          hAxis: {title: 'Audit unit'},
+                          vAxis: {title: 'Cumulative Kaplan-Markov factor (remaining risk)'}, <!-- , logScale: true -->
+                          pointSize: 1,
+                          lineWidth: 1,
+                          legend: 'none'
+                         });
+      }
+    </script>
+
+
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
+    <h2>Audit Selections and Results for Congress03</h2>
+
+<ul>
+<li>Margin of victory: 5.136%</li>
+<li>Margin adjustment e.g. for ballots not yet tallied : 0 </li>
+<li>Total possible miscount / Total apparent margin ("U"): 20.470120 </li>
+<li>Number of audit units: 774</li>
+</ul>
+
+
+<p>Audit units are selected for audit weighted by the maximum possible miscount (u<sub>p</sub>) they could contain.  The audit units listed below were selected using the random seed value <strong>mersenne-twister 20100110 (plus hand picks)</strong> combined with the "Sequence" numbers according to the "Sum of Square Roots" pseudorandom number generator, to generate the values in the "Random" column.  Each value from the "Random" column was then looked up in the "Cumulative Probability Total" column of the Unofficial Vote Tabulation Report, and the last row for which the "Cumulative Probability Total" was still larger than the Random number was selected.
+</p>
+<p>
+This table lists the original machine counts, followed by the hand
+counts (as they become available), for each audit unit.  If there is a discrepancy, the "Margin reduction" column lists the net reduction in the margin of victory for the unofficial winner, in votes. It will be negative if the margin increased.  If there is a discrepancy, the "Taint"
+column will have a non-zero number.  The KM column (Kaplan-Markov factor)
+indicates by what fraction each hand count reduces the probability of an
+incorrect outcome.  It is larger when the Taint is greater than zero.
+</p>
+<p>
+The Cumulative KM column summarizes the progress of the auditing for this contest.  It comes from multiplying together all the KM factors up to and including that audit unit.  When it becomes less than or equal to the pre-specified P-value (0.5 for this audit), the audit has reached its risk-reduction target.  The progress is also shown in the graph, as the remaining risk drops down towards the target.
+</p>
+<p>The first half of this list will be audited first, and if there are not many discrepancies with the hand count, that is all that will be needed.  Otherwise, additional units moving down the list will be audited, until the target is reached.
+For more details, see the references on the main page.
+</p>
+
+
+
+<table border="1" cellpadding="5">
+<thead>
+ 
+  
+   <tr>
+   <th>Sequence</th>
+   <th>Random</th>
+   <th>Batches</th>
+   <!-- <th>Type</th> -->
+   <th>Ballots</th>
+   <th>Maximum relative miscount: u<sub>p</sub></th>
+   
+      <th style="writing-mode: tb-rl;">CNGAIP</th>
+   
+      <th style="writing-mode: tb-rl;">CNGDEM</th>
+   
+      <th style="writing-mode: tb-rl;">CNGGRN</th>
+   
+      <th style="writing-mode: tb-rl;">CNGLIB</th>
+   
+      <th style="writing-mode: tb-rl;">CNGPAF</th>
+   
+      <th style="writing-mode: tb-rl;">CNGREP</th>
+   
+      <th style="writing-mode: tb-rl;">Under</th>
+   
+   
+      <th style="writing-mode: tb-rl;">CNGDEM</th>
+   
+      <th style="writing-mode: tb-rl;">CNGLIB</th>
+   
+      <th style="writing-mode: tb-rl;">CNGPAF</th>
+   
+      <th style="writing-mode: tb-rl;">CNGREP</th>
+   
+   <th>Margin reduction</th>
+   <th>Taint</th>
+   <th>KM</th>
+   <!-- <th>Net KM</th> -->
+   <th>Cumulative KM</th>
+   </tr>
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+</thead>
+
+<tbody>
+ 
+  
+  <tr>
+
+   <td>000001</td>
+   <td>0.408279</td>
+   <td>0606736740</td>
+   <!-- <td>U</td> -->
+   <td>670</td>
+   <td>0.039707</td>
+   
+     <td>0</td>
+   
+     <td>266</td>
+   
+     <td>0</td>
+   
+     <td>20</td>
+   
+     <td>23</td>
+   
+     <td>289</td>
+   
+     <td>72</td>
+   
+   
+     <td><b>266</b></td>
+   
+     <td><b>20</b></td>
+   
+     <td><b>23</b></td>
+   
+     <td><b>289</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.951148</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000002</td>
+   <td>0.800619</td>
+   <td>060678057156</td>
+   <!-- <td>U</td> -->
+   <td>716</td>
+   <td>0.045551</td>
+   
+     <td>0</td>
+   
+     <td>285</td>
+   
+     <td>0</td>
+   
+     <td>8</td>
+   
+     <td>17</td>
+   
+     <td>364</td>
+   
+     <td>42</td>
+   
+   
+     <td><b>285</b></td>
+   
+     <td><b>8</b></td>
+   
+     <td><b>17</b></td>
+   
+     <td><b>364</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.904683</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000003</td>
+   <td>0.946763</td>
+   <td>0606782030</td>
+   <!-- <td>U</td> -->
+   <td>592</td>
+   <td>0.025497</td>
+   
+     <td>0</td>
+   
+     <td>309</td>
+   
+     <td>0</td>
+   
+     <td>5</td>
+   
+     <td>50</td>
+   
+     <td>162</td>
+   
+     <td>66</td>
+   
+   
+     <td><b>309</b></td>
+   
+     <td><b>5</b></td>
+   
+     <td><b>50</b></td>
+   
+     <td><b>162</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.860488</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000004</td>
+   <td>0.497369</td>
+   <td>0606758200</td>
+   <!-- <td>U</td> -->
+   <td>706</td>
+   <td>0.051452</td>
+   
+     <td>0</td>
+   
+     <td>210</td>
+   
+     <td>0</td>
+   
+     <td>10</td>
+   
+     <td>30</td>
+   
+     <td>402</td>
+   
+     <td>54</td>
+   
+   
+     <td><b>211</b></td>
+   
+     <td><b>10</b></td>
+   
+     <td><b>30</b></td>
+   
+     <td><b>403</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.818452</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000005</td>
+   <td>0.461929</td>
+   <td>0606755800</td>
+   <!-- <td>U</td> -->
+   <td>688</td>
+   <td>0.037873</td>
+   
+     <td>0</td>
+   
+     <td>301</td>
+   
+     <td>0</td>
+   
+     <td>12</td>
+   
+     <td>34</td>
+   
+     <td>274</td>
+   
+     <td>67</td>
+   
+   
+     <td><b>301</b></td>
+   
+     <td><b>12</b></td>
+   
+     <td><b>34</b></td>
+   
+     <td><b>274</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.778469</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000006</td>
+   <td>0.812794</td>
+   <td>060678057620</td>
+   <!-- <td>U</td> -->
+   <td>544</td>
+   <td>0.036670</td>
+   
+     <td>0</td>
+   
+     <td>195</td>
+   
+     <td>0</td>
+   
+     <td>12</td>
+   
+     <td>13</td>
+   
+     <td>291</td>
+   
+     <td>33</td>
+   
+   
+     <td><b>196</b></td>
+   
+     <td><b>12</b></td>
+   
+     <td><b>13</b></td>
+   
+     <td><b>293</b></td>
+   
+   
+     <td> <a name="cb622"><b>-2</b></a>  <a href="#cbnote622">(note)</a>  </td>
+     <td> <b>-0.000368</b> </td>
+     <td>0.950798</td>
+     <!-- <td>0.950798</td> -->
+     <td><b>0.740167</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000007</td>
+   <td>0.723504</td>
+   <td>060678034804</td>
+   <!-- <td>U</td> -->
+   <td>436</td>
+   <td>0.027846</td>
+   
+     <td>0</td>
+   
+     <td>175</td>
+   
+     <td>0</td>
+   
+     <td>7</td>
+   
+     <td>7</td>
+   
+     <td>225</td>
+   
+     <td>22</td>
+   
+   
+     <td><b>205</b></td>
+   
+     <td><b>7</b></td>
+   
+     <td><b>7</b></td>
+   
+     <td><b>195</b></td>
+   
+   
+     <td> <a name="cb555"><b>60</b></a>  <a href="#cbnote555">(note)</a>  </td>
+     <td> <b>0.123457</b> </td>
+     <td>1.085113</td>
+     <!-- <td>1.085113</td> -->
+     <td><b>0.803164</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000008</td>
+   <td>0.831293</td>
+   <td>060678061130</td>
+   <!-- <td>U</td> -->
+   <td>863</td>
+   <td>0.057698</td>
+   
+     <td>0</td>
+   
+     <td>330</td>
+   
+     <td>0</td>
+   
+     <td>16</td>
+   
+     <td>6</td>
+   
+     <td>474</td>
+   
+     <td>37</td>
+   
+   
+     <td><b>330</b></td>
+   
+     <td><b>16</b></td>
+   
+     <td><b>6</b></td>
+   
+     <td><b>474</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.763929</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000009</td>
+   <td>0.162158</td>
+   <td>0606721310</td>
+   <!-- <td>U</td> -->
+   <td>440</td>
+   <td>0.022632</td>
+   
+     <td>0</td>
+   
+     <td>197</td>
+   
+     <td>0</td>
+   
+     <td>4</td>
+   
+     <td>35</td>
+   
+     <td>152</td>
+   
+     <td>52</td>
+   
+   
+     <td><b>197</b></td>
+   
+     <td><b>4</b></td>
+   
+     <td><b>35</b></td>
+   
+     <td><b>152</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.726609</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000010</td>
+   <td>0.982467</td>
+   <td>0609549700A</td>
+   <!-- <td>U</td> -->
+   <td>634</td>
+   <td>0.042457</td>
+   
+     <td>0</td>
+   
+     <td>229</td>
+   
+     <td>0</td>
+   
+     <td>26</td>
+   
+     <td>21</td>
+   
+     <td>336</td>
+   
+     <td>22</td>
+   
+   
+     <td><b>229</b></td>
+   
+     <td><b>26</b></td>
+   
+     <td><b>21</b></td>
+   
+     <td><b>336</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.691113</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000011</td>
+   <td>0.956941</td>
+   <td>0606787344</td>
+   <!-- <td>U</td> -->
+   <td>338</td>
+   <td>0.025096</td>
+   
+     <td>0</td>
+   
+     <td>86</td>
+   
+     <td>0</td>
+   
+     <td>7</td>
+   
+     <td>15</td>
+   
+     <td>186</td>
+   
+     <td>44</td>
+   
+   
+     <td><b>86</b></td>
+   
+     <td><b>7</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>186</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.657351</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000012</td>
+   <td>0.676670</td>
+   <td>060678029102</td>
+   <!-- <td>U</td> -->
+   <td>736</td>
+   <td>0.041769</td>
+   
+     <td>0</td>
+   
+     <td>330</td>
+   
+     <td>0</td>
+   
+     <td>19</td>
+   
+     <td>26</td>
+   
+     <td>323</td>
+   
+     <td>38</td>
+   
+   
+     <td><b>334</b></td>
+   
+     <td><b>19</b></td>
+   
+     <td><b>26</b></td>
+   
+     <td><b>324</b></td>
+   
+   
+     <td> <a name="cb528"><b>3</b></a>  <a href="#cbnote528">(note)</a>  </td>
+     <td> <b>0.004115</b> </td>
+     <td>0.955079</td>
+     <!-- <td>0.955079</td> -->
+     <td><b>0.627822</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000013</td>
+   <td>0.600174</td>
+   <td>060678024324</td>
+   <!-- <td>U</td> -->
+   <td>417</td>
+   <td>0.026471</td>
+   
+     <td>0</td>
+   
+     <td>156</td>
+   
+     <td>0</td>
+   
+     <td>12</td>
+   
+     <td>14</td>
+   
+     <td>201</td>
+   
+     <td>34</td>
+   
+   
+     <td><b>156</b></td>
+   
+     <td><b>12</b></td>
+   
+     <td><b>14</b></td>
+   
+     <td><b>201</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.597152</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000014</td>
+   <td>0.369314</td>
+   <td>0606734106</td>
+   <!-- <td>U</td> -->
+   <td>623</td>
+   <td>0.034607</td>
+   
+     <td>0</td>
+   
+     <td>257</td>
+   
+     <td>0</td>
+   
+     <td>25</td>
+   
+     <td>32</td>
+   
+     <td>238</td>
+   
+     <td>71</td>
+   
+   
+     <td><b>257</b></td>
+   
+     <td><b>25</b></td>
+   
+     <td><b>32</b></td>
+   
+     <td><b>238</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.567980</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000015</td>
+   <td>0.242124</td>
+   <td>0606724312</td>
+   <!-- <td>U</td> -->
+   <td>26</td>
+   <td>0.001662</td>
+   
+     <td>0</td>
+   
+     <td>9</td>
+   
+     <td>0</td>
+   
+     <td>0</td>
+   
+     <td>2</td>
+   
+     <td>12</td>
+   
+     <td>3</td>
+   
+   
+     <td><b>11</b></td>
+   
+     <td><b>2</b></td>
+   
+     <td><b>3</b></td>
+   
+     <td><b>10</b></td>
+   
+   
+     <td> <a name="cb184"><b>4</b></a>  <a href="#cbnote184">(note)</a>  </td>
+     <td> <b>0.137931</b> </td>
+     <td>1.103332</td>
+     <!-- <td>1.103332</td> -->
+     <td><b>0.626671</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000016</td>
+   <td>0.802390</td>
+   <td>060678057206</td>
+   <!-- <td>U</td> -->
+   <td>591</td>
+   <td>0.035753</td>
+   
+     <td>0</td>
+   
+     <td>246</td>
+   
+     <td>0</td>
+   
+     <td>13</td>
+   
+     <td>14</td>
+   
+     <td>279</td>
+   
+     <td>39</td>
+   
+   
+     <td><b>246</b></td>
+   
+     <td><b>13</b></td>
+   
+     <td><b>14</b></td>
+   
+     <td><b>279</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.596057</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000017</td>
+   <td>0.773400</td>
+   <td>060678053126</td>
+   <!-- <td>U</td> -->
+   <td>444</td>
+   <td>0.026528</td>
+   
+     <td>0</td>
+   
+     <td>185</td>
+   
+     <td>0</td>
+   
+     <td>13</td>
+   
+     <td>16</td>
+   
+     <td>204</td>
+   
+     <td>26</td>
+   
+   
+     <td><b>185</b></td>
+   
+     <td><b>13</b></td>
+   
+     <td><b>16</b></td>
+   
+     <td><b>204</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.566938</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000018</td>
+   <td>0.031712</td>
+   <td>06005AV130</td>
+   <!-- <td>U</td> -->
+   <td>424</td>
+   <td>0.028992</td>
+   
+     <td>0</td>
+   
+     <td>149</td>
+   
+     <td>0</td>
+   
+     <td>13</td>
+   
+     <td>12</td>
+   
+     <td>231</td>
+   
+     <td>19</td>
+   
+   
+     <td><b>150</b></td>
+   
+     <td><b>13</b></td>
+   
+     <td><b>12</b></td>
+   
+     <td><b>230</b></td>
+   
+   
+     <td> <a name="cb34"><b>2</b></a>  <a href="#cbnote34">(note)</a>  </td>
+     <td> <b>0.003953</b> </td>
+     <td>0.954923</td>
+     <!-- <td>0.954923</td> -->
+     <td><b>0.541382</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000019</td>
+   <td>0.278919</td>
+   <td>0606726108</td>
+   <!-- <td>U</td> -->
+   <td>685</td>
+   <td>0.039592</td>
+   
+     <td>0</td>
+   
+     <td>284</td>
+   
+     <td>0</td>
+   
+     <td>14</td>
+   
+     <td>36</td>
+   
+     <td>290</td>
+   
+     <td>61</td>
+   
+   
+     <td><b>284</b></td>
+   
+     <td><b>14</b></td>
+   
+     <td><b>36</b></td>
+   
+     <td><b>290</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.514935</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000020</td>
+   <td>0.689625</td>
+   <td>060678031204</td>
+   <!-- <td>U</td> -->
+   <td>538</td>
+   <td>0.038332</td>
+   
+     <td>0</td>
+   
+     <td>166</td>
+   
+     <td>0</td>
+   
+     <td>13</td>
+   
+     <td>23</td>
+   
+     <td>297</td>
+   
+     <td>39</td>
+   
+   
+     <td><b>166</b></td>
+   
+     <td><b>13</b></td>
+   
+     <td><b>23</b></td>
+   
+     <td><b>297</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.489779</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000021</td>
+   <td>0.364742</td>
+   <td>0606733224</td>
+   <!-- <td>U</td> -->
+   <td>684</td>
+   <td>0.048760</td>
+   
+     <td>0</td>
+   
+     <td>220</td>
+   
+     <td>0</td>
+   
+     <td>10</td>
+   
+     <td>9</td>
+   
+     <td>387</td>
+   
+     <td>58</td>
+   
+   
+     <td><b>220</b></td>
+   
+     <td><b>10</b></td>
+   
+     <td><b>11</b></td>
+   
+     <td><b>387</b></td>
+   
+   
+     <td> <a name="cb271"><b>2</b></a>  <a href="#cbnote271">(note)</a>  </td>
+     <td> <b>0.000289</b> </td>
+     <td>0.951423</td>
+     <!-- <td>0.951423</td> -->
+     <td><b>0.465987</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000022</td>
+   <td>0.686959</td>
+   <td>060678031132</td>
+   <!-- <td>U</td> -->
+   <td>724</td>
+   <td>0.046582</td>
+   
+     <td>0</td>
+   
+     <td>270</td>
+   
+     <td>0</td>
+   
+     <td>14</td>
+   
+     <td>22</td>
+   
+     <td>359</td>
+   
+     <td>59</td>
+   
+   
+     <td><b>270</b></td>
+   
+     <td><b>14</b></td>
+   
+     <td><b>22</b></td>
+   
+     <td><b>359</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.443223</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000023</td>
+   <td>0.980938</td>
+   <td>0609549700A</td>
+   <!-- <td>U</td> -->
+   <td>634</td>
+   <td>0.042457</td>
+   
+     <td>0</td>
+   
+     <td>229</td>
+   
+     <td>0</td>
+   
+     <td>26</td>
+   
+     <td>21</td>
+   
+     <td>336</td>
+   
+     <td>22</td>
+   
+   
+     <td><b>229</b></td>
+   
+     <td><b>26</b></td>
+   
+     <td><b>21</b></td>
+   
+     <td><b>336</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.421571</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000024</td>
+   <td>0.309017</td>
+   <td>0606728102</td>
+   <!-- <td>U</td> -->
+   <td>685</td>
+   <td>0.036040</td>
+   
+     <td>0</td>
+   
+     <td>316</td>
+   
+     <td>0</td>
+   
+     <td>23</td>
+   
+     <td>27</td>
+   
+     <td>260</td>
+   
+     <td>59</td>
+   
+   
+     <td><b>316</b></td>
+   
+     <td><b>23</b></td>
+   
+     <td><b>27</b></td>
+   
+     <td><b>260</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.400976</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000025</td>
+   <td>0.971225</td>
+   <td>0606789318</td>
+   <!-- <td>U</td> -->
+   <td>606</td>
+   <td>0.042686</td>
+   
+     <td>0</td>
+   
+     <td>174</td>
+   
+     <td>0</td>
+   
+     <td>17</td>
+   
+     <td>43</td>
+   
+     <td>313</td>
+   
+     <td>59</td>
+   
+   
+     <td><b>174</b></td>
+   
+     <td><b>17</b></td>
+   
+     <td><b>43</b></td>
+   
+     <td><b>313</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.381388</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000026</td>
+   <td>0.767892</td>
+   <td>060678052200</td>
+   <!-- <td>U</td> -->
+   <td>527</td>
+   <td>0.028476</td>
+   
+     <td>0</td>
+   
+     <td>247</td>
+   
+     <td>0</td>
+   
+     <td>15</td>
+   
+     <td>21</td>
+   
+     <td>217</td>
+   
+     <td>27</td>
+   
+   
+     <td><b>247</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>21</b></td>
+   
+     <td><b>217</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.362757</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000027</td>
+   <td>0.566319</td>
+   <td>060678023118</td>
+   <!-- <td>U</td> -->
+   <td>579</td>
+   <td>0.033175</td>
+   
+     <td>0</td>
+   
+     <td>247</td>
+   
+     <td>0</td>
+   
+     <td>14</td>
+   
+     <td>34</td>
+   
+     <td>247</td>
+   
+     <td>37</td>
+   
+   
+     <td><b>247</b></td>
+   
+     <td><b>14</b></td>
+   
+     <td><b>34</b></td>
+   
+     <td><b>247</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.345035</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000028</td>
+   <td>0.313497</td>
+   <td>0606728312</td>
+   <!-- <td>U</td> -->
+   <td>710</td>
+   <td>0.038790</td>
+   
+     <td>0</td>
+   
+     <td>323</td>
+   
+     <td>0</td>
+   
+     <td>22</td>
+   
+     <td>25</td>
+   
+     <td>290</td>
+   
+     <td>50</td>
+   
+   
+     <td><b>323</b></td>
+   
+     <td><b>22</b></td>
+   
+     <td><b>25</b></td>
+   
+     <td><b>290</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.328180</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000029</td>
+   <td>0.032250</td>
+   <td>06005CP01</td>
+   <!-- <td>U</td> -->
+   <td>447</td>
+   <td>0.030883</td>
+   
+     <td>0</td>
+   
+     <td>152</td>
+   
+     <td>0</td>
+   
+     <td>15</td>
+   
+     <td>15</td>
+   
+     <td>244</td>
+   
+     <td>21</td>
+   
+   
+     <td><b>152</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>244</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.312148</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000030</td>
+   <td>0.490957</td>
+   <td>0606757750</td>
+   <!-- <td>U</td> -->
+   <td>381</td>
+   <td>0.026643</td>
+   
+     <td>0</td>
+   
+     <td>118</td>
+   
+     <td>0</td>
+   
+     <td>11</td>
+   
+     <td>24</td>
+   
+     <td>202</td>
+   
+     <td>26</td>
+   
+   
+     <td><b>118</b></td>
+   
+     <td><b>11</b></td>
+   
+     <td><b>24</b></td>
+   
+     <td><b>202</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.296899</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000031</td>
+   <td>0.120903</td>
+   <td>06009520</td>
+   <!-- <td>U</td> -->
+   <td>990</td>
+   <td>0.067954</td>
+   
+     <td>0</td>
+   
+     <td>332</td>
+   
+     <td>0</td>
+   
+     <td>34</td>
+   
+     <td>33</td>
+   
+     <td>528</td>
+   
+     <td>63</td>
+   
+   
+     <td><b>332</b></td>
+   
+     <td><b>36</b></td>
+   
+     <td><b>33</b></td>
+   
+     <td><b>528</b></td>
+   
+   
+     <td> <a name="cb90"><b>2</b></a>  <a href="#cbnote90">(note)</a>  </td>
+     <td> <b>0.000199</b> </td>
+     <td>0.951337</td>
+     <!-- <td>0.951337</td> -->
+     <td><b>0.282451</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000032</td>
+   <td>0.099487</td>
+   <td>06009350</td>
+   <!-- <td>U</td> -->
+   <td>919</td>
+   <td>0.055406</td>
+   
+     <td>0</td>
+   
+     <td>392</td>
+   
+     <td>0</td>
+   
+     <td>30</td>
+   
+     <td>16</td>
+   
+     <td>440</td>
+   
+     <td>41</td>
+   
+   
+     <td><b>393</b></td>
+   
+     <td><b>30</b></td>
+   
+     <td><b>16</b></td>
+   
+     <td><b>442</b></td>
+   
+   
+     <td> <a name="cb82"><b>-2</b></a>  <a href="#cbnote82">(note)</a>  </td>
+     <td> <b>-0.000244</b> </td>
+     <td>0.950917</td>
+     <!-- <td>0.950917</td> -->
+     <td><b>0.268587</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000033</td>
+   <td>0.628309</td>
+   <td>060678025810</td>
+   <!-- <td>U</td> -->
+   <td>435</td>
+   <td>0.021486</td>
+   
+     <td>0</td>
+   
+     <td>224</td>
+   
+     <td>0</td>
+   
+     <td>9</td>
+   
+     <td>18</td>
+   
+     <td>164</td>
+   
+     <td>20</td>
+   
+   
+     <td><b>224</b></td>
+   
+     <td><b>9</b></td>
+   
+     <td><b>18</b></td>
+   
+     <td><b>164</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.255466</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000034</td>
+   <td>0.101225</td>
+   <td>06009350</td>
+   <!-- <td>U</td> -->
+   <td>919</td>
+   <td>0.055406</td>
+   
+     <td>0</td>
+   
+     <td>392</td>
+   
+     <td>0</td>
+   
+     <td>30</td>
+   
+     <td>16</td>
+   
+     <td>440</td>
+   
+     <td>41</td>
+   
+   
+     <td><b>393</b></td>
+   
+     <td><b>30</b></td>
+   
+     <td><b>16</b></td>
+   
+     <td><b>442</b></td>
+   
+   
+     <td> <a name="cb82"><b>-2</b></a>  <a href="#cbnote82">(note)</a>  </td>
+     <td> <b>-0.000244</b> </td>
+     <td>0.950917</td>
+     <!-- <td>0.950917</td> -->
+     <td><b>0.242927</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000035</td>
+   <td>0.289737</td>
+   <td>0606726420</td>
+   <!-- <td>U</td> -->
+   <td>382</td>
+   <td>0.021085</td>
+   
+     <td>0</td>
+   
+     <td>172</td>
+   
+     <td>0</td>
+   
+     <td>14</td>
+   
+     <td>15</td>
+   
+     <td>158</td>
+   
+     <td>23</td>
+   
+   
+     <td><b>182</b></td>
+   
+     <td><b>14</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>158</b></td>
+   
+   
+     <td> <a name="cb222"><b>10</b></a>  <a href="#cbnote222">(note)</a>  </td>
+     <td> <b>0.027174</b> </td>
+     <td>0.977717</td>
+     <!-- <td>0.977717</td> -->
+     <td><b>0.237514</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000036</td>
+   <td>0.996040</td>
+   <td>0609594939</td>
+   <!-- <td>U</td> -->
+   <td>209</td>
+   <td>0.013407</td>
+   
+     <td>0</td>
+   
+     <td>80</td>
+   
+     <td>0</td>
+   
+     <td>4</td>
+   
+     <td>6</td>
+   
+     <td>105</td>
+   
+     <td>14</td>
+   
+   
+     <td><b>80</b></td>
+   
+     <td><b>4</b></td>
+   
+     <td><b>6</b></td>
+   
+     <td><b>105</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.225911</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000037</td>
+   <td>0.543676</td>
+   <td>060678022102</td>
+   <!-- <td>U</td> -->
+   <td>467</td>
+   <td>0.028706</td>
+   
+     <td>0</td>
+   
+     <td>182</td>
+   
+     <td>0</td>
+   
+     <td>13</td>
+   
+     <td>15</td>
+   
+     <td>216</td>
+   
+     <td>41</td>
+   
+   
+     <td><b>182</b></td>
+   
+     <td><b>13</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>216</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.214875</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000038</td>
+   <td>0.127084</td>
+   <td>06009535</td>
+   <!-- <td>U</td> -->
+   <td>1119</td>
+   <td>0.075804</td>
+   
+     <td>0</td>
+   
+     <td>393</td>
+   
+     <td>0</td>
+   
+     <td>35</td>
+   
+     <td>39</td>
+   
+     <td>597</td>
+   
+     <td>55</td>
+   
+   
+     <td><b>393</b></td>
+   
+     <td><b>35</b></td>
+   
+     <td><b>39</b></td>
+   
+     <td><b>597</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.204378</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000039</td>
+   <td>0.121083</td>
+   <td>06009520</td>
+   <!-- <td>U</td> -->
+   <td>990</td>
+   <td>0.067954</td>
+   
+     <td>0</td>
+   
+     <td>332</td>
+   
+     <td>0</td>
+   
+     <td>34</td>
+   
+     <td>33</td>
+   
+     <td>528</td>
+   
+     <td>63</td>
+   
+   
+     <td><b>332</b></td>
+   
+     <td><b>36</b></td>
+   
+     <td><b>33</b></td>
+   
+     <td><b>528</b></td>
+   
+   
+     <td> <a name="cb90"><b>2</b></a>  <a href="#cbnote90">(note)</a>  </td>
+     <td> <b>0.000199</b> </td>
+     <td>0.951337</td>
+     <!-- <td>0.951337</td> -->
+     <td><b>0.194432</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000040</td>
+   <td>0.033285</td>
+   <td>06005CP01</td>
+   <!-- <td>U</td> -->
+   <td>447</td>
+   <td>0.030883</td>
+   
+     <td>0</td>
+   
+     <td>152</td>
+   
+     <td>0</td>
+   
+     <td>15</td>
+   
+     <td>15</td>
+   
+     <td>244</td>
+   
+     <td>21</td>
+   
+   
+     <td><b>152</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>244</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.184934</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000041</td>
+   <td>0.566818</td>
+   <td>060678023126</td>
+   <!-- <td>U</td> -->
+   <td>442</td>
+   <td>0.028305</td>
+   
+     <td>0</td>
+   
+     <td>163</td>
+   
+     <td>0</td>
+   
+     <td>16</td>
+   
+     <td>21</td>
+   
+     <td>215</td>
+   
+     <td>27</td>
+   
+   
+     <td><b>164</b></td>
+   
+     <td><b>16</b></td>
+   
+     <td><b>21</b></td>
+   
+     <td><b>215</b></td>
+   
+   
+     <td> <a name="cb447"><b>1</b></a>  <a href="#cbnote447">(note)</a>  </td>
+     <td> <b>0.002024</b> </td>
+     <td>0.953078</td>
+     <!-- <td>0.953078</td> -->
+     <td><b>0.176256</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000042</td>
+   <td>0.828676</td>
+   <td>060678061100</td>
+   <!-- <td>U</td> -->
+   <td>1020</td>
+   <td>0.068470</td>
+   
+     <td>0</td>
+   
+     <td>395</td>
+   
+     <td>0</td>
+   
+     <td>14</td>
+   
+     <td>12</td>
+   
+     <td>570</td>
+   
+     <td>29</td>
+   
+   
+     <td><b>395</b></td>
+   
+     <td><b>14</b></td>
+   
+     <td><b>12</b></td>
+   
+     <td><b>570</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.167646</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000043</td>
+   <td>0.342894</td>
+   <td>0606731404</td>
+   <!-- <td>U</td> -->
+   <td>628</td>
+   <td>0.039764</td>
+   
+     <td>0</td>
+   
+     <td>228</td>
+   
+     <td>0</td>
+   
+     <td>13</td>
+   
+     <td>36</td>
+   
+     <td>294</td>
+   
+     <td>57</td>
+   
+   
+     <td><b>228</b></td>
+   
+     <td><b>13</b></td>
+   
+     <td><b>36</b></td>
+   
+     <td><b>294</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.159456</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000044</td>
+   <td>0.588563</td>
+   <td>060678023624</td>
+   <!-- <td>U</td> -->
+   <td>436</td>
+   <td>0.024294</td>
+   
+     <td>0</td>
+   
+     <td>180</td>
+   
+     <td>0</td>
+   
+     <td>21</td>
+   
+     <td>27</td>
+   
+     <td>168</td>
+   
+     <td>40</td>
+   
+   
+     <td><b>180</b></td>
+   
+     <td><b>21</b></td>
+   
+     <td><b>27</b></td>
+   
+     <td><b>168</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.151666</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000045</td>
+   <td>0.110315</td>
+   <td>06009430</td>
+   <!-- <td>U</td> -->
+   <td>990</td>
+   <td>0.063370</td>
+   
+     <td>0</td>
+   
+     <td>377</td>
+   
+     <td>0</td>
+   
+     <td>34</td>
+   
+     <td>30</td>
+   
+     <td>493</td>
+   
+     <td>56</td>
+   
+   
+     <td><b>377</b></td>
+   
+     <td><b>34</b></td>
+   
+     <td><b>30</b></td>
+   
+     <td><b>493</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.144257</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000046</td>
+   <td>0.277330</td>
+   <td>0606726108</td>
+   <!-- <td>U</td> -->
+   <td>685</td>
+   <td>0.039592</td>
+   
+     <td>0</td>
+   
+     <td>284</td>
+   
+     <td>0</td>
+   
+     <td>14</td>
+   
+     <td>36</td>
+   
+     <td>290</td>
+   
+     <td>61</td>
+   
+   
+     <td><b>284</b></td>
+   
+     <td><b>14</b></td>
+   
+     <td><b>36</b></td>
+   
+     <td><b>290</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.137210</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000047</td>
+   <td>0.047917</td>
+   <td>06005CP16</td>
+   <!-- <td>U</td> -->
+   <td>319</td>
+   <td>0.020799</td>
+   
+     <td>0</td>
+   
+     <td>115</td>
+   
+     <td>0</td>
+   
+     <td>15</td>
+   
+     <td>12</td>
+   
+     <td>159</td>
+   
+     <td>18</td>
+   
+   
+     <td><b>115</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>12</b></td>
+   
+     <td><b>159</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.130507</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000048</td>
+   <td>0.193523</td>
+   <td>0606722716</td>
+   <!-- <td>U</td> -->
+   <td>644</td>
+   <td>0.034607</td>
+   
+     <td>0</td>
+   
+     <td>294</td>
+   
+     <td>0</td>
+   
+     <td>9</td>
+   
+     <td>25</td>
+   
+     <td>254</td>
+   
+     <td>62</td>
+   
+   
+     <td><b>294</b></td>
+   
+     <td><b>9</b></td>
+   
+     <td><b>25</b></td>
+   
+     <td><b>254</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.124132</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000049</td>
+   <td>0.900551</td>
+   <td>060678089318</td>
+   <!-- <td>U</td> -->
+   <td>537</td>
+   <td>0.034779</td>
+   
+     <td>0</td>
+   
+     <td>191</td>
+   
+     <td>0</td>
+   
+     <td>10</td>
+   
+     <td>40</td>
+   
+     <td>261</td>
+   
+     <td>35</td>
+   
+   
+     <td><b>191</b></td>
+   
+     <td><b>10</b></td>
+   
+     <td><b>40</b></td>
+   
+     <td><b>261</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.118068</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000050</td>
+   <td>0.619219</td>
+   <td>060678025430</td>
+   <!-- <td>U</td> -->
+   <td>538</td>
+   <td>0.030023</td>
+   
+     <td>0</td>
+   
+     <td>248</td>
+   
+     <td>0</td>
+   
+     <td>9</td>
+   
+     <td>15</td>
+   
+     <td>234</td>
+   
+     <td>32</td>
+   
+   
+     <td><b>249</b></td>
+   
+     <td><b>17</b></td>
+   
+     <td><b>15</b></td>
+   
+     <td><b>234</b></td>
+   
+   
+     <td> <a name="cb489"><b>1</b></a>  <a href="#cbnote489">(note)</a>  </td>
+     <td> <b>0.001908</b> </td>
+     <td>0.952967</td>
+     <!-- <td>0.952967</td> -->
+     <td><b>0.112514</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000051</td>
+   <td>0.422998</td>
+   <td>0606737312</td>
+   <!-- <td>U</td> -->
+   <td>530</td>
+   <td>0.036212</td>
+   
+     <td>0</td>
+   
+     <td>185</td>
+   
+     <td>0</td>
+   
+     <td>12</td>
+   
+     <td>11</td>
+   
+     <td>287</td>
+   
+     <td>35</td>
+   
+   
+     <td><b>186</b></td>
+   
+     <td><b>21</b></td>
+   
+     <td><b>11</b></td>
+   
+     <td><b>287</b></td>
+   
+   
+     <td> <a name="cb306"><b>9</b></a>  <a href="#cbnote306">(note)</a>  </td>
+     <td> <b>0.001678</b> </td>
+     <td>0.952747</td>
+     <!-- <td>0.952747</td> -->
+     <td><b>0.107198</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000052</td>
+   <td>0.176488</td>
+   <td>0606722120</td>
+   <!-- <td>U</td> -->
+   <td>568</td>
+   <td>0.034034</td>
+   
+     <td>0</td>
+   
+     <td>212</td>
+   
+     <td>0</td>
+   
+     <td>5</td>
+   
+     <td>18</td>
+   
+     <td>238</td>
+   
+     <td>95</td>
+   
+   
+     <td><b>212</b></td>
+   
+     <td><b>5</b></td>
+   
+     <td><b>18</b></td>
+   
+     <td><b>238</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.101961</b></td>
+   
+  </tr>
+  
+ 
+  
+  <tr>
+
+   <td>000053</td>
+   <td>0.098457</td>
+   <td>06009340</td>
+   <!-- <td>U</td> -->
+   <td>846</td>
+   <td>0.047270</td>
+   
+     <td>0</td>
+   
+     <td>383</td>
+   
+     <td>0</td>
+   
+     <td>37</td>
+   
+     <td>17</td>
+   
+     <td>362</td>
+   
+     <td>47</td>
+   
+   
+     <td><b>383</b></td>
+   
+     <td><b>37</b></td>
+   
+     <td><b>17</b></td>
+   
+     <td><b>362</b></td>
+   
+   
+     <td></td>
+     <td> 0 </td>
+     <td>0.951148</td>
+     <!-- <td>0.951148</td> -->
+     <td><b>0.096980</b></td>
+   
+  </tr>
+  
+ 
+</tbody>
+</table>
+
+<h2>Discrepancy Notes</h2>
+<ul>
+
+    
+    
+    
+    
+    
+   <li><a href="#cb622"><b>ContestBatch 060678057620</b></a>: <a name="cbnote622">Max taint was for CNGREP vs CNGLIB, with discrepancy -2<br/>Notes: +2 for CNGREP (Lundgren), +1 for CNGDEM (Durston), no change for others</a></li>  
+   <li><a href="#cb555"><b>ContestBatch 060678034804</b></a>: <a name="cbnote555">Max taint was for CNGREP vs CNGDEM, with discrepancy 60<br/>Notes: This large discrepancy (reducing the margin by 60 in an audit unit with 436 ballots) results in the need to audit 3 additional units</a></li>  
+    
+    
+    
+    
+   <li><a href="#cb528"><b>ContestBatch 060678029102</b></a>: <a name="cbnote528">Max taint was for CNGREP vs CNGDEM, with discrepancy 3<br/>Notes: +4 for CNGDEM, +1 for CNGREP</a></li>  
+    
+    
+   <li><a href="#cb184"><b>ContestBatch 0606724312</b></a>: <a name="cbnote184">Max taint was for CNGREP vs CNGDEM, with discrepancy 4<br/>Notes: This significant discrepancy (reducing the margin by 4 in an audit unit with only 26 ballots) results in the need to audit 3 additional units</a></li>  
+    
+    
+   <li><a href="#cb34"><b>ContestBatch 06005AV130</b></a>: <a name="cbnote34">Max taint was for CNGREP vs CNGDEM, with discrepancy 2<br/>Notes: +1 for CNGDEM, -1 for CNGREP</a></li>  
+    
+    
+   <li><a href="#cb271"><b>ContestBatch 0606733224</b></a>: <a name="cbnote271">Max taint was for CNGREP vs CNGPAF, with discrepancy 2<br/>Notes: +2 for CNGPAF (Padilla)</a></li>  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   <li><a href="#cb90"><b>ContestBatch 06009520</b></a>: <a name="cbnote90">Max taint was for CNGREP vs CNGLIB, with discrepancy 2<br/>Notes: +2 for CNGLIB (Tuma).   Selected twice</a></li>  
+   <li><a href="#cb82"><b>ContestBatch 06009350</b></a>: <a name="cbnote82">Max taint was for CNGREP vs CNGLIB, with discrepancy -2<br/>Notes: +1 for CNGDEM, +2 for CNGREP.  This audit unit was randomly selected twice (note the selection is &quot;with replacement&quot;)</a></li>  
+    
+   <li><a href="#cb82"><b>ContestBatch 06009350</b></a>: <a name="cbnote82">Max taint was for CNGREP vs CNGLIB, with discrepancy -2<br/>Notes: +1 for CNGDEM, +2 for CNGREP.  This audit unit was randomly selected twice (note the selection is &quot;with replacement&quot;)</a></li>  
+   <li><a href="#cb222"><b>ContestBatch 0606726420</b></a>: <a name="cbnote222">Max taint was for CNGREP vs CNGDEM, with discrepancy 10<br/>Notes: +10 for CNGDEM</a></li>  
+    
+    
+    
+   <li><a href="#cb90"><b>ContestBatch 06009520</b></a>: <a name="cbnote90">Max taint was for CNGREP vs CNGLIB, with discrepancy 2<br/>Notes: +2 for CNGLIB (Tuma).   Selected twice</a></li>  
+    
+   <li><a href="#cb447"><b>ContestBatch 060678023126</b></a>: <a name="cbnote447">Max taint was for CNGREP vs CNGDEM, with discrepancy 1<br/>Notes: +1 for CNGDEM</a></li>  
+    
+    
+    
+    
+    
+    
+    
+    
+   <li><a href="#cb489"><b>ContestBatch 060678025430</b></a>: <a name="cbnote489">Max taint was for CNGREP vs CNGDEM, with discrepancy 1<br/>Notes: taint from +8 for CNGLIB (Tuma) is less than taint from +1 for CNGDEM, so discrepancy is 1</a></li>  
+   <li><a href="#cb306"><b>ContestBatch 0606737312</b></a>: <a name="cbnote306">Max taint was for CNGREP vs CNGLIB, with discrepancy 9<br/>Notes: taint from +9 for CNGLIB (Tuma) overcomes taint from +1 for CNGDEM, so discrepancy is 9</a></li>  
+    
+    
+</ul>
+
+<h2>KM Factor Graph</h2>
+<p>
+Here is an interactive graph of the KM factor data.  Hover the mouse over the points to see the exact values.
+</p>
+
+<!--Div that will hold the chart-->
+<div id="chart_div"></div>
+
+<p>Page generated: Thu, 2 Dec 2010 19:14:00 -0700</p>
+
+
+    </div>
+</body>
+</html>

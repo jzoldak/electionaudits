@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Contest List | {{ block.super }}{% endblock %}
+{% block content %}
+<!-- FIXME: Put this in a new header block or whatever -->
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    
+      // Load the Visualization API and the piechart package.
+      google.load('visualization', '1', {'packages':['corechart']});
+      
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+      
+      // Callback that creates and populates a data table, 
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+      // Create our data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Task');
+        data.addColumn('number', 'Hours per Day');
+        data.addRows([
+          ['Work', 11],
+          ['Eat', 2],
+          ['Commute', 2],
+          ['Watch TV', 2],
+          ['Sleep', 7]
+        ]);
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, {width: 400, height: 240, is3D: true, title: 'My Daily Activities'});
+      }
+    </script>
+
+    <!--Div that will hold the chart-->
+    <div id="chart_div"></div>
+
+    <h2>Contest List</h2>
+
+<p>Number of contests: {{ object_list|length }}.  Contests selected for auditing are highlighted in yellow.</p>
+<p>The auditing selection statistics are based
+on the Overall Margin percentage if it has been entered to reflect results from
+other counties.  Otherwise the margin used for the statistics comes from
+the Margin calculated based on just the ballots reflected in the given report.
+</p>
+<p>Information on two alternative auditing sampling methods is presented:
+SAFE (in which each audit unit has an equal chance of being picked).
+and NEGEXP (which provides more statistical signifigance for a given effort and
+requires selecting larger audit units
+with higher probability than smaller ones).
+The numbers given here are based on the given confidence 
+level.  I.e. they are designed so the
+audit will either 1) find a discrepancy and call for an escalation or
+full hand recount, or 2) reduce the risk of confirming an incorrect
+outcome to e.g. 25% (for a confidence level of 75%),
+even if the tally system has been manipulated.
+A maximum "within-precinct-miscount" of 20% is assumed.
+See <a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
+On Auditing Elections When Precincts Have Different Sizes, by Javed
+A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
+
+<table border="1" cellpadding="5">
+<thead>
+<tr>
+ <th>Contest Name</th>
+ <th>Audit Units</th>
+ <th>Overall Margin %</th>
+ <th>Margin %</th>
+ <th>Contest Seq</th>
+ <th>Threshold</th>
+ <th>Random</th>
+ <th>Priority</th>
+ <th>Confidence %</th>
+ <th>Proportion %</th>
+ <th>Units to audit: NEGEXP</th>
+{% comment %}
+ <th>Units to audit: PPEBWR</th>
+{% endcomment %}
+ <th>Units to audit: SAFE</th>
+ <th>Ballots to audit: NEGEXP</th>
+{% comment %}
+ <th>Ballots to audit: PPEBWR</th>
+{% endcomment %}
+ <th>Ballots to audit: SAFE</th>
+</tr>
+</thead>
+<tbody>
+        {% for contest in object_list %}
+<tr{% if contest.selected %} style="background: yellow;"{% endif %}>
+ <td><a href="{{ contest.id }}/">{{ contest.name }}</a></td>
+ <td style="text-align: right;">{{ contest.contestbatch_set.all|length }}</td>
+ <td style="text-align: right;">{{ contest.overall_margin|floatformat:3 }}</td>
+ <td style="text-align: right;">{{ contest.min_margin|floatformat:3 }}</td>
+ <td style="text-align: right;">{{ contest.id|stringformat:"06d" }}</td>
+ <td style="text-align: right;">{{ contest.threshhold|floatformat:5 }}</td>
+ <td style="text-align: right;">{{ contest.ssr|floatformat:5 }}</td>
+ <td style="text-align: right;">{{ contest.priority|floatformat:5 }}</td>
+ <td style="text-align: right;">{{ contest.confidence }}</td>
+ <td style="text-align: right;">{{ contest.proportion|floatformat:0 }}</td>
+ <td style="text-align: right;">{{ contest.stats.negexp_precincts|floatformat:1 }}</td>
+{% comment %}
+ <td style="text-align: right;">{{ contest.stats.ppebwr_precincts|floatformat:1 }}</td>
+{% endcomment %}
+ <td style="text-align: right;">{{ contest.stats.safe_precincts|floatformat:1 }}</td>
+ <td style="text-align: right;">{{ contest.stats.negexp_work|floatformat:0 }}</td>
+{% comment %}
+ <td style="text-align: right;">{{ contest.stats.ppebwr_work|floatformat:0 }}</td>
+{% endcomment %}
+ <td style="text-align: right;">{{ contest.stats.safe_work|floatformat:0 }}</td>
+</tr>
+        {% endfor %}
+</tbody>
+</table>
+{% endblock %}

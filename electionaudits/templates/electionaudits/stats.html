@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %} Ad-Hoc Contest Statistics Calculator | {{ block.super }}{% endblock %}
+
+{% block content %}
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
+
+<h2>Ad-Hoc Contest Statistics Calculator</h2>
+
+<p>Enter your data in the form, and press the button to see selection
+statistics based on the paper<br/>
+<a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
+On Auditing Elections When Precincts Have Different Sizes, by Javed
+A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
+
+<p>All numbers are fractions between 0.0 and 1.0.  So for a margin of 5%, enter "0.05"</p>
+
+<form action="/stats/" method="post">
+<table>
+{{ form.as_table }}
+<tr><th></th><td><strong><input type="submit" value="Show selection statistics" /></strong></td></tr>
+</table>
+</form>
+
+<p>Using a fixed set of audit units for now:
+300 of size 500, 200 of size 200, 100 of size 40.</p>
+
+{% if stats %}
+<hr/>
+<h2><a name="stats">Audit statistics</a></h2>
+
+<pre>
+{{ stats.prose }}
+</pre>
+{% endif %}
+
+{% endblock %}

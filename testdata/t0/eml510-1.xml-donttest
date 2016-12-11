@@ -1,0 +1,487 @@
+<?xml version="1.0"?>
+<!-- <?xml-stylesheet type="text/xsl" href="cal510_style.xsl"?> -->
+<EML Id="510" SchemaVersion="5.0">
+  <MessageLanguage>en-US</MessageLanguage>
+  <IssueDate>FIXME date 2007-08-08T20:07:08.007</IssueDate>
+  <Count>
+    <EventIdentifier Id="FIXME Election NAME"/>
+    <Election>
+      <ElectionIdentifier Id="FIXME Election ID"/>
+      <Contests>
+        <Contest>
+          <ContestIdentifier Id="1" DisplayOrder="1">
+            <ContestName>City of Boulder Council Candidates, Vote For 5</ContestName>
+          </ContestIdentifier>
+
+<!--
+Do totals also - here's the data at least....
+ 
+  
+        Matthew Appelbaum, 79
+        Suzy Ageton, 75
+        Barry Siff, 53
+        Kevin Hotaling, 58
+        Fenno Hoffman, 68
+        Over, 1
+        Valerie Mitchell, 62
+        Rob Smoke, 71
+        KC Becker, 69
+        Jyotsna Raj, 66
+        Under, 50
+        Macon Cowles, 88
+        Seth Brigham, 83
+        Tim Plass, 56
+        George Karakehian, 52
+   
+  
+ 
+  
+ 
+  
+ 
+-->
+	  
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier Id="000009">p002_mb_680</ReportingUnitIdentifier>
+            <CountMetric Id="??" Type="Batch Type">AB</CountMetric>
+<!--	     -->
+            <CountMetric Id="??" Type="Ballots">25</CountMetric>
+            <CountMetric Id="??" Type="Contest Ballots">25</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="44" DisplayOrder="44">
+                  <CandidateName>Matthew Appelbaum</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>4</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="45" DisplayOrder="45">
+                  <CandidateName>Suzy Ageton</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>4</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="46" DisplayOrder="46">
+                  <CandidateName>Barry Siff</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="47" DisplayOrder="47">
+                  <CandidateName>Kevin Hotaling</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>0</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="48" DisplayOrder="48">
+                  <CandidateName>Fenno Hoffman</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>0</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="49" DisplayOrder="49">
+                  <CandidateName>Over</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>0</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="50" DisplayOrder="50">
+                  <CandidateName>Valerie Mitchell</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="51" DisplayOrder="51">
+                  <CandidateName>Rob Smoke</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="52" DisplayOrder="52">
+                  <CandidateName>KC Becker</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>4</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="53" DisplayOrder="53">
+                  <CandidateName>Jyotsna Raj</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="54" DisplayOrder="54">
+                  <CandidateName>Under</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>0</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="55" DisplayOrder="55">
+                  <CandidateName>Macon Cowles</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>4</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="56" DisplayOrder="56">
+                  <CandidateName>Seth Brigham</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>4</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="57" DisplayOrder="57">
+                  <CandidateName>Tim Plass</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="58" DisplayOrder="58">
+                  <CandidateName>George Karakehian</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>0</ValidVotes>
+            </Selection>
+	    
+          </ReportingUnitVotes>
+	
+	
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier Id="000012">p003_mb_679</ReportingUnitIdentifier>
+            <CountMetric Id="??" Type="Batch Type">AB</CountMetric>
+<!--	     -->
+            <CountMetric Id="??" Type="Ballots">50</CountMetric>
+            <CountMetric Id="??" Type="Contest Ballots">50</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="44" DisplayOrder="44">
+                  <CandidateName>Matthew Appelbaum</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>6</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="45" DisplayOrder="45">
+                  <CandidateName>Suzy Ageton</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>5</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="46" DisplayOrder="46">
+                  <CandidateName>Barry Siff</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="47" DisplayOrder="47">
+                  <CandidateName>Kevin Hotaling</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>3</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="48" DisplayOrder="48">
+                  <CandidateName>Fenno Hoffman</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>3</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="49" DisplayOrder="49">
+                  <CandidateName>Over</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>0</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="50" DisplayOrder="50">
+                  <CandidateName>Valerie Mitchell</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>4</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="51" DisplayOrder="51">
+                  <CandidateName>Rob Smoke</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>4</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="52" DisplayOrder="52">
+                  <CandidateName>KC Becker</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>6</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="53" DisplayOrder="53">
+                  <CandidateName>Jyotsna Raj</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>3</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="54" DisplayOrder="54">
+                  <CandidateName>Under</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>0</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="55" DisplayOrder="55">
+                  <CandidateName>Macon Cowles</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>7</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="56" DisplayOrder="56">
+                  <CandidateName>Seth Brigham</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>6</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="57" DisplayOrder="57">
+                  <CandidateName>Tim Plass</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="58" DisplayOrder="58">
+                  <CandidateName>George Karakehian</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+          </ReportingUnitVotes>
+	
+	
+	  
+          <ReportingUnitVotes>
+            <ReportingUnitIdentifier Id="000015">p010_mb_675</ReportingUnitIdentifier>
+            <CountMetric Id="??" Type="Batch Type">AB</CountMetric>
+<!--	     -->
+            <CountMetric Id="??" Type="Ballots">856</CountMetric>
+            <CountMetric Id="??" Type="Contest Ballots">856</CountMetric>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="44" DisplayOrder="44">
+                  <CandidateName>Matthew Appelbaum</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>69</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="45" DisplayOrder="45">
+                  <CandidateName>Suzy Ageton</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>66</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="46" DisplayOrder="46">
+                  <CandidateName>Barry Siff</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>51</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="47" DisplayOrder="47">
+                  <CandidateName>Kevin Hotaling</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>55</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="48" DisplayOrder="48">
+                  <CandidateName>Fenno Hoffman</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>65</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="49" DisplayOrder="49">
+                  <CandidateName>Over</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>1</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="50" DisplayOrder="50">
+                  <CandidateName>Valerie Mitchell</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>57</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="51" DisplayOrder="51">
+                  <CandidateName>Rob Smoke</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>66</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="52" DisplayOrder="52">
+                  <CandidateName>KC Becker</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>59</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="53" DisplayOrder="53">
+                  <CandidateName>Jyotsna Raj</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>62</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="54" DisplayOrder="54">
+                  <CandidateName>Under</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>50</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="55" DisplayOrder="55">
+                  <CandidateName>Macon Cowles</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>77</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="56" DisplayOrder="56">
+                  <CandidateName>Seth Brigham</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>73</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="57" DisplayOrder="57">
+                  <CandidateName>Tim Plass</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>54</ValidVotes>
+            </Selection>
+	    
+            <Selection>
+              <Candidate>
+                <CandidateIdentifier Id="58" DisplayOrder="58">
+                  <CandidateName>George Karakehian</CandidateName>
+                </CandidateIdentifier>
+              </Candidate>
+              <ValidVotes>51</ValidVotes>
+            </Selection>
+	    
+          </ReportingUnitVotes>
+	
+	
+
+        </Contest>
+      </Contests>
+    </Election>
+  </Count>
+</EML>

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}{{ contest }}: Audit {% if contest.election.random_seed %}Selection {% endif %}Report | {{ block.super }}{% endblock %}
+
+{% block content %}
+{% with contest.election.random_seed as random_seed %}
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
+    <h2>Audit {% if random_seed %}Selection {% endif %}Report for {{ contest }}</h2>
+
+<p>Proportion of the total number of votes for this contest that were cast within this county: {{ contest.proportion|floatformat:1 }}%</p>
+<ul>
+<li>Overall margin of victory: {{ contest.overall_margin|floatformat:3 }}%</li>
+<li>Margin of victory in this county: {{ contest.min_margin|floatformat:3 }}%</li>
+<li>Number of audit units in this county: {{ contest.contestbatch_set.all|length }}</li>
+<li>Number of audit units to audit (NEGEXP, {{ contest.confidence }}% confidence, WPM < {{ stats.wpm|floatformat:0 }}%): {{ stats.negexp_precincts|floatformat:1 }}</li>
+</ul>
+<p>See <a href="#stats">additional statistical information below...</a></p>
+{% if random_seed %}
+<p>The audit units are reported for selection in priority order, based on the thresholds below, and the "Sum of Square Roots" pseudorandom number generator using the random seed value <strong>{{ random_seed }}</strong> combined with the Batch sequence numbers.
+</p>
+<p>Select the top {{ stats.negexp_precincts|floatformat:0 }} audit units.</p>
+{% endif %}
+{% endwith %}
+<table border="1" cellpadding="5">
+<thead>
+ {% for contestbatch in contest.contestbatch_set.all %}
+  {% if forloop.first %}
+   <tr>
+   <th>Batch Seq</th>
+   <th>Threshold</th>
+   <th>Random</th>
+   <th>Priority</th>
+   <th>Type</th>
+   <th>Batches</th>
+   <th>Ballots</th>
+   <th>Contest Ballots</th>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+      <th style="writing-mode: tb-rl;">{{ votecount.choice }}</th>
+   {% endfor %}
+   </tr>
+   <tr>
+   <td>Totals</td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td></td>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+      <td>{{ votecount.choice.votes }}</td>
+   {% endfor %}
+   </tr>
+  {% endif %}
+ {% endfor %}
+</thead>
+
+<tbody>
+ {% for contestbatch in contest_batches %}
+  {% with contestbatch.batch as batch %}
+  <tr>
+
+   <td>{{ batch.id|stringformat:"06d" }}</td>
+   <td>{{ contestbatch.threshhold|stringformat:"05f" }}</td>
+   <td>{{ contestbatch.ssr|stringformat:"05f" }}</td>
+   <td>{{ contestbatch.priority|stringformat:"05f" }}</td>
+   <td>{{ batch.type }}</td>
+   <td>{{ batch.name }}</td>
+   <td>{{ batch.ballots }}</td>
+   <td>{{ contestbatch.contest_ballots }}</td>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+     <td><b>{{ votecount.votes }}</b></td>
+   {% endfor %}
+  </tr>
+  {% endwith %}
+ {% endfor %}
+</tbody>
+</table>
+
+<h3><a name="stats">Audit statistics</a></h3>
+<p>
+The "Number of audit units to audit" is based on the NEGEXP method, which is very efficient and requires selecting larger audit units
+with higher probability than smaller ones.
+The numbers given here are based on a confidence 
+level of {{ contest.confidence }}%.  I.e. they are designed so the
+audit will either 1) find a discrepancy and call for an escalation or
+full hand recount, or 2) reduce the risk of confirming an incorrect
+outcome to (100 - {{ contest.confidence }})%, even if the tally system has been manipulated.
+A maximum "within-precinct-miscount" of {{ stats.wpm|floatformat:0 }}% is assumed.
+See <a href="http://people.csail.mit.edu/rivest/AslamPopaRivest-OnAuditingElectionsWhenPrecinctsHaveDifferentSizes.pdf">
+On Auditing Elections When Precincts Have Different Sizes, by Javed
+A. Aslam, Raluca A. Popa and Ronald L. Rivest</a></p>
+
+<pre>
+{{ stats.prose }}
+</pre>
+{% endblock %}

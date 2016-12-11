@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.4  (Unix)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGED" CONTENT="20090722;10510700">
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">ElectionAudits
+talk for OSCON - 2009-07-22 by <A HREF="http://neal.mcburnett.org/">Neal
+McBurnett</A></FONT></FONT></P>
+<H1 ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">ElectionAudits:
+a Django App for Advanced Election Auditing</FONT></FONT></H1>
+<UL>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Boulder
+	County used open source code to audit its 2008 election! </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Share
+	the story, share the code, and get you all involved where you live.</FONT></FONT></P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Why
+	audit?</FONT></FONT></P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Elections
+	to celebrate: South Africa 1994, paper ballots, hand counted </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Obvious
+	disasters: Iran 2009 - clearly fraudulent <A HREF="http://www.chathamhouse.org.uk/publications/papers/view/-/id/755/">Preliminary
+	Analysis of the Voting Figures in Iran's 2009 Presidential Election</A>
+	</FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">US
+	problems with elections: black box voting systems </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Not
+	just a problem with touch screen devices (DRE) </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Humboldt
+	County 2008: 197 ballots deleted by Diebold/Premier without a trace.
+	</FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Certified
+	</FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Discovered
+	later by Humboldt County Election Transparency Project audit</FONT></FONT></P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Goal:
+	software independence, via auditable paper records, good audits</FONT></FONT></P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Open
+	Source voting systems: Great! </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Good
+	audits and chain of custody: Necessary </FONT></FONT>
+	</P>
+</UL>
+<P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Fascinating
+algorithms behind modern election auditing, negexp, ssr, Rivest's Sum
+of Square Roots method</FONT></FONT></P>
+<H1 ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">How
+- what is an audit anyway?</FONT></FONT></H1>
+<UL>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Audit
+	Election: Compare sample of detailed results with hand counts </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Auditing
+	hand-counted election: </FONT></FONT><EM><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">*
+	Count piles of ballots by hand and write subtotals down *</FONT></FONT></EM><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">
+	add them up ** check arithmetic and compare to number of ballots </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Optical
+	scanners arrived: era of trusting computers too much </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Audit
+	DREs without voter verified paper trail? Can't do it.... Pushback. </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Audit
+	optical scan systems, e.g.<A HREF="http://bcn.boulder.co.us/~neal/elections/boulder-audit-08-11/reports/4/">Markey
+	vs Musgrave</A> </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Closing
+	loopholes and gaps; Getting more efficient, Improved confidence in
+	election outcomes<!-- in Boulder than anywhere but a few California counties which also had good audits
+. and Minnessota and ?? -->
+	</FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Map
+	of how audits vary by state: (from ea web site) </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Fixed
+	percentage vs Risk-limiting audits </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt"><A HREF="http://bcn.boulder.co.us/~neal/elections/boulder-audit-08-11/selections/4/">Selections
+	for Markey vs Musgrave</A> </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt"><A HREF="http://electionaudits.org/principles/">Principles
+	and Best practices</A> </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Results
+	</FONT></FONT>
+	</P>
+</UL>
+<H1 ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Django
+and Python</FONT></FONT></H1>
+<UL>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Rivest's
+	varsize.py </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">ElectionAudits
+	- MIT license </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Hosted
+	at Launchpad, Bzr </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Debug_toolbar
+	for great debugging over the web </FONT></FONT>
+	</P>
+</UL>
+<H1 ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Help
+wanted with:</FONT></FONT></H1>
+<UL>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Web
+	presentation: css, layout </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Logo
+	</FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">XML
+	expertise, e.g. for reading and writing (and improving) Election
+	Markup Language </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Database
+	design </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Django/python
+	insights </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Implement
+	features </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Windows
+	testing, installation, eggs and Django, etc </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Help
+	getting auditing laws passed. c.v. Colorado - Election Reform
+	Commission </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Biggest
+	challenge: getting useful data out of election systems</FONT></FONT></P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">At
+	1:45: </FONT></FONT><EM><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Open
+	Source and Democracy - Creating transparent, trustworthy voting
+	systems</FONT></FONT></EM></P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Code
+	is Law - Write our own procedures (after randomness cluelessness) </FONT></FONT>
+	</P>
+</UL>
+<H1 ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">Links:</FONT></FONT></H1>
+<UL>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt"><A HREF="https://edge.launchpad.net/electionaudits">ElectionAudits
+	on Launchpad</A> </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt"><A HREF="http://bcn.boulder.co.us/~neal/elections/boulder-audit-08-11/">Boulder
+	Audit, 2008</A> </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">(https://edge.launchpad.net/electionaudits)
+	</FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER STYLE="margin-bottom: 0in"><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt"><A HREF="http://neal.mcburnett.org/blog/2008/10/18/electionaudits-software-help-audit-election/">Help
+	Audit Elections</A> </FONT></FONT>
+	</P>
+	<LI><P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt"><A HREF="http://arstechnica.com/news.ars/post/20081221-open-source-auditing-tool-boosts-election-integrity.html">Open
+	source auditing tool boosts election integrity</A> - ArsTechnica </FONT></FONT>
+	</P>
+</UL>
+<P ALIGN=CENTER><FONT FACE="Arial, sans-serif"><FONT SIZE=7 STYLE="font-size: 44pt">This
+talk:
+<A HREF="http://bcn.boulder.co.us/~neal/electionaudits/electionaudits-oscon.html">http://bcn.boulder.co.us/~neal/electionaudits/electionaudits-oscon.html</A></FONT></FONT></P>
+</BODY>
+</HTML>

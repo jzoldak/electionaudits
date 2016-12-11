@@ -1,0 +1,61 @@
+08-12-05 17:15 "Philip B. Stark To Neal McBurnett  formula
+
+Suppose you want to allow an overstatement by k errors and still
+certify, and the smallest precinct has b ballots.
+
+The total number of ballots in the race is T.
+
+The overall margin in votes is M.
+
+We are using WPM = 0.2 (but don't tell Howard).
+
+U = 2*WPM*T/M.
+
+Initial confidence level for NO errors is 1-alpha.
+
+Revised confidence level is
+
+1 - exp(log(alpha)*(1-U*k/b)/(1-k/b))
+
+Example:
+
+Cartoon of City of Lafayette 2A
+
+R code:
+
+alpha <- 0.25;  # 75% confidence
+WPM <- 0.2;
+k <- 2;
+b <- 100;  # false--this will need some thought for b=1.
+T <- 12000;
+M <- 0.08*T;
+
+
+U <- 2*WPM*T/M;
+
+confNew <- 1 - exp(log(alpha)*(1-U*k/b)/(1-k/b));
+
+confNew   # 72%
+
+####  more realistic:  one vote off in a precinct of 30 votes using WPM = 0.2
+b <- 30;
+k <- 1;
+confNew <- 1 - exp(log(alpha)*(1-U*k/b)/(1-k/b));
+confNew  [.685 = 68%]
+
+
+####  code to find the confidence level given the observed discrepancies.
+[R code:]
+
+b <- rep(100,100);  #  this should get the vector of the number of
+votes by batch
+u <- WPM*2*b;       #  Philip says this should get a rigorous error
+bound instead...
+e <- rep(1,100);      # this should get the vector of the number of
+margin overstatement errors
+
+q <- max(e/u);        # maximum overstatement of the margin observed
+in any batch
+
+confNew <- 1 - exp(log(alpha)*(1-U*q)/(1-q));
+confNew   # .7118

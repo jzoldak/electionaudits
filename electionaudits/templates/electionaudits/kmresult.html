@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}{{ contest }}: Audit Results | {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- FIXME: Put the scripts in a new header block or whatever -->
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+      // Load the Visualization API and the corechart package.
+      google.load('visualization', '1', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Audit unit name');
+        data.addColumn('number', 'KM');
+        data.addRows([
+          {% for contestbatch, random, cum_km in result %}
+           {% if cum_km %} [ '{{ contestbatch.batch.name }}', {{ cum_km }} ], {% endif %} {% endfor %}
+        ]);
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        google.visualization.events.addListener(chart, 'select', function() {
+          var row = chart.getSelection()[0].row;
+          alert('You selected row ' + data.getValue(row, 0));
+        });
+
+        chart.draw(data, {width: 700, height: 500,
+                          title: 'Remaining risk as audit progresses',
+                          hAxis: {title: 'Audit unit'},
+                          vAxis: {title: 'Cumulative Kaplan-Markov factor (remaining risk)'}, <!-- , logScale: true -->
+                          pointSize: 1,
+                          lineWidth: 1,
+                          legend: 'none'
+                         });
+      }
+    </script>
+
+{% with contest.election.random_seed as random_seed %}
+<ul>
+<li><a href="..">Up</a></li>
+</ul>
+    <h2>Audit Selections and Results for {{ contest }}</h2>
+
+<ul>
+<li>Margin of victory: {{ contest.min_margin|floatformat:3 }}%</li>
+<li>Margin adjustment e.g. for ballots not yet tallied : {{ contest.margin_offset }} </li>
+<li>Total possible miscount / Total apparent margin ("U"): {{ contest.U|floatformat:6 }} </li>
+<li>Number of audit units: {{ contest.contestbatch_set.all|length }}</li>
+</ul>
+
+{% if random_seed %}
+<p>Audit units are selected for audit weighted by the maximum possible miscount (u<sub>p</sub>) they could contain.  The audit units listed below were selected using the random seed value <strong>{{ random_seed }}</strong> combined with the "Sequence" numbers according to the "Sum of Square Roots" pseudorandom number generator, to generate the values in the "Random" column.  Each value from the "Random" column was then looked up in the "Cumulative Probability Total" column of the Unofficial Vote Tabulation Report, and the last row for which the "Cumulative Probability Total" was still larger than the Random number was selected.
+</p>
+<p>
+This table lists the original machine counts, followed by the hand
+counts (as they become available), for each audit unit.  If there is a discrepancy, the "Margin reduction" column lists the net reduction in the margin of victory for the unofficial winner, in votes. It will be negative if the margin increased.  If there is a discrepancy, the "Taint"
+column will have a non-zero number.  The KM column (Kaplan-Markov factor)
+indicates by what fraction each hand count reduces the probability of an
+incorrect outcome.  It is larger when the Taint is greater than zero.
+</p>
+<p>
+The Cumulative KM column summarizes the progress of the auditing for this contest.  It comes from multiplying together all the KM factors up to and including that audit unit.  When it becomes less than or equal to the pre-specified P-value (0.5 for this audit), the audit has reached its risk-reduction target.  The progress is also shown in the graph, as the remaining risk drops down towards the target.
+</p>
+<p>The first half of this list will be audited first, and if there are not many discrepancies with the hand count, that is all that will be needed.  Otherwise, additional units moving down the list will be audited, until the target is reached.
+For more details, see the references on the main page.
+</p>
+{% else %}
+No random seed has been specified for this contest, so no selections are listed yet.
+{% endif %}
+{% endwith %}
+
+<table border="1" cellpadding="5">
+<thead>
+ {% for contestbatch, random in result %}
+  {% if forloop.first %}
+   <tr>
+   <th>Sequence</th>
+   <th>Random</th>
+   <th>Batches</th>
+   <!-- <th>Type</th> -->
+   <th>Ballots</th>
+   <th>Maximum relative miscount: u<sub>p</sub></th>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+      <th style="writing-mode: tb-rl;">{{ votecount.choice }}</th>
+   {% endfor %}
+   {% for votecount in contestbatch.handcounts|dictsort:"choice.name"%}
+      <th style="writing-mode: tb-rl;">{{ votecount.choice }}</th>
+   {% endfor %}
+   <th>Margin reduction</th>
+   <th>Taint</th>
+   <th>KM</th>
+   <!-- <th>Net KM</th> -->
+   <th>Cumulative KM</th>
+   </tr>
+  {% endif %}
+ {% endfor %}
+</thead>
+
+<tbody>
+ {% for contestbatch, random, cum_km in result %}
+  {% with contestbatch.batch as batch %}
+  <tr>
+
+   <td>{{ forloop.counter|stringformat:"06d" }}</td>
+   <td>{{ random|stringformat:"06f" }}</td>
+   <td>{{ batch.name }}</td>
+   <!-- <td>{{ batch.type }}</td> -->
+   <td>{{ batch.ballots }}</td>
+   <td>{{ contestbatch.u|stringformat:"05f" }}</td>
+   {% for votecount in contestbatch.votecount_set.all|dictsort:"choice.name"%}
+     <td>{{ votecount.votes }}</td>
+   {% endfor %}
+   {% for votecount in contestbatch.handcounts|dictsort:"choice.name"%}
+     <td><b>{{ votecount.votes }}</b></td>
+   {% endfor %}
+   {% if contestbatch.handcounts %}
+     <td>{% ifnotequal contestbatch.discrepancy 0 %} <a name="cb{{contestbatch.id}}"><b>{{ contestbatch.discrepancy }}</b></a> {% if contestbatch.notes %} <a href="#cbnote{{contestbatch.id}}">(note)</a> {% else %} <a href="/admin/electionaudits/contestbatch/{{contestbatch.id}}">add note</a> {% endif %} {% endifnotequal %}</td>
+     <td>{% ifnotequal contestbatch.taint 0.0 %} <b>{{ contestbatch.taint|stringformat:"05f" }}</b> {% else %} 0 {% endifnotequal %}</td>
+     <td>{{ contestbatch.km|stringformat:"05f" }}</td>
+     <!-- <td>{{ contestbatch.net_km|stringformat:"05f" }}</td> -->
+     <td><b>{{ cum_km|stringformat:"05f" }}</b></td>
+   {% endif %}
+  </tr>
+  {% endwith %}
+ {% endfor %}
+</tbody>
+</table>
+
+<h2>Discrepancy Notes</h2>
+<ul>
+{% for contestbatch, random, cum_km in result %}
+  {% if contestbatch.notes %} <li><a href="#cb{{contestbatch.id}}"><b>ContestBatch {{contestbatch.batch.name}}</b></a>: <a name="cbnote{{contestbatch.id}}">Max taint was for {{ contestbatch.taint_winner }} vs {{ contestbatch.taint_loser }}, with discrepancy {{ contestbatch.discrepancy }}<br/>Notes: {{ contestbatch.notes }}</a></li> {% else %} {% endif %} {% endfor %}
+</ul>
+
+<h2>KM Factor Graph</h2>
+<p>
+Here is an interactive graph of the KM factor data.  Hover the mouse over the points to see the exact values.
+</p>
+
+<!--Div that will hold the chart-->
+<div id="chart_div"></div>
+
+<p>Page generated: {% now "r" %}</p>
+
+{% endblock %}

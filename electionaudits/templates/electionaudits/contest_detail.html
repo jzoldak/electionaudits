@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Batches for Contest: {{ object.name }}</h2>
+
+<table border="1" cellpadding="5">
+<tbody>
+  {% for contestbatch in object.contestbatch_set.all %}
+<tr>
+ <td>{{ contestbatch.batch.election }}</td>
+ <td>{{ contestbatch.batch }}</td>
+</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

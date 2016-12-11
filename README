@@ -1,0 +1,418 @@
+The ElectionAudits software project is designed to help audit
+elections with good statistical confidence.  It is provided in support
+of the
+
+ Principles and Best Practices for Post-Election Audits
+ http://electionaudits.org/principles
+
+Features:
+=========
+
+It helps with several facets of the task of auditing elections:
+
+ * Imports standard election report files into a simple SQL database
+ * Protects voter anonymity by combining results for very small precincts or
+   batches into larger audit units.
+ * Enables audits of central-count systems and mail-in ballots
+   without requiring that the paper ballots be sorted into piles by precinct.
+   Works with election systems which can't produce batch results, by
+   importing full election results for each batch and subtracting the result
+   for the previous batch from the current batch.
+ * Facilitates risk-limiting audits by calculating relevant statistics
+   based on the margin, number, size, and results of the audit units.
+   Support for PPEBWR, SAFE, and NEGEXP is provided, with more on the
+   drawing board.
+ * Supports augmenting dice throws with the "Sum of Square Roots" (SSR)
+   Pseudorandom Sampling Method to select which audit units to audit and/or
+   which contests to audit, based on margin size.
+ * Ad-hoc calculator form lets you quickly enter information about hypothetical
+   contests and get selection statistics for them also.  This supports
+   planning for future audits, e.g. deciding how many batches to report
+   on so as to minimize the fraction of the ballots you'll have to audit.
+ * Provides information to help candidates, parties, or other observers
+   target unusual audit units for elective audit.
+ * Convenient platform for publication and archiving of auditable reports
+   for the public.
+ * Exports data in the standard Election Markup Language, including EML 510.
+ * Can be used to convert election data from vendor formats into EML.
+
+The software is "Open source" via the very permissive MIT license.  It
+can be used with no obligation, by anyone from elections officials, to
+citizens to Election Management System vendors.
+
+
+For up-to-date information, see the project home page at
+
+ http://neal.mcburnett.org/electionaudits/
+
+
+Authors
+=======
+Neal McBurnett
+
+Includes a variant of varsize.py from Ronald L. Rivest
+
+Copyright and License
+=====================
+ElectionAudits uses the liberal open source "MIT" (aka "X11") license.
+See the LICENSE file for details.
+
+Support and Participation
+=========================
+
+Join the https://launchpad.net/~electionaudits team and get support
+via that mailing list.
+
+Or for real-time chat support try #electionaudits on irc.freenode.net
+
+
+Versions, Bug reports
+=====================
+See launchpad.net for project support at
+
+ https://launchpad.net/electionaudits
+
+to download the latest version or report bugs.  It uses the bzr ("Bazaar")
+distributed version control software, making it easy for you to
+contribute.
+
+
+Requirements
+============
+
+ElectionAudits has been tested on Ubuntu Linux and Windows, and should
+run fine on Mac OS X and other Unix-like systems.
+
+It requires these other components:
+
+ * Python (developed with python version 2.5, but should work with 2.3)
+ * lxml (xml parsing package)
+ * Django 1.0
+ * sqlite3 lightweight database
+
+Helpful but optional Django apps used in settings.DEBUG mode:
+
+ * lukeplant_me_uk.django.validator, for automatic xhtml validation
+ * django_extensions, for ease in development and documentation
+ * debug-toolbar, http://github.com/robhudson/django-debug-toolbar/tree/master
+
+If you want to run in DEBUG mode and don't have these, just comment
+them out of root/settings_debug.py and electionaudits/urls.py
+
+
+Installation
+============
+
+Ubuntu Linux
+------------
+On Linux, installation is easy.
+
+On the Lucid release, Ubuntu 10.04, you can get all the required prerequisites this way:
+
+  $ sudo apt-get install python-lxml libsqlite3-0 python-django
+
+You can add the great debugging apps with this command:
+  $ sudo apt-get install python-django-extensions python-django-debug-toolbar
+
+or install the same packages via the Synaptic Package Manager GUI.
+
+
+Windows XP, and maybe Vista and Windows 7
+-----------------------------------------
+
+First install a release of python 2.5 (e.g. 2.5.2, though 2.6 might
+work):
+
+ http://www.python.org/download/
+
+Next install the official version of Django 1.0 using the simple steps
+described at http://www.djangoproject.com/download/
+
+On Windows you can use a tool like 7-zip (http://www.7-zip.org/) to
+unpack the .tar.gz file, or bsdtar
+(http://gnuwin32.sourceforge.net/packages/bsdtar.htm) for more
+straightforward command-line use.
+
+Then install lxml via setuptools:
+
+Get and run this setuptools installer:
+
+  http://pypi.python.org/packages/2.5/s/setuptools/setuptools-0.6c9.win32-py2.5.exe
+
+You can then just run this:
+  C:> easy-install lxml
+
+Or use the MS Windows Installer for lxml that matches your version of
+python at http://pypi.python.org/pypi/lxml/2.1.2, e.g.
+
+   http://pypi.python.org/packages/2.5/l/lxml/lxml-2.1.2.win32-py2.5.exe
+
+Finally, get the sqlite3 library DLL from
+   http://www.sqlite.org/download.html
+
+e.g. http://www.sqlite.org/sqlitedll-3_6_4.zip
+
+Unzip it and put the .dll file with your other DLLs in
+your default System directory, e.g. C:\WINDOWS\system32
+
+The "install.bat" script has not been tested but may help.
+
+
+Mac OS X
+--------
+
+It appears that the easiest way to get the prerequisites for Mac OS X
+is to use either the Macports or Fink packaging systems.  Sqlite3 is
+already available in Mac OS X, so you just need Django and lxml for the
+version of python that you use.  This seems to require installing
+Apple's Xcode development environment.
+
+Let us know if you want help, or if you can share advice.
+
+
+Initialization
+==============
+
+Security note: you should change the SECRET_KEY in the settings.py
+file to a long random string, especially if you ever change the
+default URL or deploy the site on a publicly accessible server.
+Otherwise, authentication will be less secure.
+
+
+When you first install or upgrade the software, you need to
+initialize the database:
+
+$ cd root
+$ ./manage.py syncdb
+
+In Windows leave off the "./":
+
+C:> cd root
+C:> manage.py syncdb
+
+When it asks: 
+
+ "You just installed Django's auth system, which means you don't have
+ any superusers defined.  Would you like to create one now? (yes/no)"
+
+answer "yes" and provide a username and password for the "admin" system.
+Logging in with this account, or another "staff" account, is necessary
+for parsing new data files from within the web interface.
+
+It asks for a valid email address also, but doesn't share it or use
+it unless you customize things.
+
+Usage
+=====
+
+parse
+=====
+
+You can import and parse new files in two ways: via the
+http://127.0.0.1:8000/parse/ page (see below) or from the
+command line.
+
+From the command line, use the manage.py parse command to import
+election results data into easily manipulated databases.
+
+Use the --help option to print usage instructions:
+
+$ ./manage.py parse --help
+
+In Windows leave off the "./":
+
+C:> manage.py parse --help
+
+Test data is provided, so you can just run
+
+$ ./manage.py parse -s -c ../testdata/t0
+
+which parses all the files in that directory in chronological order.
+It may take a while to run.  A brief synopsis of each contest is
+printed at the end.
+
+In Windows:
+
+C:> manage.py parse
+or
+C:> manage.py parse -s -c ..\testdata\t0
+
+
+Use "manage.py reset electionaudits" to clear the database before
+trying to re-enter data.
+
+Currently supported input formats:
+
+ * Hart InterCivic Tally "cumulative" reports in xml (crystal-reports)
+   format (including all options: Absentee, Early and Election day, and
+   the info box)
+
+   One file per cumulative batch of input.  Use the "-s" option to
+   "manage.py parse" to subtract each cumulative report from the previous one.
+
+   Examples: testdata/t0/*.xml
+
+ * CSV input with one line per candidate using these headers:
+   'Precinct_name'
+   'Contest_title'
+   'Party_Code'
+   'candidate_name'
+   'cand_seq_nbr'
+   'absentee_votes'
+   'early_votes',
+   'election_votes'
+ 
+  and these columns, only used for 1st candidate (when 'cand_seq_nbr' is 1)
+    'absentee_under_votes'
+    'absentee_over_votes'
+    'early_under_votes',
+    'early_over_votes',
+    'election_under_votes'
+    'election_over_votes'
+
+  Examples: testdata/test-san-mateo-dp-92-p.csv
+
+Planned
+ * Hart "precinct" reports
+
+Web server
+==========
+
+This provides a web-based graphical user interface for exploration,
+reporting and even entry of information.  It is built on the Django
+framework.
+
+Usage:
+
+First run the internal django server:
+
+$ cd root
+$ ./manage.py runserver
+
+This will remain running until you kill it with ctrl-c or close the window.
+It will show each web page you visit.
+
+Then, in a browser, visit the main URL, e.g.
+
+ http://127.0.0.1:8000/
+
+to see the Audit Reports for the various Contests, etc.
+
+The "Parse incoming data files" page <http://127.0.0.1:8000/parse/>
+provides an alternative to the command line for importing xml data files.
+It automatically selects the --subtract and --chronological options.
+
+Just put the files in the "incoming" directory, visit that page to see
+a list of the files, and click the button.  Beware that there is
+currently no feedback during the import, so just be patient.
+
+See http://127.0.0.1:8000/admin/ (using the username and password
+you entered during the "syncdb" step) to enter new data, and
+http://127.0.0.1:8000/admin/doc/ for more documentation on the data models
+and various available views of the information.
+
+For example, you will usually want to edit the countyelection to
+specifiy the confidence level for each contest, and the overall margin
+of victory if there are ballots that are outside the county.  Visit:
+
+ http://127.0.0.1:8000/admin/electionaudits/countyelection/
+
+
+See doc/model_graph.png for a diagram of the various database tables
+and associated fields and relationships.
+
+
+PROCEDURE
+=========
+Here, in brief, are the steps for using this in an election, along
+with some "TODO" notes for likely future enhancements to ElectionAudits.
+
+* Publicly commit to a plan for the audit
+* Export elections data from the vote tallying system, and import ("parse") it into ElectionAudits
+* If the export data doesn't include the number of ballots for each batch,
+ to get accurate statistics you currently need to find some other way to get it,
+ e.g. by taking it from contest_batch.contest_ballots() for some
+ contest that is on every ballot, or by getting it from some other source,
+ e.g. by parsing the pdf files.  This currently needs to be done
+ via the python interface, or one-at-a-time from the admin interface.
+ [TODO: make this easier]
+* Publish the results (http://127.0.0.1:8000/reports/) publicly.
+* Roll 10-sided dice 15 times and enter the random seed for the appropriate election via
+ http://127.0.0.1:8000/admin/electionaudits/countyelection/
+* Sort the table of contests at http://127.0.0.1:8000/selections/ by priority and select
+ the appropriate number of contests of each type via
+ http://127.0.0.1:8000/admin/electionaudits/contest/
+ [TODO: sort it automatically, rather than requiring browser plug-ins
+ or manual steps]
+* Select additional targeted audit units manually via
+ http://127.0.0.1:8000/admin/electionaudits/contestbatch/
+* Publish the contest selection details via
+ http://127.0.0.1:8000/results/
+* [TODO] Print custom tally sheets for each audit unit
+* Hand count the selected audit units
+* [TODO] Enter the results via a new form, review statistics, and if necessary, select and audit more until enough evidence is gathered 
+* [TODO] Provisional ballots: Parse new batches, publish the /reports/
+ and select more audit units: either old ones based on the new margins with
+ the old random seed, and ones from the new audit units using a new random seed.
+
+
+Debugging
+=========
+
+You can run the test cases via this command:
+
+ manage.py test electionaudits
+
+or a single class of them via, e.g.
+ manage.py test electionaudits.TestT0
+
+If you install the django html validator app
+lukeplant_me_uk.django.validator and use debug settings
+  manage.py runserver --settings settings_debug
+the server will do self-validation of all xhtml pages generated.
+You can then see a report of any errors at
+
+ http://127.0.0.1:8000/validator/
+
+Acknowledgements:
+=================
+Thanks to these contributors:
+
+The auditing experts led by Mark Halvorson and John McCarthy at Verified Voting.
+
+Others who made significant contributions:
+ David Webber, Don Hayden, Crystal Christman, Mark Lindeman, Hillary Hall,
+ Aaron D. Gerber, Mary Eberle, Holly Lewis.
+
+
+FAQ - Frequently Asked Questions
+================================
+
+Q: Parsing failed with " ValueError: Negative vote count in test" - why?
+
+A: When parsing xml files with the --subtract option, you need to 
+make sure they are processed in sequential order, or else the
+subtraction will result in negative vote counts.  If you can preserve
+the modification timestamps on the files, you should be able to use the
+"--chronological" option to process them in order.  But note that
+various ways of copying will change the timestamps - e.g. via cp without
+the "-p" option, or via bzr, or via some versions of Nautilus.
+
+This can also happen if you read the same data in twice.  Before
+re-reading data, you should clear out all vote counts in the database
+with
+
+ manage.py reset electionaudits
+
+
+Q: I've forgotten the admin password and can't access staff pages!
+
+A: See http://coderseye.com/2007/howto-reset-the-admin-password-in-django.html
+
+
+Q: I forgot to get a zero cumulative xml report before reading in ballots.
+What do I do now?
+
+A: You can specify the same report as the first two cumulative
+reports, and it will subtract one from the other, and not add any
+audit units because everything subtracts out to be zero.

@@ -1,0 +1,1036 @@
+ToDo list for ElectionAudits   http://neal.mcburnett.org/electionaudits/
+
+Questions
+=========
+Is median right in varsize.print_precinct_stats()?  Why?  Only sorted in Contest.select_units()?
+
+Bugs
+====
+
+Add copyright/license to each file.
+
+Update the notes and links on the generated home page at /
+
+Fix possible bug in some csv parsers: missing final audit unit - problem with flushpipes
+ worked to parse the last line, followed by a line I didn't care about
+  the latter line caused new contest to be registered, with zero votes
+ /srv/voting/californiadb/g08_svprec_trim_nonzero-tail.csv
+  == (head -1 /srv/voting/californiadb/*csv ; tail -1 ../testdata/test-swdb-cd3.csv ; tail -1 /srv/voting/californiadb/*.csv) 
+
+revisit ContestBatch.taintfactor - won't work if more than 2 candidates?  need discrepancy for each pair of candidates?  cv equation 4 in stark-kaplan-markov....pdf
+
+Do we need to make the printed output (e.g. just to 6-decimal places) match the actual selection process??
+Or go with full precision and specify IEEE floating point numbers in case of dispute?
+If margin_offset changes, and new kmreport is produced, what is the risk of a change in selections
+because the u values change?  Perhaps try to normalize them in a more robust manner.
+
+Incorporate margin_offset in tally margin calculations
+
+Deal properly with strict error_bounds and margins in multi-county contests
+
+Why no negative alert for  j001_mb_052.xml after p287_mb_735.xml ?
+
+Fix "ballots to audit" for contests that allow multiple votes
+
+Look at TestT0 failure on ec2:
+ ValueError: Negative vote count in ElectionAudits Test Election_STATE REPRESENTATIVE - DISTRICT 10_ED_['p014_lat_ed_002']_-1: Dorothy Marshall Republican is -1
+
+Get discrepancy headers right even when not all choices are entered
+Deal better with no seed in km_result, or bad seed
+Check totals of last published column in each contest to make sure logic is working
+
+Kaplan-Markoff
+==============
+Implement kaplan-markoff with ppeb sampling
+ http://papers.ssrn.com/sol3/papers.cfm?abstract_id=1443314
+ /srv/voting/audit/stark-kaplan-markoff-ssrn-id1443314.pdf
+
+Mark Lindeman example:
+ A Kaplan-Markov auditing example using 2008 California data - Mark Lindeman, 1/10/2010 (v. 1.2, 1/13/2010)
+ /srv/voting/audit/kaplan-example-1.2.pdf
+  and https://docs.google.com/fileview?id=0B2nDnxGP_08mZjY2NGJlNmMtZTM0Ni00NjExLWFkNjUtNzgwZDhmN2U0NmQx&hl=en
+
+ need to add contest to Margin model
+    possible to delete all margins for a contest prior to recalculation, and fix situations with invalid Choices
+    easier to iterate over them for a contest
+    and I suppose two candidates could be in multiple races together
+
+For use from vote tabulation templates, and from taint calculations:
+ save winners and losers in database during tallies, for calculating margins of individual handcounts
+   what about ties??  no entry?
+   using a new Winners (and perhaps Losers) model with Contest and Choice foreign keys?
+   or highest vote-getter in Contest model (except for ties....)
+   And remember to delete all entries for a contest at beginning of tally or error_bounds....
+   or somehow save a sorted list of the Choices?
+
+ add option to set late_ballots for each contest, during parsing before error_bounds is called
+ turn km_select_units into generator that yields as many items as are asked for??  risk of unexpected results from threads??
+ change logic to mark ContestBallots for audit at tally time, if random selection has been done?
+  but when to un-mark or re-mark?
+
+ report ideas from tables in mark's paper:
+  tabulation: county code, precinct, total votes, choice A, choice B, u sub p, prob: u sub p / U, cumulative sum
+  results: precinct, ballots cast, choices A B C D, times drawn, audit A, audit B, audit C, audit D, e_B, e_C, e_D, taint = max{e}/u sub p, KM factor, net KM factor
+
+ table for initial unofficial tabulation:
+ cumtot, u, batches, ballots, choice a..n
+   or sequence #, u, cumtot,   if u & cumtot go at end, hard to find, access, but less initial confusing clutter
+ for selection:
+  pick number, random, precinct, Type, ballots, possibly choice a..n, discrepancies, taint, km, net km, cumulative km
+   or seq# u, 
+ for results, add counts, discrepancies, taint, cumulative km
+
+ NOTE duplicated batches in kmselection report.
+ provide overall margin
+ drop or comment out NEGEXP stats
+ add audit method indication to Contest and use one report() view?
+  or allow for both at once, and add km_report() view, from km/ url or km option on urls
+ add some sort of custom code or plug-in method to facilitate setting batch size - execute python script option?
+  e.g. from django-extensions: runscript - Runs a script in django context.
+  or just use "shell" command or put together a separate command-line option
+ LOOK at using contest_ballots in error_bounds calculation, not batch.ballots
+  FIRST need to fix some tests and parsers that don't add under/over votes??
+ FIXME: select_units_eb if U is None
+
+ how/where to specify k-m confidence alongside aslam, without trashing stats
+
+ improve generation of ppeb audit unit selections, and note possibility of multiple selections
+  change "selected" to be an integer!
+  return how many? need a "select more" capability??
+  add "with replacement" option to erandom.weightedsample()
+
+ switch margin to integer, not percent?
+ confidence ==> float?
+
+Add code for discrepancies:
+ Record hand counts, perhaps for individual sub-batches of main batch, one per sub-batch (scan batch) tally sheet
+   possibly more than one hand count.
+   subclass ContestBatch?
+   perhaps add a type and number to contestbatch? (machine vs hand count; sequence number)
+    or add a "Tabulation" model with administration unit and type and number?
+   and then a web of linkages between tabulations and contestBatches
+
+  restrict to "primary tally" contestbatches for most work: to tally contest, merging, 
+  record primary tally in countyelection
+
+ add discrepancy for each audit unit to ContestBatch?  Or just decrease in margin, by contest?  record for every loseer (every margin) or just max?
+  or just calculate them by comparing tabulations?
+
+ how to deal with error bounds, selection if we're a fraction of the whole?
+
+ later:
+ parse "vote for n" rules on who wins
+ handle contests with multiple classes of winner, like boulder council: 4 4-year winners, one 2-year winner
+
+Implement macro auditing (stark)
+
+What info is needed to determine error bound in vote-for-2 race?  undervotes??
+
+Security
+Upgrade to Django 1.4 for PBKDF2 password hashing algorithm
+
+Performance
+===========
+
+Use prefetch_related or select_related to get votecounts populated when querying a contestbatch
+ Hmm - but they don't work backwards for related objects, do they?
+ Alternative: do the query on votecounts, and turn the resulting stream into
+  a stream of contestbatch objects to pass to the view, perhaps as a generator
+ Might help to store hand tallies in the same VoteCount objects.
+  with a new field "source" that is perhaps a number: 0 for "machine", 1,2,3 for "hand"
+  part of "unique"
+  And make contestbatch queries easier via a proxy model
+
+Use Model.objects.bulk_create when parsing?
+
+Use annotate() to get results of aggregation functions - total votes etc
+
+Reuse querysets to gain advantage of caching.
+
+Avoid confusion - for long page loads - get some sort of http response up early (please wait....)
+
+Speed up stats (for page loads etc)
+ Or use a proxy 
+Speed up parsing: cache election, batch and contest lookups for better speed
+ multi-processing: use multiple processes, parallel python tasks or threads, ipython to parse files in parallel
+
+calculate (optionally?) and store needed data from Contest.stats() at parse time
+ or when parms change
+
+Note: Minimize transactions: SQLite will only do a few dozen transactions per second. Transaction speed is limited by the rotational speed of your disk drive. A transaction normally requires two complete rotations of the disk platter, which on a 7200RPM disk drive limits you to about 60 transactions per second.
+ http://www.rkblog.rk.edu.pl/w/p/sqlite-performance-and-django/
+
+Testing
+=======
+Enable `setup.py test` command: http://gremu.net/blog/2010/enable-setuppy-test-your-django-apps/
+
+Add test cases for Kaplan-Markov which produce web pages suitable for illustrating and extending Lindeman's kaplan-example.
+ Use custom templates to avoid dangling navigation headers.
+
+Add test cases for EML, Hart (csv), Sequoia (txt) format and swdb (dbf) format 
+ via testdata/test-orange-hart-whimper.csv and 
+ margin_offset, prng, merge()
+
+Make sure there are test cases for case when discrepancy between different sets of candidates hit the max
+
+Speed up Tests - use fixture or stored database or use smaller data file.  About 2 minutes on puny machine....
+
+Find a way to conveniently do just the quick tests for logic, and only do longer tests like TestCsv when needed
+
+Log tests more, e.g. timestamps and test name at beginning of each test, save all output in file labeled with version, Django version, machine, etc.
+
+Make tests more robust.
+E.g. need floating point fuzz? 
+
+Testing bug in   manage.py test electionaudits.TestT0
+ testdata/t0/reports.html St Vrain Negexp ballots: 23 on my machine, 22 on Aaron's windows box
+
+Note/Beware reliance on packages in local $PYTHONPATH when using runserver etc.
+
+Note that changing how merging and parsing is done can change audit unit numbers, contestbatch ids, urls to contestbatch notes,
+and perhaps even how to select stuff in test cases
+
+E.g. test case changes for revno 66 2010-10-25:
+different batch seq, random and priority for ../testdata/t0/selections-4.html
+-   <td>000006</td>
++   <td>000008</td>
+    <td>0.907125</td>
+-   <td>0.189911</td>
+-   <td>4.776582</td>
++   <td>0.966987</td>
++   <td>0.938094</td>
+
+?
+
+../testdata/t0/results.html diff: 
+ -<li> Votes audited: 80
+ +<li> Votes audited: 55
+
+-   <td><a href="../admin/electionaudits/contestbatch/109/">None</a></td>
++   <td><a href="../admin/electionaudits/contestbatch/102/">None</a></td>
+
+etc.  looks like manual selection of contestbatch 109 might be picking up a different one than before??
+
+prev    file:///srv/s/electionaudits/trunk/testdata/t0/results.html  == STATE SENATE - DISTRICT 17  "p008_lat_ed_001 p014_lat_ed_002 p011_lat_ed_003"
+current http://127.0.0.1:8000/admin/electionaudits/contestbatch/109/ == amend 56, p011_lat_ed_003:ED
+  other is now #102 - why?
+
+Interface, Usability
+====================
+
+Only show "Contests selected for auditing are highlighted in yellow." if there are some, or perhaps if random is there.
+  Add highlights to kmreport/c/ files?  probably better to avoid touching those?
+
+Put election names on home page
+Add a more user-friendly check at parse time for -i parsing to detect out-of-order, e.g. via total_ballots somehow?
+
+Features
+========
+
+Add the rest of the election audit statistics from results.html to the kmresult.html report,
+or report in overall results report?
+
+Point to ASA statement on risk-limiting audits in default front page, etc.
+
+Indicate winners and losers in kmresult, and margin in votes
+
+Provide for some kind of check that all discrepancies have associated notes, and that all notes are reported on?
+
+If a kmresult discrepancy doesn't have a note yet, link to the contestbatch admin to enter it
+Make it easier to edit a given ContestBatch in admin: provide search via contest and part of batch name
+
+Display information about each discrepancy: footnote from non-zero discrepancy to the bottom of the page,
+ and show "description" field there.
+
+Add contest views with Kaplan-Markov data, linking to /kmreports/ and /kmselections/
+
+Provide a visualization of the election data.  E.g. plot contest data, like log margin vs log undervote ratio
+
+Perhaps via http://code.google.com/apis/visualization/documentation/dev/gviz_api_lib.html
+
+Add Kaplan-Markov features to interactive ad-hoc calculator form.
+ Allow users to specify # audit units, margin, rate of discrepancies, make up some distribution of vote counts
+  Calculate # units needed, # votes counted, etc
+ Allow users to specify number of units audited, margin, etc and find out what p-value they'd get
+  Or specify # to audit, p-value and find out what margin they'd retire
+ Clarify how to use for provisionals
+ Use Mock to speed things up
+
+Add parsing options to parse data from URLs or directly parse online data for well-organized jurisdictions: SWDB, MN? Champaign?
+
+kmreport: present audit units sorted: order_by -u
+
+In ElectionAudits reports (and Choice ids?), use the same order of presentation that was used in the parsed data, at least optionally
+ => add sequence number to Choice record.  Look up how EML handles it
+
+Add a logger for significant events, like files parsed, database changes(??), which writes to a file
+Track and provide access to last DB modification or user action somehow.
+
+Print total number of ballots at end of parsing summary, and contest ballots for each contest
+
+Add version number to database, check it, maybe auto-convert.
+
+In boulder csv parsing, extract Type from name of batch if possible
+
+Add a simple command to just show information about the current database.  even via shell.
+
+Add GUI interface to run Batch.merge() and ContestBatch.merge() functions to combine audit units and batches.
+
+Add Mersenne twister as an option in the user interface - needs option variable in county-election?
+ and need to figure out standard and good way to seed it from 15-digit number
+ and clarify which version of mersenne twister for voting, python - 19937 or 19937-64 (64-bit)
+ and document sample output from known seed.
+
+Add type of contest information (notes?): county-wide, subset of county; superset of county; sub-superset like estes valley
+
+Import hand count data from the spreadsheets used by the county, e.g. save as csv with ssconverter.py on jl
+
+Add overall number of contest ballots and total valid votes to report.html
+
+Statistics:
+Add statistics to handle New Mexico rules about error rate > 90% of margin
+
+Produce data and scripts suitable for easy R processing - ask for advice on formats, scripts
+
+To help with targetted selection by runner-up, display margin for each audit unit,
+display histograms of fractional margin for each batch, or of fraction voting for each choice
+display hierarchical clustering
+ http://stackoverflow.com/questions/2907919/hierarchical-clustering-on-correlations-in-python-scipy-numpy
+  linkage, pdist, dendrogram
+  http://docs.scipy.org/doc/scipy/reference/spatial.distance.html
+display scatter plots of margin ratios of contest a vs contest b for each batch, using contests close to one of interest
+ in a scatter plot matrix
+ weighted somehow by size of batch?
+ Combination Chart?  Z-test scores for variation in outcome by method of voting?
+flag outliers or let visitors sort in various ways to find outliers, and make recommendations
+on what should be targeted
+
+Plots: scatterplot of margins of selected contest vs most correlated audited contests
+ and contest_ballots sizes for different batches
+
+Plot fractional margin of victory over top loser for a given contest across all audit units, identified by batch type, or residuals from prediction
+ Try to pick out different kinds of batches: precinct, mixed-mail-in, early, etc
+ The angle between two vectors can be used as a distance measure when clustering high dimensional data. See Inner product space.
+Analyze correlations between different contests across the audit units - multiple regression or the like
+  robust linear model
+  cox[obamares > 35, c("batchseq", "Batches", "p_ballots", "x_obama", "x_udall")]
+        batchseq     Batches p_ballots   x_obama   x_udall
+        197      197 p236_ev_202       626 0.8753994 0.7619808
+
+  2008-11-18 10:04 Neal McBur To Mark Lindema   15 Re: [Auditing] Help find the outliers for targetted audits in Boulder
+  Mark: refactor this into a table that is one row per audit unit, one column per vote count, and then look for
+  outliers among any of the 71 contests?  find covariates, etc
+  e.g. try to predict margin in each batch based on other margins in that and other races
+  Calculate correlation coefficient R, and R-square - how much variation is explained?
+  http://www.statsoft.com/textbook/multiple-regression/
+Perhaps try to increase confidence of audit in one contest based on auditing in another contest along with correlations between choices in the two contests.
+ provide conversions from votecounts to numpy array to simplify analysis
+  http://stackoverflow.com/questions/1741107/how-do-i-convert-a-django-queryset-to-numpy-record-array
+  but using iterators - faster?
+  Specify count to improve performance. It allows fromiter to pre-allocate the output array, instead of resizing it on demand.
+  allocate empty array of right size, then find a way to get fromiter to store in one row at a time?
+
+Show generally helpful data analysis:
+ results by voting type (mail-in, in-precinct, early, dre, paper, etc)
+ results by time if available,
+ u value of median selection - i.e. for random number of 0.5 is sorted by u; median u value; median size;
+
+Apply the Second-digit Benford's Law Test for fraud (Mebane et al)
+
+Generate a pivot table of preference tendencies by precincts vs contests
+
+Support multiple databases, or at least multiple elections, managed by one person
+
+Address confusion over why audit units aren't sequential, due to combining of units.  List all unit numbers along with batch ids?
+
+Add a /favicon.ico
+
+Establish a transaction log to allow backups of work-in-progress etc.  LOG4J?
+
+Finish direct swdb import support and stub it back in to parsers.ph, as in version r68 from bzr
+ If so, need to fix bugs, document dbfpy.dbf (or alternative) and openanything requirement in README
+ In the meantime, folks can export the swdb data to csv like lindeman did and use parse_swdb_csv()
+
+Documentation
+=============
+
+Refactoring
+===========
+
+Define basic Kaplan-Markov functions for general use, and use them in the model
+ e.g. taint calculation for a contestbatch.
+
+Combine tally() and error_bounds()
+Switch min_margin to a vote count, and add a contest_ballots field so fractional margin can be recalculated.
+ Then use it in taintfactor()
+
+look for places to use sequential filter() rather than queries in a loop, like maybe taintfactor() (prior to shift to min_margin there)
+
+Look at use of __exact and figure out if I'm doing it the clearest way.
+
+get floating division via "from __future__ import division"   http://www.python.org/dev/peps/pep-0238/
+  look for "* 1.0" and use finddiv.py to find what to fix
+
+Use xrange() rather than range()
+
+Perhaps require python 2.6 and use named tuples for clarity?
+ Named tuples are especially useful for assigning field names to result tuples returned by the csv or sqlite3 modules:
+
+When we get to Python 2.7, use Counter object (dict subclass) for votes??  convenient subtract(), most_common() etc...
+
+Unclassified
+============
+Provide a way to specify which audit units should be combined, and how to renumber them.
+Note: for interoperability and reproducability between different software
+auditing applications, the combining/merging rules need to be the same, to
+the point where they end up with the same sequence numbers for all audit units.
+
+Fix bug "server error" 500 on contest with no audit units, e.g. boulder primary 2010 COUNTY SHERIFF Republican http://127.0.0.1:8000/reports/44/
+
+What character encodings are used in the files from various vendors we're parsing?
+Test internationalization via unicode/utf8 data.
+
+Add a database field ("slug"?) for a unique nickname for a Contest or Choice, and use it
+ in the __str__ method
+Don't re-sort audit_units after adding each one in models/select_units!
+
+Provide a way to read in, serialize, save and restore election metadata
+ which is not covered by the normal data imports.
+ Via Meta class and a settings save/restore
+ function based on fixtures or dumpdata?
+
+ Contest: overall_margin, proportion, confidence, selected, nickname
+ CountyElection: name random_seed, 
+ Batch: ballots, notes
+ Choice: nickname
+
+Provide ways to incorporate late-arriving ballots (provisional,
+UOCAVA, delayed signature verification, etc)
+ Allow additional batches to be read in and used to:
+  1) adjust the margin and highlight any audit units from the original
+   set that now need to be added to the audit
+  2) separate the new batches out and allow them to be independently
+   audited as a separate stage, with a new random seed.
+
+Add selection order sequence number to /selections/<id>/ report
+to make it easier to "Select the top xx audit units."
+
+Add winnerVotes() and loserVotes() methods to contestbatch ?and margin()?
+ or a way to get a list of AuditUnit objects?  or 2d array?
+
+Normalize contest selection thresholds so sum of all thresholds is 100%
+
+views.py results(): implement parameter or more flexible way to limit
+number of audit units per contest
+Include option to do smarter audit using 1% of audit units ala CA,
+ and including every contest
+
+Add election data timestamp field (e.g. for reports ala EML report)
+ e.g. from file timestamp of last data file parsed.
+
+Vote counts view as EML 510: Election Markup Language:
+ handle over, under properly, and reflect via xsl also
+ choose a way to report #ballots, #contest ballots, batch type
+ selected-for-audit, notes, desired confidence, error bound, 
+ include stylesheet and reference at canonical url
+ produce clean, standard HTML output
+ do an xslt for listing candidates across the table
+ support more than 4 countmetrics (or 2 for TotalVotes) in the xslt
+ style the generated HTML with css
+ support parties/AffiliationIdentifiers in eml510
+ why test for validvotes < 1 in xslt?
+Parse election results as EML
+Produce audit results as EML with discrepancies, selection algorithms & seed
+
+Add test contest with zero margin, and check for errors, e.g. in contest selection
+Select all contests with margin less than x for audit
+
+Add --subtract option for Sequoia cumulative reports + parsing for batch ballots
+
+Track and report on audit unit information: storage location, which
+scanner was used, which operator, etc.
+
+Make wpm an option, either per-contest or per-report or something.
+Beware multiple defaults, for "wpm" in models.py and for "s" in stats()
+
+Document parsers.py better - why not just make a new audit unit for each choice?
+ just more efficient?   No need to worry about empty au's pushed first?
+catch and print useful information about parser errors, e.g. /home0/srv/s/electionaudits/debug/nounder.out
+ file name and line number of file being parsed
+ what is being looked for
+ xml context
+ electionaudits version number, revision
+ how to procede, report bugs, etc.
+
+Declare licenses - "Ohloh searches the source code for individual
+license declarations. Ohloh didn't find any such declarations in this
+project's source code."
+maybe via PACKAGEMAP.xml - http://www.google.com/help/codesearch_packagemap.html
+ http://www.google.com/support/webmasters/bin/answer.py?answer=75224&ctx=sibling
+
+http://127.0.0.1:8000/reports/66/
+ Negexp says:
+    w = 8.65617024533
+    largest probability =  0.75
+    smallest probability =  0.75
+    expected number of precincts audited =  0.75
+    expected workload =  22.5 votes counted
+
+Tag election data with universal identifiers for contests, elected officials etc
+ala sunlight labs, for linking to contribution data, etc
+
+Produce a report of contests audited, with # units audited, results,
+ whether audit was full or just incidental, local or regional, etc.
+ Date and time of initial publication of vote counts, random selection,
+ and each hand count.
+
+Add documentation to audit pages, and EML: list of canvass board
+ members, instructions for hand counters, standards for interpreting
+ votes on ballots, relevant laws, etc.
+
+setup.py advice - check this out:
+ If your project contains django templates, set the zip_safe property to False. 
+ http://justinlilly.com/blog/2009/jul/05/6-things-learned-about-setuptools/
+
+Add total # ballots to cache args
+
+Improve build/packaging to include dates and release numbers in README, etc.
+and to automate upload procedure and reserve best practice in what
+to say in each of the many release info fields.
+
+Parse subdirectories e.g. in incoming for windows.  handle zips, and globs also?
+
+Get NEGEXP thresholds right for contests with proportion less than 100%
+and then start using true NEGEXP, rather always selecting top n races,
+where n is the predicted number of audit units.
+
+Need new seed if you count provisionals after doing original choices.
+Need a way to mark which seeds go with which batches.  Use new CountyElection in a pinch?
+Want multiple reporting phases which stay separate
+ => Introduce EML language around Events?  And link batches to events,
+ maybe as well as CountyElection, for reporting?
+Or rename CountyElection to be ElectionPhase or ElectionStratum,
+ add another overarching set of Events related to aggregating
+ vote counts and auditing?
+Look at Sequoia's data model when it comes out?
+
+use 'auth' template variable to add urls for adding notes, admin links, etc
+get access to 'request' template variable via
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+from django.template import ContextRequest
+return render_to_request('home.html', {}, context_instance=RequestContext(request))
+{% ifequal request.path "/" %}...
+
+Find synergy with Humboldt Transparency Project?  E.g. manage
+ballot-by-ballot audits in which multiple people independently
+evaluate given sets of ballots.
+
+Use dict constructor instead of class Bunch in management command
+views: get values from vars() for render_to_response rather than making
+a custom dict
+Is there a way to access all object attributes in a template, including docstrings?
+
+Add number of counts also
+
+If only one contestant, report 100% margin
+
+Spell threshold right in models....
+
+Do function to mark selected audit units - ask for confirmation?
+  top x batches, sorted like report view(?)
+
+try just allocating budget of counting x% of votes to all races,
+(or separately for state and local) and figuring out what best
+confidence level you can get.  Probably still need to limit really
+close races.
+
+Add "audited" field
+Show "targeted", and don't show confidence for targeted races, but yes for margin
+also list margin by votes, as well as percent?
+Add note defining margin for auditing
+
+Add "results" field(s) to contestbatch - sum of absolute diffs for each choice?
+
+New view to produce tally forms for selected contests: /batch/batch#/contest#/
+ Election name Tally batchid, scan batch id, date, start/finish times, count #
+ Unique id number for tracking sheet?
+ "Office use only" for data entry, maybe discrepancies, etc
+ Names of people doing the counting: vote counter and recorder.
+ Race title, Choices - YES/NO/Under/Over/Not-On-Ballot
+ sums by row and column, grand total that they should check with tally batch summary sheet
+ Some way to simplify data entry: bar codes to pop the right entry screen?
+ Scheduling system that pops out new forms for new batches when old ones are
+ returned?
+
+Data entry form for tally results
+
+Some way to deal with custody of tally sheets and secure comparisions to
+original vote.  E.g. have a system where after folks complete a tally,
+they can come enter their data and compare it to the expected results.
+Really want scan-batch-level results for that.
+
+Print instruction sheet for hand counting
+
+Add a little explanation (calculator?) view for SSR, and link to it from each
+random number.
+Do the same for NEGEXP thresholds.  Print the value of "w".
+
+Incorporate more batch info: associated precinct, sub-batches (scan batches) etc
+
+If there is no seed yet for /selection/ reports, note that fact.
+Generate index.html title from election name
+Make some of the text conditional for development vs publication
+
+Add timestamps, version info to more pages, as done for kmreport.html
+But how to avoid fouling up tests if it is like "Page generated" - data date plus version?
+
+Control audit report with GET params for sorting, masking results etc
+
+Use custom view for more efficiently sorted audit report detail and report.html
+no inner nested query loop contestbatch.votecount_set.all|dictsort:"choice.name"
+Separate out Contests by CountyElection in audit report
+Don't assume, or check, that audit report rows are all in the same sequence
+Put Under, Over at end
+Allow user to sort them by winner or alphabetically
+combine/merge based on total ballots
+
+Figure out how to include MBB ballot counts (CVRs) in batch?
+ from pdf: pyPdf or pdftotext: Total Number of Voters : 568 of 170,066 = 0.33%
+  But note that that doesn't provide ballot counts by type!
+  So e.g. if a batch has both ED and EV votes, may need to just apportion
+  all of them to one type for now, search for zeros later, and reapportion then
+
+ Use csv report?  or excel?
+ Based on president, or max of all contests?
+ nope: there is no contest that everyone can vote on -
+   e.g. a dozen absentee landowners can vote on property taxes but can't vote
+   for president in Boulder County
+ too bad @ballots_cast != 'Total Number of Voters' from pdf?
+
+ Samples for Hart Tally cumulative pdf files:
+ in the unix shell:
+ for i in j*.pdf; do echo -n $i " " ;  pdftotext -l 1 $i /tmp/ptt; grep 'Total Number of Voters' /tmp/ptt; done > ../ballots-j
+
+ in python:
+ from pylab import array
+ bal = open("../ballots-j", "r").readlines()
+ bala = array([l.replace(",", "").split() for l in bal])
+
+
+In new custom report view add column for selection, highlight selected
+Error for -s with only one batch?
+report.html: Incorporate style="text-align: right;" into css
+move table formatting to css and improve it:
+ http://www.w3.org/TR/html401/struct/tables.html#adef-border-TABLE
+Add a BASE HREF item?  add site_media?
+Move /media/* to /static/ and get it working for (css, xsl) for runserver:
+ Permission denied: /usr/lib/python2.5/site-packages/django/contrib/admin/media/
+ http://docs.djangoproject.com/en/dev/howto/static-files/ - requires DEBUG=True....
+Make home page link in base.html more portable - relative, and useful
+ for use from templates at different depths in hierarchy
+  use named url somehow?
+  make it a setting?  BASE HREF?  wget --base?
+  and may need help with /admin or /media links also
+  http://groups.google.com/group/django-users/browse_thread/thread/97e65f6da4009407
+
+in eml510.xml, replace stylesheet with one from media for better performance:
+<?xml-stylesheet type="text/xsl" href="../../media/xsl/ea510_style.xsl"?>
+
+add digital signature to eml reports
+ http://security.stackexchange.com/questions/1270/what-good-standard-digital-signature-verification-clients-are-widely-or-easily-d
+ vs electionaudits.org vouching for it all, including independent eyes on the ground (hand counters) - branding, SAAS, etc
+ pdf with attachments.  pdftk or latex to add attachments.  PDF Chain is a GUI for pdftk written with gtkmm
+
+ signed pdf?   But note "it has just about the longest laundry lists of known malware vulnerabilities of any "data" file type."
+      http://www.locklizard.com/pdf_security_news.htm
+      http://www.h-online.com/security/news/item/27C3-danger-lurks-in-PDF-documents-1162166.html
+   http://blog.rubypdf.com/2009/07/14/digital-signature-pdf-documents-with-free-software/
+   How to get XAdES-X-L (Extended Long Term) signatures: encapsulate timestamp, CRL, cert and signature:  http://msdn.microsoft.com/en-us/library/cc545900.aspx
+   PDF:
+    JSignPdf - a Java application which adds digital signatures to PDF documents.  http://jsignpdf.sourceforge.net/
+      It can be used as a standalone application or as an Add-On in OpenOffice.org)
+    jPDFTweak - uses iText
+      a Java Swing application that can combine, split, rotate, reorder, watermark, encrypt, sign, and otherwise tweak PDF files 
+    opensignpdf - part of http://opensignature.sourceforge.net/english.php  (only with smart cards?)
+      You will need a PKCS#11 smartcard supported by your system.  uses iText
+    PDF Digital Signer - http://soft.rubypdf.com/software/pdf-digital-signe
+     and non-free(?) timestamp signer: http://soft.rubypdf.com/software/pdf-timestamp-signer
+    advice on several apps, especially OpenSignPDF:
+       http://my.oltrans.org/en/ubuntu/faqs/41-customizing/74-digital-signature-and-signing-pdf-documents.html
+    use itext api.  signing api in java with .pfx cert is at http://itextpdf.sourceforge.net/howtosign.html
+    http://api.itextpdf.com/com/itextpdf/text/pdf/PdfSignature.html
+     Verifying is a three step process:
+      Was the document changed?
+      What revision does the signature cover? Does the signature cover all the document?
+      Can the signature certificates be verified in your trusted identities store?
+    evince doesn't show them yet, but okular does: https://bugzilla.gnome.org/show_bug.cgi?id=510686 
+    support in evince/poppler for pdf signatures https://bugzilla.gnome.org/show_bug.cgi?id=614929
+      https://bugs.freedesktop.org/show_bug.cgi?id=16770
+    Use Adobe Reader 9 to view, search, digitally sign, verify, print, and collaborate on Adobe PDF files.
+     [but Adobe Reader can only sign "reader enabled" files??]  http://ubuntuforums.org/showthread.php?t=1083627
+ CMS (PKCS#7) format - signver and AuditVerify (Red Hat CS);  
+     create with mozilla cmsutil - 
+    http://www.mozilla.org/projects/security/pki/nss/tools/
+    /srv/mirror/s/smime/mozilla/security/nss/lib/smime/cmsutil.c 
+
+ browser add-on or client
+ signed .zip (ala android ROMs)
+ jarsigner for .jar files (extended .zip files, like android .apk): http://onjava.com/pub/a/onjava/2001/04/12/signing_jar.html
+    verify details.  jarsigner doesn't do path validation to root certs?  http://www.java-samples.com/showtutorial.php?tutorialid=666
+     https://svn.cs.cf.ac.uk/projects/whip/trunk/whip-core/src/main/java/org/whipplugin/data/bundle/JarVerifier.java
+    see also signtool in libnss3-tools - http://docs.sun.com/source/816-5531-10/app_sign.htm
+    http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html
+   .SF, .DSA, .RSA, .PGP
+    On the Windows platform you can rename the file that contains a timestamp as a type ".p7s" and Microsoft Crypto Shell will decode and display any attach certificates (just double click on the .p7s file).
+   timestamps: OPENSSL "ts" command.  test server at http://www.opentsa.org/ or see http://www.digistamp.com/tech.htm
+      perhaps via http://timestamp.globalsign.com/scripts/timstamp.dll get added as signers:
+      ==? Certum Time-Stamping Authority accepts SHA1 digest, Microsoft Authenticode® or TSQ requests compatible with IETF RFC 3161
+      OpenSignPDF uses http://tss.pki.gva.es:8318/tsa
+      http://stackoverflow.com/questions/1647759/how-to-validate-if-a-signed-jar-contains-a-timestamp
+    globaltrustfinder - demo service looks ok.  removed several others from wikipedia that asked for documents
+   risk of people updating .jar with zip tools and invalidating sigs
+ [.net]
+ java or .net/silverlight app to verify signatures?
+ shttp
+ XML signature
+  which style?  enveloped? detached?   cv saml, openoffice.  x.509 cert?  pgp key?
+  dependencies?  licensing implications?
+  http://www.decalage.info/en/python/xmldsig
+  for fedora 11 in 2009-04-15: pyxmlsec-0.3.0-1.fc11.src.rpm
+  PyXMLSec 0.3.0 (GPL)
+  verify via http://www.aleksey.com/xmlsec/xmldsig-verifier.html
+  http://stackoverflow.com/questions/2356039/crossbrowser-xmldsig
+ cryptonit - gui tool, detached .p7s or "attached" (some custom format I assume) leaves no visual mark, ubuntu package
+
+Put explanatory notes (e.g. about margins) in FAQ or help html,
+and add link from report, reports, etc
+
+Set sequence of Choices on first save
+
+Get --contest working again
+Add custom combining/merging of contestbatches post-parse
+
+Deal better with "Not enough ballots for privacy" at end of input for a contest
+ complain more loudly, prompt user for OK?
+ Save temp db record for next input batch?
+
+Provide help for selecting contests weighted by inverse margin up to 1/.005
+
+Check out generating this message because of entry in admin after reboot:
+ 403 Forbidden Cross Site Request Forgery detected. Request aborted.
+
+Validation: Should dtd url be in DOCTYPE?  Add character encoding?
+What about eml510 output?
+
+http://www.w3.org/International/tutorials/tutorial-char-enc/#Slide0250
+ if you decide to omit the XML declaration you should choose either
+ UTF-8 or UTF-16 as the encoding for the page.
+
+
+We have synergy between selections for different contests to count multiple
+contests on same batch, using NEGEXP, setting probability for each batch,
+and using same random number for the batch for all contests.
+Make that feasible with privacy protection:
+ Need to combine batches the same way across contests, or refer to other contestbatches.
+ Combine based on overall batch size?  Or based on min of all races??
+  And mask small numbers, to be revealed in combination with others later on?
+
+Make sure logic for combining ballots counts in AuditUnit is right for
+both subtract and normal privacy combination, and think thru the latter
+in light of questions about canvass of ballot styles.
+
+Find a way to distinguish paper from dre batches and not combine them
+ add option ala "don't combine if batch letter 14 is different"
+ or general RE logic to compare batch names?
+
+Append batchid to type, not batch, for csv input?
+Peel it off of file name for xml?
+
+parsers.py: accept xml precinct reports also
+Parse data from San Diego - easy csv format in Election Night Results Export.zip
+ http://www.sdcounty.ca.gov/voters/Eng/rov_highlights.shtml
+
+Make it easy to run with debug but no other dependencies.
+ And perhaps no sql logging?
+Report 500 errors better, e.g. http://www.djangosnippets.org/snippets/638/
+
+Provide a way to save all audit reports for publication from another server.
+Provide secure timestamps via online timestamp server
+  http://en.wikipedia.org/wiki/Trusted_timestamping
+Do some sort of simple signature via keyed hash based on settings.SECRET_KEY?
+
+Need a logo.  e.g.
+  magnifying glass looking at a checkmark
+  http://whtalk.blogspot.com/2008/07/citizens-audit-completed-in-enfield.html
+  a grid of checkboxes, with some of them randomly selected and
+   colored/highlighted/focussed/whatever - colored magnifying glass?
+  Green eyeshades?  http://en.wikipedia.org/wiki/Green_eyeshade
+
+Get setup.py sdist to create empty "incoming" directory; delete DELETEME.txt
+
+Add pdf file name to batch model
+Add xml file modification date to batch model
+Add link to pdf file in report.html or batch.html
+Add links to batches in report.html
+
+new approach, user interface: move files from "incoming" to "processed"
+ and directories....  all at end?  and keep timestamp
+view /parse/ with get keywords for not sorted, not incremental
+ do really long test for timeouts
+ display files in sorted order
+ shows what is in "incoming" directory, and moves all but last one to
+ "processed" directory which is also shown
+ maybe via another directory until done   for --subtract, etc
+ --chronological: track high-water mark, and show error given out-of-order run
+ improve feedback somehow: show progress (javascript?)
+
+Generate different random numbers for contests than for contest list
+ Incorporate contest number into the batch sequence number?
+ Use 00 for contest list?
+
+Avoid overuse and contention for batches by selecting a new one after
+it has been assigned for 10 or more audit units?  Needs to be fully
+automatic.  Perhaps best to audit different batches for different small races,
+if looking for suppression of ballot counts in some races and using
+ballot style statistics to detect that.  [how would that help?]
+
+Or reuse batches for narrowest elections, and for next narrowest, etc
+with a guarantee of looking at 5% of ballots, or 5% of batches?
+ For Boulder, many wide races could mean just one batch, 65 audits, 0.2%
+  One very tight race and select all races could mean 65 different batches, 11%
+
+Allow user to specify WPM (the "s" parameter to stats()) to views,
+and/or allow for WPM to apply to batch ballot count rather than contest_ballots,
+and/or to use Stark's method of dealing with WPM.
+
+Do more rigorous statistics when proportion is not 100%, given better
+information about audit units around the state.
+
+
+Advise user to use django.middleware.gzip.GZipMiddleware if deploying
+on public site.
+
+set USE_ETAGS=True ?
+
+Ad-hoc form: add text box with list of contest sizes, or size*x
+ or offer common size distributions
+   Minnesota, Colorado, Boulder, California, San Mateo, 
+
+Customize admin login screen to refer to help/README and initial
+credential creation, along with how to remove those hints for a public site.
+
+Display header rows more compactly and clearly in reports.html
+Avoid repeating footnote text - make an include or template tag or the like.
+
+How to package django-based windows apps so they are easier to use?
+Try http://www.python.org/doc/2.5/dist/postinstallation-script.html
+and look at Nullsoft Scriptable Install System (NSIS).
+Any way to get a windows GUI interface to manage.py?
+
+Handle argument of *.xml in windows also - expand it myself with glob?
+
+Add tests, e.g. output from varsize.py
+
+Make upgrades easier.
+Ask user where they want the database to be [must do very early on]
+ or put in Documents
+Do .bat file for path, with path %PATH%;__dir__??
+set pythonpath with __file__ in manage.py?
+
+Test with python 2.6
+
+parsers.py: print message before lengthy save process
+
+Add ability to hide votecounts until hand count done - just totals and contest ballots
+ability to track what has been selected for audit
+Add a way to calculate stats given what was audited, according to Stark
+and PPEBWR or whatever.
+Add separate report of audited stuff, with hand count results
+Use clearer error message for duplicate data entry
+Define "incoming" directory and automatically parse files put in there
+and/or provide gui for parse file input
+Keep track of batches seen, and what is new, and which batch is "previous"
+for use with the 1st in a new run
+
+Allow filtering by type or precinct in audit report
+
+Move to bzr-based versions: 0.7-r32 or 0.8.dev-r33 (would want bzr support)
+use the -f option of easy_install for other deps
+move to README.txt?
+
+scenarios: test lots of data - speed, ease of fixing problem files
+
+describe use of IDLE IDE for windows?
+
+Fix contest detail report - not finding contestbatches (but little-used)
+Paginate votecount report
+Provide good html titles for all pages
+
+Produce output in csv format also
+
+Deal with xml namespace issue more elegantly
+
+Work on quality according to http://pypants.org and other evaluators
+
+Improve documentation - put model diagram in media
+Fix parsers optparse options for pydoc
+Get rid of or document unused stuff
+
+Generate actual selection of audit units via pps.py
+based on random input from throw of dice, ala RFC 3797?
+
+Add table relating batch names to description - type, source, mbbs, etc
+and link to that from batch name
+
+Support contests with multiple winners, instant runoff voting, etc
+(Already supports Approval voting)
+
+Separate parsers.py and util.py from django dependencies - use plugins?
+look thru pylint advice
+perhaps automatically generate doc and put in doc directory before packaging
+auto-update README on web site
+
+Use django choices for batch.type(?)
+Add info about file arguments to auto-usage message
+
+Perhaps for anonymity, print "few" rather than a number less than 3?
+
+Provide variant methods of combining batches for privacy (class Push)
+ ideally want to guarantee not just k-anonymity (where k is perhaps
+ 25), but also deal with l-diversity - taking into account the entropy
+ of the results, not the number.
+  http://www.truststc.org/pubs/465/L%20Diversity%20Privacy.pdf
+ preserve more audit units: try to only combine small units together
+ can also generate a different CountyElection with more or less detail
+
+While parsing xml, track unrecognized FormattedValue fields - dump
+ FieldName, value and line
+
+Develop view /<countyelection>/<contest>/auditreport:
+ including just batches that are in the county
+
+Add "audited" flag (selected, success, or failure with notes?)
+ and form to mark them off
+ or blank report for entering numbers.  timestamps?
+ want audit results report by contest - flag discrepancies.  do stats??
+ perhaps also progress flags - selected, fetched, counting, done, recheck
+ and update stats
+Provide report of just contestbatches selected for audit
+Set template LANGUAGE_CODE or report or fix html errors in databrowse base.html
+
+Put contest abbreviation in a new field, option to print with it or not
+
+Encapsulate election-specific data in specific classes
+  including list of contest edits ("replacements var"), fields of relevance, etc
+  some day: do that based on "programming" data from Hart system?
+
+Auto-sort result files, check for non-incremental results
+Check for results that list different candidates for a contest
+Look for columns that don't agree with previous result
+
+Figure out how to have Contest.margin default to float('nan') without
+ odd NULL errors.  After python 2.6 so it works in Windows also
+
+Make it easier to provide statistics with appropriate confidence level for race
+ print out csv for all contests with blanks
+ include sequence number for contest based on order in report?
+
+Add features to record canvassing work: tracking number of ballots
+printed, distributed, counted via each method, provisionals, and other
+aspects of ensuring that the right set of votes were counted.
+
+for --contest, don't create other contests in AuditUnit.__init__()
+
+Procedure
+=========
+
+Improve clarity of user interface.  Put together a wizard or the like
+to lead auditors thru the PROCEDURE steps from the README
+
+    * Parse incoming data files
+    * Audit reports
+    * Audit selections using the random seeds for the election
+    * Audit results
+
+Packaging:
+==========
+Currently for each new release:
+ update doc/model_graph.png if necessary
+ look for any remaining FIXME's that are important for this release
+ make sure version number is updated in setup.py
+ make sure README, web page and other docs are in sync and labeled with version
+ run tests, using different django versions, on different platforms, etc
+ check web page validations (as part of test?)
+ check bzr diff
+ bzr ls --versioned -R | sed 's/^/include /' > MANIFEST.in
+ python setup.py egg_info -b .dev-r70 sdist   # for development build - do sdist with particular .dev pre-release version
+ python setup.py sdist       	      	      # or this for published release build with given version
+ #maybe manually delete incoming/DELETME.txt
+ i=ElectionAudits-1.0.dev-r70  # or whatever it made in dist/ minus extensions
+ savetest=$PWD/dist/test-$i.out
+ tar -C /tmp -zxf /srv/s/electionaudits/trunk/dist/$i.tar.gz
+ cd /tmp/$i/root
+ (time ./manage.py test electionaudits) > $savetest 2>&1   # and keep a record of timing, output
+   1-0.dev-r67 on jl: real  2m17.460s   user  2m 0.952s   sys 0m 0.828s
+   1-0.dev-r70 on jl: real  5m 5.477s   user  0m27.282s   sys 4m10.752s
+
+ deploy in virtual environment from media
+ deploy on demo site
+ commit changes in bzr
+ scp -p dist/$i.tar.gz bcn:public_html/electionaudits/download/
+ gpg --sign $PWD/dist/$i.tar.gz
+ gpg --sign --armor --detach-sign $PWD/dist/$i.tar.gz
+ echo $PWD/dist/$i.tar.gz
+ echo $PWD/dist/$i.tar.gz.asc
+
+ register new release at https://edge.launchpad.net/electionaudits/trunk
+ generate gpg signature
+ add download files for tar.gz, gpg signature, README
+ ToDo?
+
+ scp /home/neal/eatrunk/doc/index.html bcn:public_html/electionaudits/
+
+
+Do it via the launchpad api:
+ http://news.launchpad.net/api/recipe-for-uploading-files-via-the-api
+
+Make it easy to deploy via EC2, etc.
+Try using "buildout"?
+Package up, as an egg?  And submit to http://pypi.python.org/pypi
+Package for Ubuntu?
+
+use unique settings.SECRET_KEY, ala django_extensions: generate_secret_key.py
+set up time zone?
+
+Avoid dependency on setuptools version 0.6c9 to run (even to display help)
+take out bzr dependencies for users
+Include data files
+Try to get windows egg
+How to get "pure" package, not platform-dependent?
+Get setup.py to create root directory in a demo script directory, not lib
+
+maybe switch from __file__ to resource management system for packaged data files
+ ala  http://peak.telecommunity.com/DevCenter/PythonEggs#resource-management
+  from pkg_resources import Requirement, resource_filename
+  filename = resource_filename(Requirement.parse("MyProject"),"sample.conf")
+ but that won't take care of location for dev.db DATABASE_NAME
+
+Parse xml files that have been compressed with e.g. zip
+easy_install --editable projectname==dev
+add setup.py --test and doctest support: wrapping tests in TestSuite
+
+look at output during easy_install of lxml
+
+setup.py register sdist bdist_egg upload --sign
+
+add trove classifiers to setup.py, e.g. via Jafo's mkpkg.py
+ http://www.tummy.com/journals/entries/jafo_20100302_003614
+
+describe how to host on google app engine
+
+NOTE
+====
+In primary elections, when there may be multiple contests with the same
+name per election (one for each party) the contest name extracted in
+parsers.py needs to include the party name.
