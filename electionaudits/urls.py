@@ -5,10 +5,14 @@ from django.conf import settings
 
 databrowse.site.register(CountyElection)
 databrowse.site.register(Batch)
+databrowse.site.register(Tabulation)
 databrowse.site.register(Contest)
 databrowse.site.register(ContestBatch)
+databrowse.site.register(HandContestBatch)
 databrowse.site.register(Choice)
 databrowse.site.register(VoteCount)
+databrowse.site.register(HandVoteCount)
+databrowse.site.register(Margin)
 
 contest_dict = {
     'queryset': Contest.objects.all(),

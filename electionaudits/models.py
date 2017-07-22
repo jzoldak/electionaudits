@@ -126,7 +126,9 @@ class Contest(models.Model):
 
 
     def tally(self):
-        "Tally up all the choices and calculate margins"
+        """Tally up all the choices and calculate margins
+        FIXME: fix for numWinners > 1 by combining with error_bounds().
+        """
 
         # First just calculate the winner and second place
 

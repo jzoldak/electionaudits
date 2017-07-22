@@ -2,9 +2,9 @@
 .bzr
 *.egg
 *.db*
-ElectionAudits.egg-info
-djangologging
 dist
-root/initial_data.json
+ElectionAudits.egg-info
 ez_setup.py
+djangologging
 lukeplant_me_uk
+root/initial_data.json

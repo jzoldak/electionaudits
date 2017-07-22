@@ -10,6 +10,7 @@ import sys
 import optparse
 from optparse import make_option
 import logging
+import codecs
 import csv
 from datetime import datetime
 
@@ -71,6 +72,11 @@ def set_options(args):
     (options, args) = parser.parse_args(args)
     return options
 
+def unicodeDictReader(utf8_data, **kwargs):
+    csv_reader = csv.DictReader(utf8_data, **kwargs)
+    for row in csv_reader:
+        yield {key: unicode(value, 'utf-8') for key, value in row.iteritems()}
+
 def main(parser):
     """obsolete and maybe broken - using management/commands/parse.py now.
     Parse and import files into the database and report summary statistics"""
@@ -126,7 +132,9 @@ def parse(args, options):
             csvfile = open(file, "rb")
             header = csvfile.readline()
             csvfile.seek(0)
-            if header.count('MBB Name') > 0:
+            if header.count('"line number","contest name",') > 0:
+                parse_clarity_csv(file, options)
+            elif header.count('MBB Name') > 0:
                 parse_boulder_csv(file, options)
             elif header.count('Precinct_name') > 0:
                 parse_csv(file, options)
@@ -157,6 +165,91 @@ def parse(args, options):
 
     logging.info("%s Exit" % (datetime.now().strftime("%H:%M:%S")))
 
+def parse_clarity_state(url, options):
+    """
+    just collecting some useful but disconnected code snippets for now...
+    Get ballotsByCounty, csv reports by county, correct contest naming discrepancies, 
+    """
+
+    import clarify
+
+    p = clarify.Parser()
+    p.parse("/srv/voting/colorado/2016/detailfinal.xml")
+    ballotsByCounty = [(j.name, j.ballots_cast) for j in p.result_jurisdictions]
+    with open('/tmp/ballotsByCounty.json', 'w') as outfile:
+        json.dump(ballotsByCounty, outfile)
+
+    j = clarify.Jurisdiction(url='http://results.enr.clarityelections.com/CO/63746/184388/Web01/en/summary.html', level='state')
+    j.report_url('xml')
+    subs = j.get_subjurisdictions()
+    for county in subs:
+        print "wget -O %s.xml %s" % (county.name, county.summary_url)
+
+    # For each contest in which the number of winners is indicated via "Vote For 3" or the like, set numWinners
+    import re
+
+    VOTEFOR_RE = re.compile(r'Vote [Ff]or (\d+)')
+
+    for c in contests:
+        m = re.search(VOTEFOR_RE, c.name)
+        if m:
+            numContests = int(m.group(1))
+            c.numContests = numContests
+            error_bounds = c.error_bounds()
+            c.save()
+
+@transaction.commit_on_success
+def parse_clarity_csv(file, options):
+    """Parse Clarity 'summary.csv' results (county or state or maybe precinct?)
+    It has one line per candidate per contest
+    This code assumes the file is in ISO 8859-1 encoding.
+    The first line has the column headers:
+      "line number","contest name","choice name","party name","total votes","percent of votes","registered voters","ballots cast","num Precinct total","num Precinct rptg","over votes","under votes"
+
+    FIXME: missing votes in last contest
+    """
+
+    election = options.election
+
+    reader = csv.DictReader(codecs.open(file, 'r', 'iso-8859-1'))
+
+    au = util.AuditUnit()
+
+    for r in reader:
+        print r
+        batch = [file]
+        contest = r['contest name']
+        contest = contest.replace(' (Vote For 1)', '')
+        contest = contest.replace(' (Vote for 1)', '')
+
+        #TODO: If this is a primary, see how to get party information
+        #if r['Party_Code']:
+        #    contest += ":" + r['Party_Code']
+
+        # if 'Presidential Electors' != contest: # FIXME: -c option not working for next line
+        if options.contest != None and options.contest != contest:
+            continue
+
+        choice = r['choice name']
+
+        choice = choice.strip()
+        choice = choice.replace('"', '')
+        choice = choice.replace("'", '')
+
+        # If the batch or contest has changed, push out the previous units
+        if batch != au.batches  or  contest != au.contest:
+            logging.debug("now batch '%s' contest '%s' at line %d" % (batch, contest, reader.reader.line_num))
+            util.pushAuditUnit(au, min_ballots = options.min_ballots)
+            au = util.AuditUnit(election, contest, 'all', batch)
+
+            # duplicated for each candidate - silly
+            au.update('Under', r['under votes'])
+            au.update('Over', r['over votes'])
+
+        au.update(choice, r['total votes'])
+
+    util.pushAuditUnit(au, min_ballots = options.min_ballots)
+
 @transaction.commit_on_success
 def parse_csv(file, options):
     """Parse a csv file of election data.
@@ -178,6 +271,7 @@ def parse_csv(file, options):
     for r in reader:
         batch = [r['Precinct_name'] + options.batchid]
         contest = r['Contest_title']
+
         if r['Party_Code']:
             contest += ":" + r['Party_Code']
 
@@ -321,9 +415,7 @@ def parse_boulder_csv(file, options):
     It has one line per contest per batch.
     A sample is in testdata/test-boulder-csv.txt
     The first line is a header line like this, including columns for each choice.
-    The first valid choice for a contest is deemed to be the 3rd entry
-    The last valid choice for a contest is always 'Under Votes'.
-    Entries named "Cast Votes" or "Blank" are skipped.
+    The last valid choice for a contest is always 'Under Votes':
 "MBB Name","Contest Name","Contest Ballots","YES","NO","Cast Votes","Over Votes","Under Votes",,,,,,,,
 
     """
@@ -346,7 +438,7 @@ def parse_boulder_csv(file, options):
 
         for choice in reader.fieldnames[3:]:
             # Skip the "Cast Votes" column, in among the subtotals
-            if choice in ["Cast Votes", "Blank"]:
+            if choice == "Cast Votes":
                 continue
 
             # Use standard names for votes that are Under or Over
@@ -364,10 +456,8 @@ def parse_boulder_csv(file, options):
 
             au.update(db_choice, r[choice])
 
-            """
             if choice == 'Under Votes':
                 break
-            """
 
     util.pushAuditUnit(au, min_ballots = options.min_ballots)
 
